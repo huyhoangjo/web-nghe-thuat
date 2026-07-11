@@ -57,3 +57,10 @@ Vào lúc 20:31 ngày 11/07/2026, các lỗi cơ học nhỏ sau đây đã đư
 3. **Sửa lỗi tràn bố cục timeline trên di động**: Thêm thuộc tính `left: 0 !important;` vào `.timeline-item` bên trong media query `@media (max-width: 900px)`.
 4. **Cập nhật global reset**: Chuyển bộ chọn reset toàn cục thành `*, *::before, *::after` để áp dụng cấu hình `box-sizing: border-box` lên toàn bộ các phần tử giả.
 5. **Chạy kiểm thử thành công**: Bộ kiểm thử `npm test` đã được chạy lại và toàn bộ các trường hợp kiểm thử JS đều vượt qua thành công.
+
+## 7. Bản vá lỗi bổ sung (Bug Fix Update - Lần 2)
+Vào lúc 20:36 ngày 11/07/2026, các sửa đổi cơ học nhỏ sau đây đã được thực hiện trực tiếp trong [style.css](file:///d:/WEB Nghe Thuat/style.css) để hoàn thiện hiệu ứng chuyển cảnh:
+1. **Sửa cú pháp transition của Dialog**: Thay thế dấu chấm phẩy `;` bằng dấu phẩy `,` trong khai báo transition của `dialog` thành `transition: var(--transition-smooth), display 0.5s allow-discrete, overlay 0.5s allow-discrete;`.
+2. **Cập nhật transition của Popover**: Thêm tham số transition overlay vào quy tắc `[popover]` thành `transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), display 0.4s allow-discrete, overlay 0.4s allow-discrete;`.
+3. **Xác minh kiểm thử**: Chạy `npm test` thành công, tất cả các bài kiểm tra Javascript vẫn vượt qua bình thường.
+
