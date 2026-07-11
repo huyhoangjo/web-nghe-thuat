@@ -49,7 +49,39 @@ const cartMissingQuantity = [
 ];
 const totalMissingQuantity = calculateCartTotal(cartMissingQuantity);
 assert.strictEqual(totalMissingQuantity, 31000000);
-console.log('✓ Test 3b đạt: Tính tổng giỏ hàng thành công khi thiếu quantity (fallback về 1)');
+
+// Kiểm nghiệm thêm các trường hợp quantity đặc biệt (Task 2 bug fix)
+// 1. Số lượng bằng 0
+const cartWithZeroQuantity = [
+  { title: 'Tranh A', price: 8000000, quantity: 0 },
+  { title: 'Tranh B', price: 15000000, quantity: '0' }
+];
+assert.strictEqual(calculateCartTotal(cartWithZeroQuantity), 0);
+const linkWithZeroQuantity = generateZaloLink('0901234567', cartWithZeroQuantity);
+assert.ok(!linkWithZeroQuantity.includes(encodeURIComponent(' x ')));
+
+// 2. Số lượng là chuỗi không hợp lệ
+const cartWithNonNumericQty = [
+  { title: 'Tranh A', price: 8000000, quantity: 'abc' },
+  { title: 'Tranh B', price: 15000000, quantity: 'xyz' }
+];
+assert.strictEqual(calculateCartTotal(cartWithNonNumericQty), 23000000);
+const linkWithNonNumericQty = generateZaloLink('0901234567', cartWithNonNumericQty);
+assert.ok(!linkWithNonNumericQty.includes(encodeURIComponent(' x ')));
+
+// 3. Số lượng lớn hơn 1
+const cartWithLargeQuantity = [
+  { title: 'Tranh A', price: 8000000, quantity: 3 },
+  { title: 'Tranh B', price: 15000000, quantity: '2' }
+];
+assert.strictEqual(calculateCartTotal(cartWithLargeQuantity), 54000000);
+const linkWithLargeQuantity = generateZaloLink('0901234567', cartWithLargeQuantity);
+assert.ok(linkWithLargeQuantity.includes(encodeURIComponent('Tranh A')));
+assert.ok(linkWithLargeQuantity.includes(encodeURIComponent(' x 3')));
+assert.ok(linkWithLargeQuantity.includes(encodeURIComponent(' x 2')));
+assert.ok(linkWithLargeQuantity.includes(encodeURIComponent('54.000.000')));
+
+console.log('✓ Test 3b đạt: Tính tổng giỏ hàng thành công khi thiếu quantity (fallback về 1) và kiểm thử các trường hợp quantity đặc biệt');
 
 // Test 4: Tạo link Zalo
 const link = generateZaloLink('0901234567', cart);

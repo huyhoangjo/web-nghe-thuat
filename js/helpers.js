@@ -20,11 +20,25 @@ export function filterPaintings(paintings, category, priceRange) {
   });
 }
 
+function getValidQuantity(quantity) {
+  if (typeof quantity === 'number' && !Number.isNaN(quantity)) {
+    return quantity;
+  }
+  if (typeof quantity === 'string' && quantity.trim() !== '') {
+    const parsed = Number(quantity);
+    if (!Number.isNaN(parsed)) {
+      return parsed;
+    }
+  }
+  return 1;
+}
+
 export function calculateCartTotal(cartItems) {
   if (!Array.isArray(cartItems)) return 0;
   return cartItems.reduce((total, item) => {
     if (!item || typeof item.price !== 'number' || Number.isNaN(item.price)) return total;
-    return total + (item.price * (item.quantity || 1));
+    const qty = getValidQuantity(item.quantity);
+    return total + (item.price * qty);
   }, 0);
 }
 
@@ -47,7 +61,9 @@ export function generateZaloLink(phoneNumber, cartItems) {
   validItems.forEach((item, index) => {
     const formattedPrice = vndFormatter.format(item.price);
     const size = item.size || 'N/A';
-    message += `${index + 1}. ${item.title} (${size}, ${formattedPrice})\n`;
+    const qty = getValidQuantity(item.quantity);
+    const qtySuffix = qty > 1 ? ` x ${qty}` : '';
+    message += `${index + 1}. ${item.title} (${size}, ${formattedPrice})${qtySuffix}\n`;
   });
   
   const total = calculateCartTotal(validItems);
