@@ -1,4 +1,5 @@
 export function filterPaintings(paintings, category, priceRange) {
+  if (!paintings) return [];
   return paintings.filter(painting => {
     // Lọc theo category
     if (category && category !== 'all' && painting.category !== category) {
@@ -16,10 +17,12 @@ export function filterPaintings(paintings, category, priceRange) {
 }
 
 export function calculateCartTotal(cartItems) {
+  if (!cartItems) return 0;
   return cartItems.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
 }
 
 export function generateZaloLink(phoneNumber, cartItems) {
+  if (!phoneNumber || typeof phoneNumber !== 'string') return '';
   if (!cartItems || cartItems.length === 0) return '';
   const cleanPhone = phoneNumber.replace(/[^0-9]/g, '');
   

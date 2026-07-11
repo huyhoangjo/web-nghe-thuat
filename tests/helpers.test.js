@@ -36,4 +36,14 @@ assert.ok(link.includes('zalo.me/0901234567'));
 assert.ok(link.includes(encodeURIComponent('Tranh A')));
 console.log('✓ Test 4 đạt: Tạo link Zalo thành công');
 
+// Test 5: Các chốt chặn phòng thủ (Defensive guards)
+assert.deepStrictEqual(filterPaintings(null, 'all', 'all'), []);
+assert.deepStrictEqual(filterPaintings(undefined, 'all', 'all'), []);
+assert.strictEqual(calculateCartTotal(null), 0);
+assert.strictEqual(calculateCartTotal(undefined), 0);
+assert.strictEqual(generateZaloLink(null, cart), '');
+assert.strictEqual(generateZaloLink(undefined, cart), '');
+assert.strictEqual(generateZaloLink(123456789, cart), '');
+console.log('✓ Test 5 đạt: Các chốt chặn phòng thủ hoạt động đúng');
+
 console.log('--- TẤT CẢ KIỂM THỬ ĐÃ ĐẠT! ---');
