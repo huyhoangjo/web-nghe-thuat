@@ -21,21 +21,35 @@ export function filterPaintings(paintings, category, priceRange) {
 
 export function calculateCartTotal(cartItems) {
   if (!Array.isArray(cartItems)) return 0;
-  return cartItems.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
+  return cartItems.reduce((total, item) => {
+    if (!item || typeof item.price !== 'number' || Number.isNaN(item.price)) return total;
+    return total + (item.price * (item.quantity || 1));
+  }, 0);
 }
 
 export function generateZaloLink(phoneNumber, cartItems) {
   if (!phoneNumber || typeof phoneNumber !== 'string') return '';
   if (!Array.isArray(cartItems) || cartItems.length === 0) return '';
   const cleanPhone = phoneNumber.replace(/[^0-9]/g, '');
+  if (!cleanPhone) return '';
+  
+  const validItems = cartItems.filter(item => 
+    item && 
+    typeof item.title === 'string' && 
+    item.title.trim() !== '' && 
+    typeof item.price === 'number' && 
+    !Number.isNaN(item.price)
+  );
+  if (validItems.length === 0) return '';
   
   let message = "Chào họa sĩ Minh Trí, tôi muốn đặt mua các tác phẩm:\n";
-  cartItems.forEach((item, index) => {
+  validItems.forEach((item, index) => {
     const formattedPrice = vndFormatter.format(item.price);
-    message += `${index + 1}. ${item.title} (${item.size}, ${formattedPrice})\n`;
+    const size = item.size || 'N/A';
+    message += `${index + 1}. ${item.title} (${size}, ${formattedPrice})\n`;
   });
   
-  const total = calculateCartTotal(cartItems);
+  const total = calculateCartTotal(validItems);
   const formattedTotal = vndFormatter.format(total);
   message += `Tổng giá trị: ${formattedTotal}\nXin vui lòng tư vấn thêm cho tôi!`;
   

@@ -65,6 +65,41 @@ assert.strictEqual(calculateCartTotal(undefined), 0);
 assert.strictEqual(generateZaloLink(null, cart), '');
 assert.strictEqual(generateZaloLink(undefined, cart), '');
 assert.strictEqual(generateZaloLink(123456789, cart), '');
+
+// Test thêm cho các trường hợp đặc biệt ở Task 2
+const cartWithInvalidItems = [
+  { title: 'Tranh A', price: 8000000, quantity: 1 },
+  null,
+  undefined,
+  { title: 'Tranh B', price: NaN, quantity: 1 },
+  { title: 'Tranh C', price: 'invalid', quantity: 1 },
+  { title: 'Tranh D', price: 15000000, quantity: 1 }
+];
+assert.strictEqual(calculateCartTotal(cartWithInvalidItems), 23000000);
+
+assert.strictEqual(generateZaloLink('', cart), '');
+assert.strictEqual(generateZaloLink('abc', cart), '');
+assert.strictEqual(generateZaloLink('  ', cart), '');
+
+const cartWithNullAndMissingSize = [
+  null,
+  { title: 'Tranh A', price: 8000000, quantity: 1 },
+  { title: '', price: 10000000, quantity: 1 },
+  { title: 'Tranh B', price: 15000000 }
+];
+const linkWithEdgeCases = generateZaloLink('0901234567', cartWithNullAndMissingSize);
+assert.ok(linkWithEdgeCases.includes(encodeURIComponent('Tranh A')));
+assert.ok(linkWithEdgeCases.includes(encodeURIComponent('Tranh B')));
+assert.ok(linkWithEdgeCases.includes(encodeURIComponent('N/A')));
+assert.ok(linkWithEdgeCases.includes(encodeURIComponent('23.000.000')));
+
+const cartWithNoValidItems = [
+  null,
+  { title: '', price: 10000000 },
+  { title: 'Tranh A', price: NaN }
+];
+assert.strictEqual(generateZaloLink('0901234567', cartWithNoValidItems), '');
+
 console.log('✓ Test 5 đạt: Các chốt chặn phòng thủ hoạt động đúng');
 
 console.log('--- TẤT CẢ KIỂM THỬ ĐÃ ĐẠT! ---');
