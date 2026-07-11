@@ -21,7 +21,7 @@ assert.strictEqual(priceFiltered.length, 1);
 assert.strictEqual(priceFiltered[0].title, 'Tranh B');
 console.log('✓ Test 2 đạt: Lọc theo mức giá thành công');
 
-// Test 2b: Lọc các tranh có giá không hợp lệ (NaN, undefined, etc.) khi có priceRange
+// Test 2b: Lọc các tranh có giá không hợp lệ (NaN, undefined, etc.) khi có priceRange hoặc khi priceRange là 'all' / category được chọn
 const invalidPricePaintings = [
   { id: '1', title: 'Tranh Hợp Lệ', category: 'phong-canh', price: 15000000 },
   { id: '2', title: 'Tranh NaN Price', category: 'phong-canh', price: NaN },
@@ -31,7 +31,18 @@ const invalidPricePaintings = [
 const filteredInvalid = filterPaintings(invalidPricePaintings, 'all', '10m-20m');
 assert.strictEqual(filteredInvalid.length, 1);
 assert.strictEqual(filteredInvalid[0].title, 'Tranh Hợp Lệ');
-console.log('✓ Test 2b đạt: Lọc bỏ tranh có giá trị giá không hợp lệ khi có priceRange thành công');
+
+// Kiểm tra khi priceRange là 'all'
+const filteredInvalidAll = filterPaintings(invalidPricePaintings, 'all', 'all');
+assert.strictEqual(filteredInvalidAll.length, 1);
+assert.strictEqual(filteredInvalidAll[0].title, 'Tranh Hợp Lệ');
+
+// Kiểm tra khi category được chọn và priceRange là 'all'
+const filteredInvalidCategory = filterPaintings(invalidPricePaintings, 'phong-canh', 'all');
+assert.strictEqual(filteredInvalidCategory.length, 1);
+assert.strictEqual(filteredInvalidCategory[0].title, 'Tranh Hợp Lệ');
+
+console.log('✓ Test 2b đạt: Lọc bỏ tranh có giá trị giá không hợp lệ khi có priceRange hoặc priceRange là "all" / category thành công');
 
 // Test 3: Tính tổng giỏ hàng
 const cart = [
@@ -101,7 +112,7 @@ console.log('✓ Test 4 đạt: Tạo link Zalo thành công');
 // Test 5: Các chốt chặn phòng thủ (Defensive guards)
 assert.deepStrictEqual(filterPaintings(null, 'all', 'all'), []);
 assert.deepStrictEqual(filterPaintings(undefined, 'all', 'all'), []);
-assert.deepStrictEqual(filterPaintings([null, { id: 1, category: 'phong-canh' }, undefined], 'phong-canh', 'all'), [{ id: 1, category: 'phong-canh' }]);
+assert.deepStrictEqual(filterPaintings([null, { id: 1, category: 'phong-canh', price: 10000000 }, undefined], 'phong-canh', 'all'), [{ id: 1, category: 'phong-canh', price: 10000000 }]);
 assert.strictEqual(calculateCartTotal(null), 0);
 assert.strictEqual(calculateCartTotal(undefined), 0);
 assert.strictEqual(generateZaloLink(null, cart), '');

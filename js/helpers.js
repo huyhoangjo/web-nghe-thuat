@@ -4,14 +4,14 @@ export function filterPaintings(paintings, category, priceRange) {
   if (!Array.isArray(paintings)) return [];
   return paintings.filter(painting => {
     if (!painting) return false;
+    const price = painting.price;
+    if (typeof price !== 'number' || Number.isNaN(price)) return false;
     // Lọc theo category
     if (category && category !== 'all' && painting.category !== category) {
       return false;
     }
     // Lọc theo price range
     if (priceRange && priceRange !== 'all') {
-      const price = painting.price;
-      if (typeof price !== 'number' || Number.isNaN(price)) return false;
       if (priceRange === 'under-10m' && price >= 10000000) return false;
       if (priceRange === '10m-20m' && (price < 10000000 || price > 20000000)) return false;
       if (priceRange === 'over-20m' && price <= 20000000) return false;
