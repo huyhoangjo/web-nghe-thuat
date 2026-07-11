@@ -170,3 +170,26 @@ Các file đã được git stage và commit thành công:
     ```
   - **Commit Hash**: `7dbd171`
 
+- **Sửa lỗi tuần tự số thứ tự và Giỏ hàng có sản phẩm số lượng 0 (Task 2 Zero Quantity & Sequential Numbering Fix - 2026-07-11)**:
+  - **Mô tả thay đổi**:
+    - **`js/helpers.js`**:
+      - Chuyển việc lọc sản phẩm có số lượng `<= 0` trực tiếp vào hàm `filter` khởi tạo `validItems` thông qua điều kiện `getValidQuantity(item.quantity) > 0`.
+      - Loại bỏ kiểm tra `if (qty <= 0) return;` trong vòng lặp `forEach` để việc đánh số thứ tự tuần tự (`index + 1`) hoạt động chính xác cho các sản phẩm hợp lệ còn lại.
+    - **`tests/helpers.test.js`**:
+      - Cập nhật assertion trong Test 3b cho giỏ hàng chỉ gồm các sản phẩm có số lượng bằng 0, xác minh hàm trả về chuỗi rỗng `''`.
+      - Thêm ca kiểm thử mới cho giỏ hàng có sự kết hợp giữa các sản phẩm có số lượng bằng 0 và số lượng lớn hơn 0, xác minh việc đánh số thứ tự tuần tự trong tin nhắn Zalo bắt đầu từ `1.` (ví dụ: `1. Tranh B`).
+  - **Kết quả kiểm thử mới (npm test)**:
+    ```text
+    --- Chạy kiểm thử Helpers ---
+    ✓ Test 1 đạt: Lọc theo category thành công
+    ✓ Test 2 đạt: Lọc theo mức giá thành công
+    ✓ Test 2b đạt: Lọc bỏ tranh có giá trị giá không hợp lệ khi có priceRange thành công
+    ✓ Test 3 đạt: Tính tổng giỏ hàng thành công
+    ✓ Test 3b đạt: Tính tổng giỏ hàng thành công khi thiếu quantity (fallback về 1) và kiểm thử các trường hợp quantity đặc biệt
+    ✓ Test 4 đạt: Tạo link Zalo thành công
+    ✓ Test 5 đạt: Các chốt chặn phòng thủ hoạt động đúng
+    --- TẤT CẢ KIỂM THỬ ĐÃ ĐẠT! ---
+    ```
+  - **Commit Hash**: `7ef3aa3`
+
+
