@@ -103,3 +103,24 @@ Các file đã được git stage và commit thành công:
     --- TẤT CẢ KIỂM THỬ ĐÃ ĐẠT! ---
     ```
   - **Commit Hash**: `d57fe8f`
+
+- **Sửa lỗi Quan trọng: Kiểm tra null/undefined trong callback filterPaintings (Task 2 Bug Fix - 2026-07-11)**:
+  - **Mô tả thay đổi**:
+    - **`js/helpers.js`**:
+      - Bổ sung `if (!painting) return false;` ở đầu callback của hàm `filter` trong `filterPaintings` để ngăn ngừa lỗi khi mảng chứa phần tử `null` hoặc `undefined`.
+    - **`tests/helpers.test.js`**:
+      - Thêm assertion trong Test 5 để kiểm chứng rằng `filterPaintings` lọc bỏ thành công các phần tử `null` và `undefined` khỏi mảng kết quả.
+  - **Kết quả kiểm thử (npm test)**:
+    ```text
+    --- Chạy kiểm thử Helpers ---
+    ✓ Test 1 đạt: Lọc theo category thành công
+    ✓ Test 2 đạt: Lọc theo mức giá thành công
+    ✓ Test 2b đạt: Lọc bỏ tranh có giá trị giá không hợp lệ khi có priceRange thành công
+    ✓ Test 3 đạt: Tính tổng giỏ hàng thành công
+    ✓ Test 3b đạt: Tính tổng giỏ hàng thành công khi thiếu quantity (fallback về 1)
+    ✓ Test 4 đạt: Tạo link Zalo thành công
+    ✓ Test 5 đạt: Các chốt chặn phòng thủ hoạt động đúng
+    --- TẤT CẢ KIỂM THỬ ĐÃ ĐẠT! ---
+    ```
+  - **Commit Hash**: `7fa5933`
+
