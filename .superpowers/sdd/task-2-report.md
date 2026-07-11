@@ -124,3 +124,28 @@ Các file đã được git stage và commit thành công:
     ```
   - **Commit Hash**: `7fa5933`
 
+- **Sửa lỗi số lượng và cập nhật Zalo Link (Task 2 Quantity Validation & Link Update - 2026-07-11)**:
+  - **Mô tả thay đổi**:
+    - **`js/helpers.js`**:
+      - Thêm hàm private `getValidQuantity(quantity)` để phân tích cú pháp và xác thực số lượng một cách an toàn. Cho phép số lượng bằng 0, chuyển đổi chuỗi số (numeric string) thành số, và mặc định trả về 1 đối với các giá trị không hợp lệ (không phải số, chuỗi không hợp lệ, undefined, null, v.v.).
+      - Cập nhật `calculateCartTotal` sử dụng `getValidQuantity`.
+      - Cập nhật `generateZaloLink` sử dụng `getValidQuantity` để xác thực số lượng, và tự động chèn hậu tố ` x {quantity}` vào sau tên mỗi bức tranh trong tin nhắn nếu số lượng lớn hơn 1.
+    - **`tests/helpers.test.js`**:
+      - Thêm các ca kiểm thử bổ sung vào Test 3b để xác thực:
+        - Số lượng bằng 0 (không nhân giá trị tranh, không hiển thị ` x ` trong link Zalo).
+        - Số lượng là chuỗi không hợp lệ (mặc định về 1, không hiển thị ` x ` trong link Zalo).
+        - Số lượng lớn hơn 1 (nhân đúng giá trị tổng và hiển thị ` x {quantity}` trong link Zalo).
+  - **Kết quả kiểm thử mới (npm test)**:
+    ```text
+    --- Chạy kiểm thử Helpers ---
+    ✓ Test 1 đạt: Lọc theo category thành công
+    ✓ Test 2 đạt: Lọc theo mức giá thành công
+    ✓ Test 2b đạt: Lọc bỏ tranh có giá trị giá không hợp lệ khi có priceRange thành công
+    ✓ Test 3 đạt: Tính tổng giỏ hàng thành công
+    ✓ Test 3b đạt: Tính tổng giỏ hàng thành công khi thiếu quantity (fallback về 1) và kiểm thử các trường hợp quantity đặc biệt
+    ✓ Test 4 đạt: Tạo link Zalo thành công
+    ✓ Test 5 đạt: Các chốt chặn phòng thủ hoạt động đúng
+    --- TẤT CẢ KIỂM THỬ ĐÃ ĐẠT! ---
+    ```
+  - **Commit Hash**: `fd7f049`
+
