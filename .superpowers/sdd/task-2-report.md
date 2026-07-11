@@ -78,3 +78,28 @@ Các file đã được git stage và commit thành công:
     --- TẤT CẢ KIỂM THỬ ĐÃ ĐẠT! ---
     ```
   - **Commit Hash**: `2a45ef821ed4c007daf9051b29ca2d351f952b26`
+
+- **Sửa lỗi Quan trọng & Kiểm tra các trường hợp biên (Task 2 Critical Fixes - 2026-07-11)**:
+  - **Mô tả thay đổi**:
+    - **`js/helpers.js`**:
+      - `calculateCartTotal`: Bổ sung kiểm tra tính hợp lệ của từng `item` và `item.price` (bắt buộc phải là kiểu `number` và không phải `NaN`).
+      - `generateZaloLink`:
+        - Bổ sung kiểm tra `cleanPhone` không được trống: `if (!cleanPhone) return '';`.
+        - Bổ sung lọc và kiểm tra tính hợp lệ của từng item trong giỏ hàng (phải có `title` và `price` hợp lệ) trước khi đưa vào tin nhắn.
+        - Trả về chuỗi rỗng nếu không tìm thấy item hợp lệ nào trong giỏ hàng.
+        - Sử dụng fallback `'N/A'` cho các item bị thiếu thuộc tính `size`.
+    - **`tests/helpers.test.js`**:
+      - Thêm các assertion kiểm thử các trường hợp biên: giỏ hàng có chứa item `null`/`undefined`, item có `price` là `NaN`/chuỗi không hợp lệ, số điện thoại không hợp lệ (không chứa số), giỏ hàng không có item nào hợp lệ, và giỏ hàng có item thiếu `size` (kiểm tra fallback `'N/A'`).
+  - **Kết quả kiểm thử (npm test)**:
+    ```text
+    --- Chạy kiểm thử Helpers ---
+    ✓ Test 1 đạt: Lọc theo category thành công
+    ✓ Test 2 đạt: Lọc theo mức giá thành công
+    ✓ Test 2b đạt: Lọc bỏ tranh có giá trị giá không hợp lệ khi có priceRange thành công
+    ✓ Test 3 đạt: Tính tổng giỏ hàng thành công
+    ✓ Test 3b đạt: Tính tổng giỏ hàng thành công khi thiếu quantity (fallback về 1)
+    ✓ Test 4 đạt: Tạo link Zalo thành công
+    ✓ Test 5 đạt: Các chốt chặn phòng thủ hoạt động đúng
+    --- TẤT CẢ KIỂM THỬ ĐÃ ĐẠT! ---
+    ```
+  - **Commit Hash**: `d57fe8f`
