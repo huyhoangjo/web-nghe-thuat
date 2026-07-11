@@ -55,3 +55,26 @@ Các file đã được git stage và commit thành công:
   --- TẤT CẢ KIỂM THỬ ĐÃ ĐẠT! ---
   ```
 - **Commit Hash của bản sửa lỗi**: `9d3c3cd96ecd8f6fe93fc6548d6c5da879023911`
+
+- **Sửa lỗi cơ bản (Task 2 Bug Fix - 2026-07-11)**:
+  - **Mô tả thay đổi**:
+    - **`js/helpers.js`**:
+      - Thêm kiểm tra `typeof price !== 'number' || Number.isNaN(price)` khi `priceRange` được thiết lập để loại bỏ các tranh có giá trị không hợp lệ.
+      - Chuyển khai báo `new Intl.NumberFormat` ra phạm vi module (module scope) với tên `vndFormatter` để tái sử dụng trong `generateZaloLink`.
+      - Cải tiến các chốt chặn phòng thủ (guard clauses) sử dụng `Array.isArray(paintings)` và `Array.isArray(cartItems)` thay vì chỉ kiểm tra truthiness thông thường.
+    - **`tests/helpers.test.js`**:
+      - Thêm Test 2b: Xác minh việc lọc bỏ các tranh có giá trị `NaN`, `undefined`, và chuỗi ký tự khi có lọc theo mức giá.
+      - Thêm Test 3b: Xác minh cơ chế fallback của hàm `calculateCartTotal` khi thuộc tính `quantity` bị thiếu (fallback về 1).
+  - **Kết quả kiểm thử mới (npm test)**:
+    ```text
+    --- Chạy kiểm thử Helpers ---
+    ✓ Test 1 đạt: Lọc theo category thành công
+    ✓ Test 2 đạt: Lọc theo mức giá thành công
+    ✓ Test 2b đạt: Lọc bỏ tranh có giá trị giá không hợp lệ khi có priceRange thành công
+    ✓ Test 3 đạt: Tính tổng giỏ hàng thành công
+    ✓ Test 3b đạt: Tính tổng giỏ hàng thành công khi thiếu quantity (fallback về 1)
+    ✓ Test 4 đạt: Tạo link Zalo thành công
+    ✓ Test 5 đạt: Các chốt chặn phòng thủ hoạt động đúng
+    --- TẤT CẢ KIỂM THỬ ĐÃ ĐẠT! ---
+    ```
+  - **Commit Hash**: `2a45ef821ed4c007daf9051b29ca2d351f952b26`
