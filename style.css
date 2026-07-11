@@ -10,13 +10,14 @@
   --text-muted: #6E6A5F;     /* Chữ xám kem */
   --accent-color: #C5A880;   /* Vàng Gold */
   --accent-hover: #A88B58;
+  --error: #D9534F;
   --transition-smooth: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', 'Inter', sans-serif;
 }
 
 /* Reset Styles */
-* {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -502,7 +503,7 @@ dialog::backdrop {
   dialog {
     opacity: 0;
     transform: scale(0.95);
-    transition: opacity 0.5s var(--transition-smooth), transform 0.5s var(--transition-smooth), display 0.5s allow-discrete;
+    transition: var(--transition-smooth), display 0.5s allow-discrete; overlay 0.5s allow-discrete;
   }
   dialog[open] {
     opacity: 1;
@@ -945,6 +946,7 @@ footer {
     text-align: left !important;
     padding-left: 3rem !important;
     padding-right: 0 !important;
+    left: 0 !important;
   }
   .timeline-dot {
     left: 14px !important;
