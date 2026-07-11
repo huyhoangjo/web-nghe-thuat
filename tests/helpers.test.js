@@ -60,6 +60,7 @@ console.log('✓ Test 4 đạt: Tạo link Zalo thành công');
 // Test 5: Các chốt chặn phòng thủ (Defensive guards)
 assert.deepStrictEqual(filterPaintings(null, 'all', 'all'), []);
 assert.deepStrictEqual(filterPaintings(undefined, 'all', 'all'), []);
+assert.deepStrictEqual(filterPaintings([null, { id: 1, category: 'phong-canh' }, undefined], 'phong-canh', 'all'), [{ id: 1, category: 'phong-canh' }]);
 assert.strictEqual(calculateCartTotal(null), 0);
 assert.strictEqual(calculateCartTotal(undefined), 0);
 assert.strictEqual(generateZaloLink(null, cart), '');

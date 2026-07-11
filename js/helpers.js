@@ -3,6 +3,7 @@ const vndFormatter = new Intl.NumberFormat('vi-VN', { style: 'currency', currenc
 export function filterPaintings(paintings, category, priceRange) {
   if (!Array.isArray(paintings)) return [];
   return paintings.filter(painting => {
+    if (!painting) return false;
     // Lọc theo category
     if (category && category !== 'all' && painting.category !== category) {
       return false;
