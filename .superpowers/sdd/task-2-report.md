@@ -149,3 +149,24 @@ Các file đã được git stage và commit thành công:
     ```
   - **Commit Hash**: `fd7f049`
 
+- **Sửa lỗi Quan trọng về Số lượng âm và lọc Zalo Link (Task 2 Negative Quantity Fix & Zalo Link Filter - 2026-07-11)**:
+  - **Mô tả thay đổi**:
+    - **`js/helpers.js`**:
+      - `getValidQuantity`: Bổ sung `qty = Math.max(0, qty);` để đảm bảo số lượng không bao giờ âm.
+      - `generateZaloLink`: Thêm kiểm tra `if (qty <= 0) return;` ở đầu vòng lặp để loại bỏ hoàn toàn các sản phẩm có số lượng <= 0 khỏi tin nhắn Zalo.
+    - **`tests/helpers.test.js`**:
+      - Cập nhật assertion của Test 3b cho trường hợp số lượng bằng 0, xác minh rằng tranh có số lượng 0 không xuất hiện trong nội dung tin nhắn của đường dẫn Zalo.
+  - **Kết quả kiểm thử mới (npm test)**:
+    ```text
+    --- Chạy kiểm thử Helpers ---
+    ✓ Test 1 đạt: Lọc theo category thành công
+    ✓ Test 2 đạt: Lọc theo mức giá thành công
+    ✓ Test 2b đạt: Lọc bỏ tranh có giá trị giá không hợp lệ khi có priceRange thành công
+    ✓ Test 3 đạt: Tính tổng giỏ hàng thành công
+    ✓ Test 3b đạt: Tính tổng giỏ hàng thành công khi thiếu quantity (fallback về 1) và kiểm thử các trường hợp quantity đặc biệt
+    ✓ Test 4 đạt: Tạo link Zalo thành công
+    ✓ Test 5 đạt: Các chốt chặn phòng thủ hoạt động đúng
+    --- TẤT CẢ KIỂM THỬ ĐÃ ĐẠT! ---
+    ```
+  - **Commit Hash**: `7dbd171`
+
