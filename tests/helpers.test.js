@@ -58,7 +58,8 @@ const cartWithZeroQuantity = [
 ];
 assert.strictEqual(calculateCartTotal(cartWithZeroQuantity), 0);
 const linkWithZeroQuantity = generateZaloLink('0901234567', cartWithZeroQuantity);
-assert.ok(!linkWithZeroQuantity.includes(encodeURIComponent(' x ')));
+assert.ok(!linkWithZeroQuantity.includes(encodeURIComponent('Tranh A')));
+assert.ok(!linkWithZeroQuantity.includes(encodeURIComponent('Tranh B')));
 
 // 2. Số lượng là chuỗi không hợp lệ
 const cartWithNonNumericQty = [

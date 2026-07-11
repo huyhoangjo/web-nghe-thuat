@@ -21,16 +21,17 @@ export function filterPaintings(paintings, category, priceRange) {
 }
 
 function getValidQuantity(quantity) {
+  let qty = 1;
   if (typeof quantity === 'number' && !Number.isNaN(quantity)) {
-    return quantity;
-  }
-  if (typeof quantity === 'string' && quantity.trim() !== '') {
+    qty = quantity;
+  } else if (typeof quantity === 'string' && quantity.trim() !== '') {
     const parsed = Number(quantity);
     if (!Number.isNaN(parsed)) {
-      return parsed;
+      qty = parsed;
     }
   }
-  return 1;
+  qty = Math.max(0, qty);
+  return qty;
 }
 
 export function calculateCartTotal(cartItems) {
@@ -59,9 +60,10 @@ export function generateZaloLink(phoneNumber, cartItems) {
   
   let message = "Chào họa sĩ Minh Trí, tôi muốn đặt mua các tác phẩm:\n";
   validItems.forEach((item, index) => {
+    const qty = getValidQuantity(item.quantity);
+    if (qty <= 0) return;
     const formattedPrice = vndFormatter.format(item.price);
     const size = item.size || 'N/A';
-    const qty = getValidQuantity(item.quantity);
     const qtySuffix = qty > 1 ? ` x ${qty}` : '';
     message += `${index + 1}. ${item.title} (${size}, ${formattedPrice})${qtySuffix}\n`;
   });
