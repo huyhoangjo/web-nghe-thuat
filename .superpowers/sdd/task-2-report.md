@@ -192,4 +192,25 @@ Các file đã được git stage và commit thành công:
     ```
   - **Commit Hash**: `7ef3aa3`
 
+- **Sửa lỗi Quan trọng: Áp dụng kiểm tra giá cho mọi trường hợp lọc (Task 2 Price Validation Fix - 2026-07-11)**:
+  - **Mô tả thay đổi**:
+    - **`js/helpers.js`**:
+      - Chuyển kiểm tra tính hợp lệ của giá (`const price = painting.price; if (typeof price !== 'number' || Number.isNaN(price)) return false;`) lên đầu callback của `filterPaintings` (ngay sau kiểm tra phần tử `null`/`undefined`). Điều này đảm bảo rằng bất kể bộ lọc giá (`priceRange`) là `'all'` hay bị bỏ qua, tất cả các tác phẩm có giá không hợp lệ đều bị loại bỏ một cách chính xác.
+    - **`tests/helpers.test.js`**:
+      - Cập nhật Test 2b để bổ sung các xác nhận (assertions) kiểm tra việc lọc bỏ các tác phẩm có giá không hợp lệ khi bộ lọc `priceRange` là `'all'` hoặc khi bộ lọc danh mục (`category`) được chọn.
+      - Cập nhật Test 5 (kiểm tra các chốt chặn phòng thủ) bằng cách bổ sung giá hợp lệ cho đối tượng mẫu để vượt qua bộ lọc giá bắt buộc mới.
+  - **Kết quả kiểm thử mới (npm test)**:
+    ```text
+    --- Chạy kiểm thử Helpers ---
+    ✓ Test 1 đạt: Lọc theo category thành công
+    ✓ Test 2 đạt: Lọc theo mức giá thành công
+    ✓ Test 2b đạt: Lọc bỏ tranh có giá trị giá không hợp lệ khi có priceRange hoặc priceRange là "all" / category thành công
+    ✓ Test 3 đạt: Tính tổng giỏ hàng thành công
+    ✓ Test 3b đạt: Tính tổng giỏ hàng thành công khi thiếu quantity (fallback về 1) và kiểm thử các trường hợp quantity đặc biệt
+    ✓ Test 4 đạt: Tạo link Zalo thành công
+    ✓ Test 5 đạt: Các chốt chặn phòng thủ hoạt động đúng
+    --- TẤT CẢ KIỂM THỬ ĐÃ ĐẠT! ---
+    ```
+  - **Commit Hash**: `c2c1c1f7506cb5d3081839088c7d9e431add9161`
+
 
