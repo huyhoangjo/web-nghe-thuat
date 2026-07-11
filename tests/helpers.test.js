@@ -51,15 +51,23 @@ const totalMissingQuantity = calculateCartTotal(cartMissingQuantity);
 assert.strictEqual(totalMissingQuantity, 31000000);
 
 // Kiểm nghiệm thêm các trường hợp quantity đặc biệt (Task 2 bug fix)
-// 1. Số lượng bằng 0
+// 1. Số lượng bằng 0 (trả về chuỗi rỗng)
 const cartWithZeroQuantity = [
   { title: 'Tranh A', price: 8000000, quantity: 0 },
   { title: 'Tranh B', price: 15000000, quantity: '0' }
 ];
 assert.strictEqual(calculateCartTotal(cartWithZeroQuantity), 0);
 const linkWithZeroQuantity = generateZaloLink('0901234567', cartWithZeroQuantity);
-assert.ok(!linkWithZeroQuantity.includes(encodeURIComponent('Tranh A')));
-assert.ok(!linkWithZeroQuantity.includes(encodeURIComponent('Tranh B')));
+assert.strictEqual(linkWithZeroQuantity, '');
+
+// 1b. Hỗn hợp số lượng 0 và lớn hơn 0 (đánh số thứ tự tuần tự bắt đầu từ 1. ...)
+const cartWithMixedQuantity = [
+  { title: 'Tranh A', price: 8000000, quantity: 0 },
+  { title: 'Tranh B', price: 15000000, quantity: 2 }
+];
+const linkWithMixedQuantity = generateZaloLink('0901234567', cartWithMixedQuantity);
+assert.ok(linkWithMixedQuantity.includes(encodeURIComponent('1. Tranh B')));
+assert.ok(!linkWithMixedQuantity.includes(encodeURIComponent('Tranh A')));
 
 // 2. Số lượng là chuỗi không hợp lệ
 const cartWithNonNumericQty = [

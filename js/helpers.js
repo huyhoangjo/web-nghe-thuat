@@ -54,14 +54,14 @@ export function generateZaloLink(phoneNumber, cartItems) {
     typeof item.title === 'string' && 
     item.title.trim() !== '' && 
     typeof item.price === 'number' && 
-    !Number.isNaN(item.price)
+    !Number.isNaN(item.price) &&
+    getValidQuantity(item.quantity) > 0
   );
   if (validItems.length === 0) return '';
   
   let message = "Chào họa sĩ Minh Trí, tôi muốn đặt mua các tác phẩm:\n";
   validItems.forEach((item, index) => {
     const qty = getValidQuantity(item.quantity);
-    if (qty <= 0) return;
     const formattedPrice = vndFormatter.format(item.price);
     const size = item.size || 'N/A';
     const qtySuffix = qty > 1 ? ` x ${qty}` : '';
