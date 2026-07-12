@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bảng Quản Trị Triển Lãm Tranh | Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Admin specific layout adjustments overlayed on top of style.css */
+    .admin-body {
+      padding-top: 100px;
+      min-height: 100vh;
+      background-color: var(--bg-primary);
+    }
+    .admin-wrapper {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      padding: 3rem;
+      margin-bottom: 5rem;
+    }
+    .admin-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1.5rem;
+    }
+    .admin-grid-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
+    }
+    @media (max-width: 900px) {
+      .admin-grid-layout { grid-template-columns: 1fr; }
+    }
+    .painting-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .painting-table th, .painting-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .painting-table th {
+      background-color: var(--bg-primary);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+    .admin-thumbnail {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border: 1px solid var(--border-color);
+    }
+    .action-icons {
+      display: flex;
+      gap: 0.8rem;
+    }
+    .action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: var(--transition-smooth);
+    }
+    .edit-btn { color: var(--accent-color); }
+    .edit-btn:hover { color: var(--accent-hover); }
+    .delete-btn { color: #ff3b30; }
+    .delete-btn:hover { color: #ff453a; }
+    .login-container {
+      max-width: 400px;
+      margin: 8rem auto;
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      padding: 3rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="admin-body">
+
+  <!-- Header Nav -->
+  <header>
+    <div class="container nav-container">
+      <a href="index.html" class="logo">MINH <span>TRI</span></a>
+      <a href="index.html" class="admin-link"><i class="fa-solid fa-arrow-left"></i> Quay lại Web</a>
+    </div>
+  </header>
+
+  <!-- Login Gate Panel -->
+  <div class="container" id="login-panel">
+    <div class="login-container">
+      <h3 style="margin-bottom: 1.5rem;">Đăng Nhập Quản Trị</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem;">Nhập mật khẩu quản trị để chỉnh sửa triển lãm tranh (Mật khẩu mặc định: <strong>1234</strong>)</p>
+      <form id="login-form" style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="form-group" style="text-align: left;">
+          <label for="passcode">Mật khẩu</label>
+          <input type="password" id="passcode" class="form-input" required placeholder="Nhập mật khẩu">
+        </div>
+        <button type="submit" class="btn-primary" style="margin-top: 1rem;">Xác nhận</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- CRUD Panel Dashboard (Hidden by default) -->
+  <main class="container" id="dashboard-panel" style="display: none;">
+    <div class="admin-wrapper">
+      <div class="admin-header-row">
+        <div>
+          <h2 style="font-size: 2rem;">Quản Lý Phòng Trưng Bày</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Quản trị danh mục tranh hiển thị ngoài phòng khách hàng</p>
+        </div>
+        <button id="logout-btn" class="admin-link">Đăng xuất</button>
+      </div>
+
+      <div class="admin-grid-layout">
+        <!-- List Panel -->
+        <div>
+          <h3 style="margin-bottom: 1.5rem; border-bottom: 1px dashed var(--border-color); padding-bottom: 0.5rem;">Danh Sách Tác Phẩm</h3>
+          <div style="overflow-x: auto;">
+            <table class="painting-table">
+              <thead>
+                <tr>
+                  <th>Ảnh</th>
+                  <th>Tên tác phẩm</th>
+                  <th>Chất liệu / Giá</th>
+                  <th>Trạng thái</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="paintings-list-body">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Form CRUD Panel -->
+        <div style="border-left: 1px solid var(--border-color); padding-left: 2rem;" id="form-container">
+          <h3 id="form-title" style="margin-bottom: 1.5rem; border-bottom: 1px dashed var(--border-color); padding-bottom: 0.5rem;">Thêm Tác Phẩm Mới</h3>
+          <form id="crud-form" style="display: flex; flex-direction: column; gap: 1.2rem;">
+            <input type="hidden" id="edit-id">
+            
+            <div class="form-group">
+              <label for="p-title">Tên tác phẩm *</label>
+              <input type="text" id="p-title" class="form-input" required placeholder="Nhập tên tranh">
+            </div>
+
+            <div class="form-group">
+              <label for="p-category">Chủ đề *</label>
+              <select id="p-category" class="form-input" style="border: none; border-bottom: 1px solid var(--border-color); background: none; font-family: inherit; font-size: 0.95rem;" required>
+                <option value="phong-canh">Phong cảnh</option>
+                <option value="truu-tuong">Trừu tượng</option>
+                <option value="chan-dung">Chân dung</option>
+                <option value="tinh-vat">Tĩnh vật</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="p-material">Chất liệu *</label>
+                <input type="text" id="p-material" class="form-input" required placeholder="Ví dụ: Sơn dầu trên vải toan">
+              </div>
+              <div class="form-group">
+                <label for="p-size">Kích thước *</label>
+                <input type="text" id="p-size" class="form-input" required placeholder="Ví dụ: 80 x 100 cm">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="p-price">Giá bán (VND) *</label>
+                <input type="number" id="p-price" class="form-input" required placeholder="Ví dụ: 15000000">
+              </div>
+              <div class="form-group">
+                <label for="p-year">Năm sáng tác *</label>
+                <input type="number" id="p-year" class="form-input" required placeholder="Ví dụ: 2026">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="p-image-url">Ảnh tác phẩm (URL hoặc tải tệp lên) *</label>
+              <div style="display: flex; gap: 1rem; align-items: center;">
+                <input type="text" id="p-image-url" class="form-input" placeholder="Nhập URL ảnh hoặc chọn file bên phải" style="flex: 1;">
+                <input type="file" id="p-image-file" accept="image/*" style="font-size: 0.8rem; width: 150px;">
+              </div>
+              <div id="image-preview-container" style="margin-top: 0.5rem; display: none;">
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Xem trước ảnh:</span><br>
+                <img id="p-image-preview" src="" style="max-height: 80px; margin-top: 0.2rem; border: 1px solid var(--border-color);">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="p-description">Cảm hứng sáng tác / Mô tả câu chuyện *</label>
+              <textarea id="p-description" class="form-input form-textarea" style="min-height: 60px;" required placeholder="Kể câu chuyện, ý nghĩa hoặc nguồn cảm hứng đằng sau tác phẩm..."></textarea>
+            </div>
+
+            <div class="form-group" style="flex-direction: row; gap: 0.5rem; align-items: center;">
+              <input type="checkbox" id="p-sold" style="width: 18px; height: 18px; cursor: pointer;">
+              <label for="p-sold" style="margin-bottom: 0; cursor: pointer; font-size: 0.9rem;">Tác phẩm này đã bán</label>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+              <button type="submit" class="btn-primary" style="flex: 1;">Lưu tác phẩm</button>
+              <button type="button" id="cancel-edit-btn" class="admin-link" style="display: none; border-radius: 0; border-color: var(--text-primary); color: var(--text-primary);">Hủy bỏ</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>
