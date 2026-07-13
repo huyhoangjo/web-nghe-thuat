@@ -1,76 +1,68 @@
-const vndFormatter = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
-
-export function filterPaintings(paintings, category, priceRange) {
-  if (!Array.isArray(paintings)) return [];
-  return paintings.filter(painting => {
-    if (!painting) return false;
-    const price = painting.price;
-    if (typeof price !== 'number' || Number.isNaN(price)) return false;
-    // Lọc theo category
-    if (category && category !== 'all' && painting.category !== category) {
-      return false;
-    }
-    // Lọc theo price range
-    if (priceRange && priceRange !== 'all') {
-      if (priceRange === 'under-10m' && price >= 10000000) return false;
-      if (priceRange === '10m-20m' && (price < 10000000 || price > 20000000)) return false;
-      if (priceRange === 'over-20m' && price <= 20000000) return false;
-    }
-    return true;
-  });
+export function filterWorks(works, chapter) {
+  if (!Array.isArray(works)) return [];
+  if (!chapter || chapter === "all") return works;
+  const parsedChapter = Number(chapter);
+  return works.filter(w => w && Number(w.chapter) === parsedChapter);
 }
 
-function getValidQuantity(quantity) {
-  let qty = 1;
-  if (typeof quantity === 'number' && !Number.isNaN(quantity)) {
-    qty = quantity;
-  } else if (typeof quantity === 'string' && quantity.trim() !== '') {
-    const parsed = Number(quantity);
-    if (!Number.isNaN(parsed)) {
-      qty = parsed;
-    }
+export function searchArchive(db, query, lang = "en") {
+  if (!db || !query) return [];
+  const cleanQuery = query.toLowerCase().trim();
+  if (!cleanQuery) return [];
+
+  const results = [];
+  const match = (val) => val && String(val).toLowerCase().includes(cleanQuery);
+
+  // Search Works
+  if (Array.isArray(db.works)) {
+    db.works.forEach(w => {
+      if (match(w.titleEn) || match(w.titleVi) || match(w.materialEn) || match(w.materialVi) || match(w.descriptionEn) || match(w.descriptionVi) || match(w.year)) {
+        results.push({ type: "work", item: w });
+      }
+    });
   }
-  qty = Math.max(0, qty);
-  return qty;
+
+  // Search Journal
+  if (Array.isArray(db.journal)) {
+    db.journal.forEach(j => {
+      if (match(j.titleEn) || match(j.titleVi) || match(j.contentEn) || match(j.contentVi) || match(j.locationEn) || match(j.locationVi)) {
+        results.push({ type: "journal", item: j });
+      }
+    });
+  }
+
+  // Search Field Notes
+  if (Array.isArray(db.fieldNotes)) {
+    db.fieldNotes.forEach(f => {
+      if (match(f.titleEn) || match(f.titleVi) || match(f.contentEn) || match(f.contentVi) || match(f.locationEn) || match(f.locationVi) || match(f.countryEn) || match(f.countryVi)) {
+        results.push({ type: "fieldNote", item: f });
+      }
+    });
+  }
+
+  // Search Archive
+  if (Array.isArray(db.archive)) {
+    db.archive.forEach(a => {
+      if (match(a.titleEn) || match(a.titleVi) || match(a.descriptionEn) || match(a.descriptionVi) || match(a.date)) {
+        results.push({ type: "archive", item: a });
+      }
+    });
+  }
+
+  return results;
 }
 
-export function calculateCartTotal(cartItems) {
-  if (!Array.isArray(cartItems)) return 0;
-  return cartItems.reduce((total, item) => {
-    if (!item || typeof item.price !== 'number' || Number.isNaN(item.price)) return total;
-    const qty = getValidQuantity(item.quantity);
-    return total + (item.price * qty);
-  }, 0);
-}
-
-export function generateZaloLink(phoneNumber, cartItems) {
-  if (!phoneNumber || typeof phoneNumber !== 'string') return '';
-  if (!Array.isArray(cartItems) || cartItems.length === 0) return '';
-  const cleanPhone = phoneNumber.replace(/[^0-9]/g, '');
-  if (!cleanPhone) return '';
-  
-  const validItems = cartItems.filter(item => 
-    item && 
-    typeof item.title === 'string' && 
-    item.title.trim() !== '' && 
-    typeof item.price === 'number' && 
-    !Number.isNaN(item.price) &&
-    getValidQuantity(item.quantity) > 0
-  );
-  if (validItems.length === 0) return '';
-  
-  let message = "Chào họa sĩ Minh Trí, tôi muốn đặt mua các tác phẩm:\n";
-  validItems.forEach((item, index) => {
-    const qty = getValidQuantity(item.quantity);
-    const formattedPrice = vndFormatter.format(item.price);
-    const size = item.size || 'N/A';
-    const qtySuffix = qty > 1 ? ` x ${qty}` : '';
-    message += `${index + 1}. ${item.title} (${size}, ${formattedPrice})${qtySuffix}\n`;
-  });
-  
-  const total = calculateCartTotal(validItems);
-  const formattedTotal = vndFormatter.format(total);
-  message += `Tổng giá trị: ${formattedTotal}\nXin vui lòng tư vấn thêm cho tôi!`;
-  
-  return `https://zalo.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+export function formatDate(dateStr, lang = "en") {
+  if (!dateStr) return "";
+  try {
+    const d = new Date(dateStr);
+    if (Number.isNaN(d.getTime())) return dateStr;
+    if (lang === "vi") {
+      return `Tháng ${d.getMonth() + 1} / ${d.getFullYear()}`;
+    }
+    const options = { month: "short", year: "numeric" };
+    return d.toLocaleDateString("en-US", options);
+  } catch {
+    return dateStr;
+  }
 }
