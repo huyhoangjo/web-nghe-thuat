@@ -59,7 +59,7 @@ const UI_TRANSLATIONS = {
     contactTitle: "Get in Touch",
     
     contactIntro: "For inquiries regarding curatorial projects, exhibitions, or research collaborations, please write to the studio.",
-    contactEmail: "duyenngo.art@gmail.com",
+    contactEmail: "duyen.hoian@gmail.com",
     contactInstagram: "@ngo.thi.thuy.duyen",
 
     labelName: "Your Name *",
@@ -147,7 +147,7 @@ const UI_TRANSLATIONS = {
     contactTitle: "Liên Hệ",
     
     contactIntro: "Mọi yêu cầu về dự án giám tuyển, triển lãm hoặc hợp tác nghiên cứu nghệ thuật, xin vui lòng gửi thư cho xưởng vẽ.",
-    contactEmail: "duyenngo.art@gmail.com",
+    contactEmail: "duyen.hoian@gmail.com",
     contactInstagram: "@ngo.thi.thuy.duyen",
 
     labelName: "Họ và tên *",
@@ -486,7 +486,9 @@ function renderWorks() {
     const card = document.createElement('div');
     card.className = 'work-card';
     card.innerHTML = `
-      <img src="${work.image}" alt="${currentLang === 'en' ? work.titleEn : work.titleVi}">
+      <div class="work-card-img-wrapper">
+        <img src="${work.image}" alt="${currentLang === 'en' ? work.titleEn : work.titleVi}">
+      </div>
       <h4>${currentLang === 'en' ? work.titleEn : work.titleVi}</h4>
       <p>${currentLang === 'en' ? work.materialEn : work.materialVi} | ${work.year}</p>
     `;
