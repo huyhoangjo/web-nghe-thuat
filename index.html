@@ -5,36 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NGO THI THUY DUYEN | Living Artistic Archive</title>
   <meta name="description" content="The Living Artistic Archive of Vietnamese contemporary artist Ngo Thi Thuy Duyen. A digital space where artworks, memories, travels, and observations coexist.">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2.2">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-  <!-- Minimal Header & Navigation -->
-  <header>
-    <div class="container nav-container">
-      <div class="nav-top-row">
+  <!-- Mobile Header (Visible only on screens < 1024px) -->
+  <div class="mobile-header">
+    <a href="#home" class="mobile-logo">NGO THI THUY DUYEN</a>
+    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu Toggle">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
+
+  <div class="app-layout">
+    <!-- Minimal Left Sidebar -->
+    <aside class="sidebar" id="app-sidebar">
+      <div class="sidebar-top">
         <a href="#home" class="logo-link" id="nav-logo">NGO THI THUY DUYEN</a>
+        <p class="sidebar-subtitle">Living Artistic Archive</p>
       </div>
       
-      <div class="nav-bottom-row">
+      <nav class="sidebar-nav">
         <ul class="nav-menu" id="nav-menu">
           <!-- Rendered dynamically to support active underline and bilingual naming -->
         </ul>
+      </nav>
 
+      <div class="sidebar-bottom">
         <div class="nav-actions">
           <button id="search-toggle-btn" class="nav-btn" aria-label="Search archive">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
           <button id="lang-toggle" class="nav-btn lang-toggle">VI</button>
-          <a href="admin.html" class="nav-btn" style="font-size: 0.75rem; border: 1px solid var(--border-color); padding: 0.25rem 0.5rem;" id="nav-admin-link">CMS</a>
+          <a href="admin.html" class="nav-btn-link" id="nav-admin-link">CMS</a>
         </div>
+        <p class="sidebar-copyright">© 2026 Ngo Thi Thuy Duyen</p>
       </div>
-    </div>
-  </header>
+    </aside>
 
-  <!-- Main View Containers (Virtual Pages) -->
-  <main class="container" style="margin-top: 3rem;">
+    <!-- Main View Canvas Area -->
+    <main id="main-content">
     
     <!-- HOME VIEW -->
     <div id="view-home" class="view-container">
@@ -173,6 +184,16 @@
 
   </main>
 
+  <!-- Minimal Footer -->
+  <footer style="margin-top: 6rem; border-top: 1px solid var(--border-color); padding: 3rem 0; text-align: center; font-size: 0.8rem; color: var(--text-muted);">
+    <div class="container">
+      <p id="footer-copyright"></p>
+      <p style="margin-top: 0.5rem;" id="footer-concept"></p>
+    </div>
+  </footer>
+
+  </div> <!-- End of .app-layout -->
+
   <!-- Dialog Modal Lightbox -->
   <dialog id="details-dialog">
     <div class="dialog-layout" id="dialog-content">
@@ -194,14 +215,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Minimal Footer -->
-  <footer style="margin-top: 6rem; border-top: 1px solid var(--border-color); padding: 3rem 0; text-align: center; font-size: 0.8rem; color: var(--text-muted);">
-    <div class="container">
-      <p id="footer-copyright"></p>
-      <p style="margin-top: 0.5rem;" id="footer-concept"></p>
-    </div>
-  </footer>
 
   <script type="module" src="js/app.js"></script>
 </body>

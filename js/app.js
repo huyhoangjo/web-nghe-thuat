@@ -213,6 +213,31 @@ function setupEventListeners() {
     renderCurrentView();
   });
 
+  // Mobile menu toggle
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const sidebar = document.getElementById('app-sidebar');
+  if (mobileMenuBtn && sidebar) {
+    mobileMenuBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      const icon = mobileMenuBtn.querySelector('i');
+      if (sidebar.classList.contains('active')) {
+        icon.className = 'fa-solid fa-xmark';
+      } else {
+        icon.className = 'fa-solid fa-bars';
+      }
+    });
+
+    // Close sidebar on link click (mobile)
+    const navLinks = document.getElementById('nav-menu');
+    navLinks.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A') {
+        sidebar.classList.remove('active');
+        const icon = mobileMenuBtn.querySelector('i');
+        if (icon) icon.className = 'fa-solid fa-bars';
+      }
+    });
+  }
+
   // Search overlay toggle
   const searchToggleBtn = document.getElementById('search-toggle-btn');
   const searchOverlay = document.getElementById('search-overlay');
