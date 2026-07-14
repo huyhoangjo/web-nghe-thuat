@@ -1,0 +1,11 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+accounts.google.com	TRUE	/	FALSE	1999999999	__Host-GAPS	1:2Gmpiq8zAgZD69JsiUHjaLg9ihPmaA:23xEWtQmr5j3jLNf
+accounts.google.com	TRUE	/	FALSE	1999999999	Priority	HIGH
+.blogger.com	TRUE	/	FALSE	1999999999	NID	533=PgY6Q4cjTtN90ulfUGIK0FxeEiWq8VwslLigf3jtpYt68DjzjJRXZLkz5MbvNLKpvZdRN3LeQmiLwOCrnIzawlrFUwWsXvRdVQbq0X3NLBWUjeI-wewkOjQ5cSJQn7I67t0ovspeaSyTk1DsiIGjLRwbY-rDDP7fFf5areGtibgnC6lqPkicg9sG
+www.pinterest.com	TRUE	/	FALSE	1999999999	csrftoken	b75e909a1ba79337d920d280d239aacb
+.pinterest.com	TRUE	/	FALSE	1999999999	_pinterest_sess	TWc9PSZjK0g4OUpGK3I2a1NOUG04UHZNQ2szdkd4ZGhuaEZYYzVvaVhQeXpIdy8xZ3VCcSsyWDR5RFRIWjhzUUN5YWZrUzN6aE5Rak1XVm01bDVGcUZJaU5YSG9TQWZ2Q0VyTEdpMHhUQ0FiY2dOOD0mL3dZQXJWZmthT3Z4Q21EVXBGRm82Z2FKNERFPQ==
+www.pinterest.com	TRUE	/	FALSE	1999999999	samesite	none
+.pinterest.com	TRUE	/	FALSE	1999999999	_auth	0
+www.pinterest.com	TRUE	/	FALSE	1999999999	_routing_id	07087eee-6ff4-4c66-8108-15a4d048ab1e"
+

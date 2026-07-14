@@ -1,0 +1,115 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta content="width=device-width, initial-scale=1" id="viewport" name="viewport"/><title>Pinterest - 404</title></head><body><div data-gestalt-valid-html="Box"><style>html {
+  background: #f7f5f5;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  font-size: 24px;
+  color: #767676;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans,
+  Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica,
+  "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, "ＭＳ Ｐゴシック",
+  Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+@keyframes fadein {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+body a.link,
+body h1,
+body p {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.wrapper {
+  align-items: center;
+  display: flex;
+  margin: 100px 10px;
+  flex-direction: column;
+  text-align: center;
+}
+
+.badge {
+  align-items: center;
+  border-radius: 100%;
+  border: 10px solid #767676;
+  color: #767676;
+  display: flex;
+  font-size: 70px;
+  height: 200px;
+  justify-content: center;
+  width: 200px;
+}
+
+a {
+  font-weight: bold;
+  color: #221919;
+  text-decoration: none;
+  outline: none;
+}
+
+a:hover {
+  color: #767676;
+  text-decoration: underline;
+}
+
+a.link {
+  animation: fadein 1.8s;
+  color: #cb2027;
+  font-weight: 600;
+  text-shadow: 0px 1px 2px white;
+}
+
+h1 {
+  animation: fadein 1.8s;
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: -0.0125em;
+  margin: 36px 0 11px;
+  text-shadow: 0px 1px 2px white;
+}
+
+p {
+  margin: 0 0 .8em;
+  line-height: 1.35em;
+  animation: fadein 1.8s;
+  font-weight: normal;
+  font-weight: 200;
+  text-shadow: 0px 1px 2px white;
+}</style><div class="wrapper" data-gestalt-valid-html="Box"><a data-gestalt-valid-html="Link" href="/"><div class="badge" data-gestalt-valid-html="Box">404</div></a><h1 data-gestalt-valid-html="Heading">Oops!</h1><p data-gestalt-valid-html="Text">The page you&#x27;re looking for could not be found.</p><a class="link" data-gestalt-valid-html="Link" href="/" id="back">Go back?</a><script nonce="a972e42ab06ec58ac95eb8a9fe81c1d5">document.getElementById("back").addEventListener("click", function(e){ history.go(-1); e.preventDefault(); });</script></div></div></body></html><script type="text/javascript">if (window.PWS_TRACE_LOGGER) {
+  var annotations = [{"key":"headPromiseEnd","timestamp":1784045135981},{"key":"ttfb","timestamp":1784045135981}];
+  if (annotations.length) {
+    window.PWS_TRACE_LOGGER.annotations.push(...annotations);
+  }
+  var binaryAnnotations = [];
+  if (binaryAnnotations.length) {
+    window.PWS_TRACE_LOGGER.binary_annotations.push(...binaryAnnotations);
+  }
+  var subspans = [{"id":"3b7d32d17bf07147","name":"buildResponder","parentId":"555e6168f6ba8649","startTime":1784045135978,"annotations":[],"binaryAnnotations":[],"status":"COMPLETED","endTime":1784045135981},{"id":"625052668312f81d","name":"loader","parentId":"3b7d32d17bf07147","startTime":1784045135979,"annotations":[],"binaryAnnotations":[],"status":"COMPLETED","endTime":1784045135980},{"id":"264c298a23d7739f","name":"headPromise","parentId":"555e6168f6ba8649","startTime":1784045135981,"annotations":[],"binaryAnnotations":[],"status":"COMPLETED","endTime":1784045135981},{"id":"1bf203bd37e45c1c","name":"beforeWriteHeadChunked","parentId":"555e6168f6ba8649","startTime":1784045135981,"annotations":[],"binaryAnnotations":[],"status":"COMPLETED","endTime":1784045135981}];
+  if (subspans.length) {
+    window.PWS_TRACE_LOGGER.subspans.push(...subspans);
+  }
+}</script><script type="text/javascript">if (window.PWS_TRACE_LOGGER) {
+  var annotations = [{"key":"firstChunkYieldTime","timestamp":1784045135983}];
+  if (annotations.length) {
+    window.PWS_TRACE_LOGGER.annotations.push(...annotations);
+  }
+  var binaryAnnotations = [];
+  if (binaryAnnotations.length) {
+    window.PWS_TRACE_LOGGER.binary_annotations.push(...binaryAnnotations);
+  }
+  var subspans = [];
+  if (subspans.length) {
+    window.PWS_TRACE_LOGGER.subspans.push(...subspans);
+  }
+}</script>
