@@ -11,7 +11,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
   
-  // 4 Core primary museum categories styled in grand, high-legibility typography
+  // 4 Primary core museum categories with large, clear typography and distinct paths
   const navItems = [
     { href: '/works', label: t('WORKS', 'TÁC PHẨM') },
     { href: '/about', label: t('ABOUT & PHILOSOPHY', 'TRIẾT LÝ & TIỂU SỬ') },
@@ -32,20 +32,20 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="border-b-2 border-border-light py-7 lg:py-9 sticky top-0 bg-background-primary/95 backdrop-blur-md z-50 shadow-sm transition-all duration-300">
-      <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16 flex justify-between items-center">
+    <header className="border-b-2 border-border-light py-6 lg:py-8 sticky top-0 bg-background-primary/95 backdrop-blur-md z-50 shadow-sm transition-all duration-300">
+      <div className="max-w-[1600px] mx-auto px-6 md:px-10 lg:px-14 flex justify-between items-center">
         
-        {/* BRAND LOGO - Grand & Prominent (Scaled Up 3x Impact) */}
+        {/* BRAND LOGO - Grand & Prominent */}
         <Link 
           href="/" 
-          className="font-serif text-2xl md:text-3xl lg:text-4xl tracking-[0.25em] font-normal text-text-primary hover:opacity-85 transition-opacity whitespace-nowrap shrink-0"
+          className="font-serif text-xl md:text-2xl lg:text-3xl tracking-[0.25em] font-normal text-text-primary hover:opacity-85 transition-opacity whitespace-nowrap shrink-0"
         >
           NGO THI THUY DUYEN
         </Link>
         
-        {/* DESKTOP NAV - Large, Luxurious Menu Items with Animated Active Pill */}
-        <div className="hidden md:flex items-center space-x-6 lg:space-x-12">
-          <nav className="flex items-center space-x-3 lg:space-x-6">
+        {/* DESKTOP NAV - Evenly spaced with explicit margins and clear tab separation */}
+        <div className="hidden md:flex items-center gap-6 lg:gap-10">
+          <nav className="flex items-center gap-4 lg:gap-8 font-serif">
             {navItems.map((item) => {
               const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
               
@@ -53,7 +53,8 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="relative px-5 py-3 rounded-md text-base md:text-lg lg:text-xl font-serif tracking-[0.12em] font-medium text-text-secondary hover:text-text-primary transition-colors whitespace-nowrap group"
+                  style={{ marginLeft: '0.75rem', marginRight: '0.75rem' }}
+                  className="relative inline-flex items-center justify-center px-6 py-3 rounded-md text-base md:text-lg lg:text-xl tracking-[0.12em] font-medium text-text-secondary hover:text-text-primary transition-all whitespace-nowrap group"
                 >
                   {/* Text Label */}
                   <span className={`relative z-10 ${isActive ? 'text-text-primary font-bold' : ''}`}>
@@ -63,8 +64,8 @@ export default function Navbar() {
                   {/* Animated Active Indicator Pill */}
                   {isActive && (
                     <motion.div
-                      layoutId="activeTabNavbarGrand"
-                      className="absolute inset-0 border-b-4 border-text-primary bg-background-secondary/80 rounded-md"
+                      layoutId="activeTabNavbarBulletproof"
+                      className="absolute inset-0 border-b-4 border-text-primary bg-background-secondary/80 rounded-md shadow-xs"
                       transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                     />
                   )}
@@ -76,20 +77,20 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* INDEX DRAWER TOGGLE BUTTON - Scaled Up */}
+          {/* INDEX DRAWER TOGGLE BUTTON */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="flex items-center space-x-3 border-2 border-border-medium hover:border-text-primary px-6 py-3 text-sm md:text-base tracking-widest text-text-primary transition-all font-mono uppercase rounded-md bg-background-secondary/60 hover:bg-background-secondary shadow-sm"
+            className="flex items-center space-x-3 border-2 border-border-medium hover:border-text-primary px-5 py-2.5 text-xs md:text-sm tracking-widest text-text-primary transition-all font-mono uppercase rounded-md bg-background-secondary/60 hover:bg-background-secondary shadow-sm shrink-0"
           >
             <span className="font-bold">{isOpen ? t('CLOSE', 'ĐÓNG') : t('INDEX', 'MỤC LỤC')}</span>
-            {isOpen ? <X size={20} /> : <Menu size={20} />}
+            {isOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
           
-          {/* DESKTOP LANG SWITCHER - Scaled Up & Bold */}
-          <div className="flex items-center space-x-3 text-sm md:text-base tracking-normal border-l-2 border-border-light pl-8 font-mono shrink-0">
+          {/* DESKTOP LANG SWITCHER */}
+          <div className="flex items-center space-x-2 text-xs md:text-sm tracking-normal border-l-2 border-border-light pl-6 font-mono shrink-0">
             <button 
               onClick={() => setLanguage('vi')} 
-              className={`transition-all px-3 py-1.5 rounded-md ${
+              className={`transition-all px-2.5 py-1 rounded-md ${
                 language === 'vi' 
                   ? 'text-text-primary font-bold bg-background-secondary border border-border-medium shadow-xs' 
                   : 'text-text-muted hover:text-text-primary'
@@ -100,7 +101,7 @@ export default function Navbar() {
             <span className="text-text-muted font-bold">/</span>
             <button 
               onClick={() => setLanguage('en')} 
-              className={`transition-all px-3 py-1.5 rounded-md ${
+              className={`transition-all px-2.5 py-1 rounded-md ${
                 language === 'en' 
                   ? 'text-text-primary font-bold bg-background-secondary border border-border-medium shadow-xs' 
                   : 'text-text-muted hover:text-text-primary'
@@ -113,7 +114,7 @@ export default function Navbar() {
 
         {/* MOBILE NAV TOGGLE */}
         <div className="flex items-center space-x-4 md:hidden">
-          <div className="flex items-center space-x-2 text-sm font-mono mr-2">
+          <div className="flex items-center space-x-2 text-xs font-mono mr-2">
             <button 
               onClick={() => setLanguage('vi')} 
               className={language === 'vi' ? 'text-text-primary font-bold underline' : 'text-text-muted'}
@@ -130,16 +131,16 @@ export default function Navbar() {
           </div>
           
           <button 
-            className="text-text-primary hover:opacity-75 transition-opacity border-2 border-border-light p-2.5 rounded-md" 
+            className="text-text-primary hover:opacity-75 transition-opacity border-2 border-border-light p-2 rounded-md" 
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
-            {isOpen ? <X size={26} /> : <Menu size={26} />}
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* FULL CURATORIAL INDEX OVERLAY MENU - Grand Scale */}
+      {/* FULL CURATORIAL INDEX OVERLAY MENU */}
       <AnimatePresence>
         {isOpen && (
           <motion.div 
@@ -151,7 +152,7 @@ export default function Navbar() {
           >
             <div className="max-w-7xl mx-auto py-16 px-8 lg:px-16 grid grid-cols-1 md:grid-cols-2 gap-16">
               <div className="space-y-6">
-                <span className="text-sm tracking-[0.35em] text-text-muted font-mono uppercase block border-b border-border-light pb-3 font-semibold">
+                <span className="text-xs md:text-sm tracking-[0.35em] text-text-muted font-mono uppercase block border-b border-border-light pb-3 font-semibold">
                   {t('CURATORIAL INDEX', 'MỤC LỤC LƯU TRỮ')}
                 </span>
                 <div className="space-y-4">
@@ -172,7 +173,7 @@ export default function Navbar() {
 
               <div className="space-y-8 md:border-l-2 md:border-border-light md:pl-16 flex flex-col justify-between">
                 <div className="space-y-6">
-                  <span className="text-sm tracking-[0.35em] text-text-muted font-mono uppercase block border-b border-border-light pb-3 font-semibold">
+                  <span className="text-xs md:text-sm tracking-[0.35em] text-text-muted font-mono uppercase block border-b border-border-light pb-3 font-semibold">
                     {t('LIVING ARTISTIC ARCHIVE', 'KHÔNG GIAN LƯU TRỮ SỐNG')}
                   </span>
                   <p className="font-serif italic text-lg md:text-xl lg:text-2xl text-text-secondary leading-relaxed font-light">
@@ -183,7 +184,7 @@ export default function Navbar() {
                   </p>
                 </div>
 
-                <div className="pt-8 border-t border-border-light space-y-2 font-mono text-sm text-text-muted">
+                <div className="pt-8 border-t border-border-light space-y-2 font-mono text-xs md:text-sm text-text-muted">
                   <p className="font-bold text-text-primary">NGO THI THUY DUYEN — VISUAL ARTIST</p>
                   <p>HO CHI MINH CITY, VIETNAM</p>
                 </div>
