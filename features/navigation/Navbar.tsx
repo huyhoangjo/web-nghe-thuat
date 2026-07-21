@@ -10,24 +10,24 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  const isHomePage = pathname === '/';
   
-  // 4 Primary core museum categories with large, clear typography and distinct paths
+  // Nav tabs matching PDF specifications
   const navItems = [
-    { href: '/works', label: t('WORKS', 'TÁC PHẨM') },
-    { href: '/about', label: t('ABOUT & PHILOSOPHY', 'TRIẾT LÝ & TIỂU SỬ') },
-    { href: '/field-notes', label: t('ARCHIVE & NOTES', 'GHI CHÉP & LƯU TRỮ') },
-    { href: '/cv', label: t('CV & CONTACT', 'HÀNH TRÌNH & LIÊN HỆ') },
+    { href: '/works', label: t('BODY OF WORK', 'BODY OF WORK') },
+    { href: '/about', label: t('PRACTICE', 'PRACTICE') },
+    { href: '/field-notes', label: t('FRAGMENTS', 'FRAGMENTS') },
+    { href: '/cv', label: t('CV & CONTACT', 'CV & CONTACT') },
   ];
 
   // Secondary sub-links for full menu overlay
   const secondaryLinks = [
-    { href: '/works', label: t('Body of Works (6 Chapters)', 'Tiến trình Tác phẩm (6 Chương)') },
-    { href: '/about', label: t('Artist Bio & Material Philosophy', 'Tiểu sử & Triết lý Vật liệu') },
-    { href: '/cv', label: t('Biography & Professional Timeline', 'Hành trình & CV Chi tiết') },
-    { href: '/field-notes', label: t('Field Notes & Research', 'Ghi chép & Nghiên cứu') },
-    { href: '/field-notes/material-philosophy', label: t('Material Philosophy Essay', 'Bài luận Triết lý Vật liệu') },
+    { href: '/works', label: t('Body of Work (5 Chapters)', 'Body of Work (5 Chương)') },
+    { href: '/about', label: t('Practice & Material Philosophy', 'Tiểu sử & Triết lý Vật liệu') },
+    { href: '/field-notes', label: t('Fragments & Field Notes', 'Ghi chép & Lưu trữ') },
     { href: '/journal', label: t('Artistic Journal & Reflections', 'Nhật ký Sáng tác') },
-    { href: '/publications', label: t('Publications & Catalogues', 'Ấn phẩm & Catalogue') },
+    { href: '/publications', label: t('Publications & Reviews', 'Ấn phẩm & Bài viết') },
+    { href: '/cv', label: t('Biography & Professional Timeline', 'Hành trình & CV Chi tiết') },
     { href: '/contact', label: t('Contact & Inquiries', 'Liên hệ & Trao đổi') },
   ];
 
@@ -35,114 +35,93 @@ export default function Navbar() {
     <header className="border-b-2 border-border-light py-6 lg:py-8 sticky top-0 bg-background-primary/95 backdrop-blur-md z-50 shadow-sm transition-all duration-300">
       <div className="max-w-[1600px] mx-auto px-6 md:px-10 lg:px-14 flex justify-between items-center">
         
-        {/* BRAND LOGO - Grand & Prominent */}
-        <Link 
-          href="/" 
-          className="font-serif text-xl md:text-2xl lg:text-3xl tracking-[0.25em] font-normal text-text-primary hover:opacity-85 transition-opacity whitespace-nowrap shrink-0"
-        >
-          NGO THI THUY DUYEN
-        </Link>
+        {/* BRAND LOGO - Only visible on Inner Pages (Page 6 of PDF) */}
+        {!isHomePage ? (
+          <Link 
+            href="/" 
+            className="font-serif text-xl md:text-2xl lg:text-3xl tracking-[0.25em] font-medium text-text-primary hover-gold transition-colors whitespace-nowrap shrink-0 uppercase"
+          >
+            NGO THI THUY DUYEN
+          </Link>
+        ) : (
+          <div className="w-1" />
+        )}
         
-        {/* DESKTOP NAV - Evenly spaced with explicit margins and clear tab separation */}
-        <div className="hidden md:flex items-center gap-6 lg:gap-10">
-          <nav className="flex items-center gap-4 lg:gap-8 font-serif">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
-              
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  style={{ marginLeft: '0.75rem', marginRight: '0.75rem' }}
-                  className="relative inline-flex items-center justify-center px-6 py-3 rounded-md text-base md:text-lg lg:text-xl tracking-[0.12em] font-medium text-text-secondary hover:text-text-primary transition-all whitespace-nowrap group"
-                >
-                  {/* Text Label */}
-                  <span className={`relative z-10 ${isActive ? 'text-text-primary font-bold' : ''}`}>
-                    {item.label}
-                  </span>
+        {/* DESKTOP NAV - Only visible on Inner Pages */}
+        {!isHomePage && (
+          <div className="hidden md:flex items-center gap-6 lg:gap-10">
+            <nav className="flex items-center gap-4 lg:gap-8 font-serif">
+              {navItems.map((item) => {
+                const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+                
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    style={{ marginLeft: '0.75rem', marginRight: '0.75rem' }}
+                    className="relative inline-flex items-center justify-center px-4 py-2 text-base md:text-lg lg:text-xl tracking-[0.15em] font-medium text-text-secondary hover-gold transition-all whitespace-nowrap group"
+                  >
+                    <span className={`relative z-10 ${isActive ? 'text-text-primary font-bold' : ''}`}>
+                      {item.label}
+                    </span>
 
-                  {/* Animated Active Indicator Pill */}
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeTabNavbarBulletproof"
-                      className="absolute inset-0 border-b-4 border-text-primary bg-background-secondary/80 rounded-md shadow-xs"
-                      transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-                    />
-                  )}
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeTabNavbar"
+                        className="absolute inset-0 border-b-2 border-text-primary bg-background-secondary/80 rounded-md"
+                        transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                      />
+                    )}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+        )}
 
-                  {/* Hover background pill */}
-                  <div className="absolute inset-0 rounded-md bg-background-secondary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                </Link>
-              );
-            })}
-          </nav>
+        {/* TOP RIGHT CONTROLS */}
+        <div className="flex items-center space-x-6 font-mono text-xs md:text-sm shrink-0">
+          {/* On Homepage: Show 3-Bar Icon Drawer Toggle (Page 1 of PDF) */}
+          {isHomePage && (
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 border-2 border-border-medium hover:border-text-primary text-text-primary rounded-md bg-background-secondary/60 hover:bg-background-secondary transition-all cursor-pointer"
+              aria-label="Toggle Menu"
+            >
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          )}
 
-          {/* INDEX DRAWER TOGGLE BUTTON */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="flex items-center space-x-3 border-2 border-border-medium hover:border-text-primary px-5 py-2.5 text-xs md:text-sm tracking-widest text-text-primary transition-all font-mono uppercase rounded-md bg-background-secondary/60 hover:bg-background-secondary shadow-sm shrink-0"
-          >
-            <span className="font-bold">{isOpen ? t('CLOSE', 'ĐÓNG') : t('INDEX', 'MỤC LỤC')}</span>
-            {isOpen ? <X size={18} /> : <Menu size={18} />}
-          </button>
-          
-          {/* DESKTOP LANG SWITCHER */}
-          <div className="flex items-center space-x-2 text-xs md:text-sm tracking-normal border-l-2 border-border-light pl-6 font-mono shrink-0">
+          {/* LANGUAGE SWITCHER - Always visible (VI / EN) */}
+          <div className="flex items-center space-x-2 border-l-2 border-border-light pl-4">
             <button 
               onClick={() => setLanguage('vi')} 
-              className={`transition-all px-2.5 py-1 rounded-md ${
+              className={`transition-all px-2 py-1 rounded cursor-pointer font-bold ${
                 language === 'vi' 
-                  ? 'text-text-primary font-bold bg-background-secondary border border-border-medium shadow-xs' 
-                  : 'text-text-muted hover:text-text-primary'
+                  ? 'text-text-primary bg-background-secondary border border-border-medium' 
+                  : 'text-text-secondary hover-gold'
               }`}
             >
               VI
             </button>
-            <span className="text-text-muted font-bold">/</span>
+            <span className="text-text-secondary font-bold">/</span>
             <button 
               onClick={() => setLanguage('en')} 
-              className={`transition-all px-2.5 py-1 rounded-md ${
+              className={`transition-all px-2 py-1 rounded cursor-pointer font-bold ${
                 language === 'en' 
-                  ? 'text-text-primary font-bold bg-background-secondary border border-border-medium shadow-xs' 
-                  : 'text-text-muted hover:text-text-primary'
+                  ? 'text-text-primary bg-background-secondary border border-border-medium' 
+                  : 'text-text-secondary hover-gold'
               }`}
             >
               EN
             </button>
           </div>
-        </div>
-
-        {/* MOBILE NAV TOGGLE */}
-        <div className="flex items-center space-x-4 md:hidden">
-          <div className="flex items-center space-x-2 text-xs font-mono mr-2">
-            <button 
-              onClick={() => setLanguage('vi')} 
-              className={language === 'vi' ? 'text-text-primary font-bold underline' : 'text-text-muted'}
-            >
-              VI
-            </button>
-            <span className="text-text-muted">/</span>
-            <button 
-              onClick={() => setLanguage('en')} 
-              className={language === 'en' ? 'text-text-primary font-bold underline' : 'text-text-muted'}
-            >
-              EN
-            </button>
-          </div>
-          
-          <button 
-            className="text-text-primary hover:opacity-75 transition-opacity border-2 border-border-light p-2 rounded-md" 
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
       </div>
 
-      {/* FULL CURATORIAL INDEX OVERLAY MENU */}
+      {/* FULL CURATORIAL INDEX OVERLAY MENU (For Homepage 3-Bar Trigger) */}
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && isHomePage && (
           <motion.div 
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
@@ -152,7 +131,7 @@ export default function Navbar() {
           >
             <div className="max-w-7xl mx-auto py-16 px-8 lg:px-16 grid grid-cols-1 md:grid-cols-2 gap-16">
               <div className="space-y-6">
-                <span className="text-xs md:text-sm tracking-[0.35em] text-text-muted font-mono uppercase block border-b border-border-light pb-3 font-semibold">
+                <span className="text-xs md:text-sm tracking-[0.35em] text-text-secondary font-mono uppercase block border-b-2 border-border-light pb-3 font-bold">
                   {t('CURATORIAL INDEX', 'MỤC LỤC LƯU TRỮ')}
                 </span>
                 <div className="space-y-4">
@@ -163,7 +142,7 @@ export default function Navbar() {
                       onClick={() => setIsOpen(false)}
                       className="block group space-y-1 py-2 border-b border-border-light/40 last:border-0"
                     >
-                      <span className="font-serif text-xl md:text-2xl lg:text-3xl text-text-primary group-hover:text-text-secondary transition-colors font-light block">
+                      <span className="font-serif text-2xl md:text-3xl text-text-primary group-hover:text-text-secondary transition-colors font-medium block">
                         {item.label}
                       </span>
                     </Link>
@@ -173,19 +152,19 @@ export default function Navbar() {
 
               <div className="space-y-8 md:border-l-2 md:border-border-light md:pl-16 flex flex-col justify-between">
                 <div className="space-y-6">
-                  <span className="text-xs md:text-sm tracking-[0.35em] text-text-muted font-mono uppercase block border-b border-border-light pb-3 font-semibold">
+                  <span className="text-xs md:text-sm tracking-[0.35em] text-text-secondary font-mono uppercase block border-b-2 border-border-light pb-3 font-bold">
                     {t('LIVING ARTISTIC ARCHIVE', 'KHÔNG GIAN LƯU TRỮ SỐNG')}
                   </span>
-                  <p className="font-serif italic text-lg md:text-xl lg:text-2xl text-text-secondary leading-relaxed font-light">
+                  <p className="font-serif italic text-xl md:text-2xl text-text-primary leading-relaxed font-normal">
                     {t(
-                      "“Tracing what remains after time has passed through us.” A museum-grade digital space for artworks, memories, materials, and transformation.",
-                      "“Lọc lại những gì còn sót lại sau khi thời gian trôi qua qua ta.” Không gian lưu trữ kỹ thuật số cấp bảo tàng lưu giữ tác phẩm, ký ức và chất liệu."
+                      "“Art as a process of becoming.” A museum-grade digital space for artworks, memories, materials, and transformation.",
+                      "“Art as a process of becoming.” Không gian lưu trữ kỹ thuật số cấp bảo tàng lưu giữ tác phẩm, ký ức và chất liệu."
                     )}
                   </p>
                 </div>
 
-                <div className="pt-8 border-t border-border-light space-y-2 font-mono text-xs md:text-sm text-text-muted">
-                  <p className="font-bold text-text-primary">NGO THI THUY DUYEN — VISUAL ARTIST</p>
+                <div className="pt-8 border-t-2 border-border-light space-y-2 font-mono text-xs md:text-sm text-text-secondary font-bold">
+                  <p className="text-text-primary uppercase">NGO THI THUY DUYEN — VISUAL ARTIST</p>
                   <p>HO CHI MINH CITY, VIETNAM</p>
                 </div>
               </div>

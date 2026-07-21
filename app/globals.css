@@ -5,10 +5,11 @@
   --color-background-primary: #F8F7F4;
   --color-background-secondary: #F2F1ED;
   --color-text-primary: #111111;
-  --color-text-secondary: #222222;
-  --color-text-muted: #333333;
+  --color-text-secondary: #2B2A2A;
+  --color-text-muted: #2B2A2A;
   --color-border-light: #D8D8D8;
   --color-border-medium: #B8B8B8;
+  --color-accent-gold: #bc9c22;
 
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-mono: "JetBrains Mono", monospace;
@@ -37,4 +38,9 @@ p, article, section, blockquote, h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-serif);
   color: var(--color-text-primary);
   text-rendering: optimizeLegibility;
+}
+
+/* Hover Accent Color #bc9c22 */
+.hover-gold:hover {
+  color: #bc9c22 !important;
 }

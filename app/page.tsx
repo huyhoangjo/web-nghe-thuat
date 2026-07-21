@@ -22,11 +22,12 @@ export default function Home() {
     <div className="pb-24 bg-background-primary">
       {/* Hero Section */}
       <section className="relative h-[85vh] flex items-center justify-center bg-background-secondary overflow-hidden border-b-2 border-border-light">
+        {/* Full Color Background Image (Page 3 of PDF: "GIỮ HÌNH MÀU, CÒN ĐỘ OPACITY THÌ CỨ THEO EM ĐANG LÀM") */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-25 filter grayscale contrast-125 transition-all duration-1000 scale-105"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-35 transition-all duration-1000 scale-105"
           style={{ backgroundImage: `url('/images/home-hero.jpg')` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background-primary via-background-primary/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background-primary via-background-primary/30 to-transparent" />
         
         <div className="relative text-center z-10 px-6 max-w-4xl space-y-6">
           <motion.span 
@@ -37,22 +38,28 @@ export default function Home() {
           >
             {t("A Living Artistic Archive", "KHÔNG GIAN LƯU TRỮ NGHỆ THUẬT SỐNG")}
           </motion.span>
+
+          {/* Main Title - Reduced to 3/4 size (Page 2 of PDF) */}
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.5, delay: 0.2, ease: 'easeOut' }}
-            className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium tracking-wider text-text-primary uppercase"
+            className="font-serif text-3xl md:text-5xl lg:text-6xl font-medium tracking-wider text-text-primary uppercase"
           >
             NGO THI THUY DUYEN
           </motion.h1>
+
+          {/* Updated Hero Quote (Page 2 of PDF) */}
           <motion.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 2, delay: 0.6 }}
             className="font-serif italic text-lg md:text-2xl text-text-primary tracking-wide leading-relaxed max-w-2xl mx-auto font-normal"
           >
-            {t('“Tracing what remains after time has passed through us.”', '“Lọc lại những gì còn sót lại sau khi thời gian trôi qua qua ta.”')}
+            “Art as a process of becoming.”
           </motion.p>
+
+          {/* Hero Button - ENTER (Page 1 of PDF: "CHỮ ENTER THE ARCHIVE CHỈ ĐỂ CHỮ ENTER") */}
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -61,9 +68,9 @@ export default function Home() {
           >
             <Link 
               href="/works" 
-              className="border-2 border-text-primary px-9 py-3.5 text-xs tracking-[0.3em] font-mono font-bold text-text-primary hover:bg-text-primary hover:text-background-primary transition-all duration-300 inline-block uppercase shadow-sm"
+              className="border-2 border-text-primary px-10 py-3 text-xs tracking-[0.35em] font-mono font-bold text-text-primary hover:bg-text-primary hover:text-background-primary transition-all duration-300 inline-block uppercase shadow-sm cursor-pointer"
             >
-              {t("ENTER THE ARCHIVE", "KHÁM PHÁ LƯU TRỮ")}
+              ENTER
             </Link>
           </motion.div>
         </div>
@@ -83,15 +90,17 @@ export default function Home() {
         <div className="w-20 h-[2px] bg-text-primary mx-auto pt-4" />
       </section>
 
-      {/* Featured Artwork Row */}
+      {/* Featured Artwork Row - Renamed BODY OF WORK (Page 4 of PDF) */}
       {featuredWorks.length > 0 && (
         <section className="max-w-7xl mx-auto px-6 md:px-12 space-y-8">
           <div className="flex justify-between items-end border-b-2 border-border-light pb-4">
+            {/* Left Title: BODY OF WORK */}
             <h3 className="font-serif text-2xl md:text-3xl tracking-wide text-text-primary font-medium uppercase">
-              {t("FEATURED FRAGMENTS", "TÁC PHẨM TIÊU BIỂU")}
+              BODY OF WORK
             </h3>
-            <Link href="/works" className="text-xs tracking-widest text-text-secondary hover:text-text-primary transition-colors font-mono font-bold uppercase">
-              {t("VIEW ALL WORKS →", "XEM TOÀN BỘ →")}
+            {/* Right Link: VIEW ALL → */}
+            <Link href="/works" className="text-xs tracking-widest text-text-secondary hover-gold transition-colors font-mono font-bold uppercase">
+              {t("VIEW ALL →", "XEM TOÀN BỘ →")}
             </Link>
           </div>
 
