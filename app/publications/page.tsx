@@ -42,7 +42,7 @@ export default function PublicationsPage() {
                 
                 {/* Body content parsed from Blogger HTML */}
                 <div 
-                  dangerouslySetInnerHTML={{ __html: pub.bodyHtml }} 
+                  dangerouslySetInnerHTML={{ __html: pub.bodyHtml || pub.bodyText || '' }} 
                   className="text-sm text-text-secondary leading-[1.8] font-serif space-y-4 prose-custom" 
                 />
               </motion.article>

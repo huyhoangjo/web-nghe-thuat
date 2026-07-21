@@ -65,7 +65,7 @@ export async function PUT(request: Request) {
     const body = await request.json() as Post;
     const posts = getPostsFromDisk();
 
-    const targetSlug = body.id || body.slug;
+    const targetSlug = (body as { id?: string; slug: string }).id || body.slug;
     const index = posts.findIndex(p => p.slug === targetSlug || p.slug === body.slug);
 
     if (index >= 0) {
