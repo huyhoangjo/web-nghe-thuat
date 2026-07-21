@@ -11,14 +11,13 @@ export default function Navbar() {
   const { language, setLanguage, t } = useLanguage();
   
   const navItems = [
-    { href: '/works', label: t('WORKS', 'TÁC PHẨM') },
-    { href: '/journal', label: t('JOURNAL', 'NHẬT KÝ') },
+    { href: '/about', label: t('BIO & PHILOSOPHY', 'TIỂU SỬ & TRIẾT LÝ') },
+    { href: '/works', label: t('BODY OF WORKS', 'TIẾN TRÌNH TÁC PHẨM') },
+    { href: '/cv', label: t('TIMELINE / CV', 'HÀNH TRÌNH / CV') },
     { href: '/field-notes', label: t('FIELD NOTES', 'GHI CHÉP') },
+    { href: '/journal', label: t('JOURNAL', 'NHẬT KÝ') },
     { href: '/publications', label: t('PUBLICATIONS', 'ẤN PHẨM') },
-    { href: '/about', label: t('ABOUT', 'GIỚI THIỆU') },
-    { href: '/cv', label: t('CV', 'TIỂU SỬ') },
     { href: '/contact', label: t('CONTACT', 'LIÊN HỆ') },
-    { href: '/admin', label: t('ADMIN', 'QUẢN TRỊ') },
   ];
 
   return (
