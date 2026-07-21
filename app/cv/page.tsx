@@ -259,18 +259,17 @@ export default function CVPage() {
   const { t } = useLanguage();
 
   return (
-    <Container className="py-24 max-w-4xl bg-background-primary space-y-16">
-      <div className="space-y-4 text-center">
-        <span className="text-[10px] tracking-[0.35em] text-text-muted font-medium uppercase font-mono">
+    <Container className="py-24 max-w-6xl bg-background-primary space-y-20">
+      <div className="space-y-4 text-center max-w-3xl mx-auto border-b-2 border-border-light pb-10">
+        <span className="text-xs tracking-[0.35em] text-text-secondary font-mono font-bold uppercase block">
           {t("ARTISTIC TIMELINE & ARCHIVE", "HÀNH TRÌNH NGHỆ THUẬT & LƯU TRỮ")}
         </span>
-        <h1 className="font-serif text-4xl md:text-6xl font-light text-text-primary tracking-wide">
+        <h1 className="font-serif text-4xl md:text-6xl font-medium text-text-primary tracking-wide">
           BIOGRAPHY / CV
         </h1>
-        <p className="text-xs text-text-muted font-mono tracking-widest uppercase">
+        <p className="text-xs text-text-secondary font-mono font-bold tracking-widest uppercase">
           NGO THI THUY DUYEN — VISUAL ARTIST
         </p>
-        <div className="w-12 h-[1px] bg-border-medium mx-auto mt-6" />
       </div>
       
       <div className="space-y-20">
@@ -283,22 +282,22 @@ export default function CVPage() {
             key={section.titleEn} 
             className="space-y-8"
           >
-            <div className="flex items-center justify-between border-b border-border-light pb-4">
-              <h2 className="font-serif text-2xl md:text-3xl font-light text-text-primary tracking-wide">
+            <div className="flex items-center justify-between border-b-2 border-border-light pb-4">
+              <h2 className="font-serif text-2xl md:text-4xl font-medium text-text-primary tracking-wide">
                 {t(section.titleEn, section.titleVi)}
               </h2>
-              <span className="font-mono text-xs text-text-muted">
+              <span className="font-mono text-xs font-bold text-text-secondary">
                 0{secIdx + 1}
               </span>
             </div>
 
             <div className="space-y-6">
               {section.items.map((item, idx) => (
-                <div key={idx} className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-6 items-start group">
-                  <div className="sm:col-span-3 font-mono text-xs tracking-wider text-text-muted font-medium pt-0.5">
+                <div key={idx} className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start border-b border-border-light/60 pb-6 last:border-0 group">
+                  <div className="md:col-span-2 font-mono text-sm md:text-base font-bold text-text-primary tracking-wider pt-1">
                     {item.year}
                   </div>
-                  <div className="sm:col-span-9 text-text-secondary font-serif text-base leading-relaxed group-hover:text-text-primary transition-colors font-light">
+                  <div className="md:col-span-10 text-text-primary font-serif text-lg md:text-xl font-normal leading-relaxed group-hover:text-text-primary transition-colors">
                     {t(item.textEn, item.textVi)}
                   </div>
                 </div>

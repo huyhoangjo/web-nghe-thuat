@@ -653,15 +653,25 @@ export default function AdminPage() {
           )}
         </AnimatePresence>
 
-        {/* EDITOR FORM MODAL / PANEL */}
+        {/* EDITOR FORM MODAL WINDOW */}
         <AnimatePresence>
           {(isAdding || editingPost) && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              className="bg-background-secondary border-2 border-text-primary p-6 md:p-10 rounded-xl shadow-2xl space-y-8"
+            <div 
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-text-primary/75 backdrop-blur-md overflow-y-auto"
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  setIsAdding(false);
+                  setEditingPost(null);
+                }
+              }}
             >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{ duration: 0.3 }}
+                className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-background-primary border-2 border-text-primary p-6 md:p-10 rounded-2xl shadow-2xl space-y-8"
+              >
               <div className="flex items-center justify-between border-b-2 border-border-medium pb-4">
                 <h2 className="font-serif text-2xl md:text-3xl text-text-primary font-bold">
                   {editingPost ? 'Chỉnh Sửa Bài Viết' : 'Tạo Bài Viết Mới'}
@@ -877,9 +887,10 @@ export default function AdminPage() {
                 </button>
               </form>
             </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </Container>
-  );
+          </div>
+        )}
+      </AnimatePresence>
+    </div>
+  </Container>
+);
 }
