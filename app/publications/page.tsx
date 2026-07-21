@@ -13,11 +13,15 @@ export default function PublicationsPage() {
   }, []);
 
   return (
-    <Container className="py-24 max-w-3xl bg-background-primary">
+    <Container className="py-24 max-w-4xl bg-background-primary">
       <div className="space-y-4 text-center mb-20">
-        <span className="text-[10px] tracking-[0.35em] text-text-muted font-medium uppercase font-mono">Critical Texts & Reviews</span>
-        <h1 className="font-serif text-4xl md:text-5xl font-light text-text-primary tracking-wide">PUBLICATIONS</h1>
-        <div className="w-8 h-[1px] bg-border-medium mx-auto mt-4" />
+        <span className="text-xs tracking-[0.35em] text-text-secondary font-mono font-bold uppercase block">
+          Critical Texts & Reviews
+        </span>
+        <h1 className="font-serif text-4xl md:text-6xl font-medium text-text-primary tracking-wide">
+          PUBLICATIONS
+        </h1>
+        <div className="w-16 h-[2px] bg-text-primary mx-auto mt-4" />
       </div>
       
       <div className="space-y-24">
@@ -28,28 +32,28 @@ export default function PublicationsPage() {
                 initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 1.2, delay: idx * 0.15 }}
+                transition={{ duration: 0.8, delay: idx * 0.15 }}
                 key={pub.slug} 
-                className="border-b border-border-light pb-16 space-y-6"
+                className="border-b-2 border-border-light pb-16 space-y-6"
               >
-                <div className="flex justify-between items-center text-[10px] text-text-muted tracking-widest font-mono uppercase">
+                <div className="flex justify-between items-center text-xs text-text-secondary tracking-widest font-mono font-bold uppercase">
                   <span>{pub.year} — ARTICLE</span>
                   <span>Original: English/Vietnamese</span>
                 </div>
-                <h2 className="font-serif text-3xl font-light text-text-primary leading-tight">
+                <h2 className="font-serif text-3xl md:text-4xl font-medium text-text-primary leading-tight">
                   {pub.title || "Critical Review Text"}
                 </h2>
                 
                 {/* Body content parsed from Blogger HTML */}
                 <div 
                   dangerouslySetInnerHTML={{ __html: pub.bodyHtml || pub.bodyText || '' }} 
-                  className="text-sm text-text-secondary leading-[1.8] font-serif space-y-4 prose-custom" 
+                  className="text-lg md:text-xl text-text-primary leading-relaxed font-serif space-y-4 font-normal" 
                 />
               </motion.article>
             );
           })
         ) : (
-          <div className="text-center text-text-muted text-sm italic font-serif">
+          <div className="text-center text-text-secondary text-base italic font-serif font-bold">
             No critical texts or reviews found.
           </div>
         )}

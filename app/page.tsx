@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <div className="pb-24 bg-background-primary">
       {/* Hero Section */}
-      <section className="relative h-[85vh] flex items-center justify-center bg-background-secondary overflow-hidden border-b border-border-light">
+      <section className="relative h-[85vh] flex items-center justify-center bg-background-secondary overflow-hidden border-b-2 border-border-light">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-25 filter grayscale contrast-125 transition-all duration-1000 scale-105"
           style={{ backgroundImage: `url('/images/home-hero.jpg')` }}
@@ -33,7 +33,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: 'easeOut' }}
-            className="text-[10px] tracking-[0.35em] text-text-muted font-medium block uppercase font-mono"
+            className="text-xs tracking-[0.35em] text-text-secondary font-mono font-bold block uppercase"
           >
             {t("A Living Artistic Archive", "KHÔNG GIAN LƯU TRỮ NGHỆ THUẬT SỐNG")}
           </motion.span>
@@ -41,7 +41,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.5, delay: 0.2, ease: 'easeOut' }}
-            className="font-serif text-5xl md:text-7xl lg:text-8xl font-light tracking-wider text-text-primary"
+            className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium tracking-wider text-text-primary uppercase"
           >
             NGO THI THUY DUYEN
           </motion.h1>
@@ -49,7 +49,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 2, delay: 0.6 }}
-            className="font-serif italic text-base md:text-xl text-text-secondary tracking-widest leading-relaxed max-w-2xl mx-auto font-light"
+            className="font-serif italic text-lg md:text-2xl text-text-primary tracking-wide leading-relaxed max-w-2xl mx-auto font-normal"
           >
             {t('“Tracing what remains after time has passed through us.”', '“Lọc lại những gì còn sót lại sau khi thời gian trôi qua qua ta.”')}
           </motion.p>
@@ -61,7 +61,7 @@ export default function Home() {
           >
             <Link 
               href="/works" 
-              className="border border-text-primary/70 hover:border-text-primary px-9 py-3.5 text-[10px] tracking-[0.3em] text-text-primary hover:bg-text-primary hover:text-background-primary transition-all duration-500 ease-in-out inline-block font-mono"
+              className="border-2 border-text-primary px-9 py-3.5 text-xs tracking-[0.3em] font-mono font-bold text-text-primary hover:bg-text-primary hover:text-background-primary transition-all duration-300 inline-block uppercase shadow-sm"
             >
               {t("ENTER THE ARCHIVE", "KHÁM PHÁ LƯU TRỮ")}
             </Link>
@@ -70,27 +70,27 @@ export default function Home() {
       </section>
 
       {/* Opening Statement */}
-      <section className="py-32 max-w-3xl mx-auto px-6 text-center space-y-8">
-        <h2 className="font-serif text-2xl md:text-4xl text-text-secondary leading-relaxed font-light">
+      <section className="py-32 max-w-4xl mx-auto px-6 text-center space-y-8">
+        <h2 className="font-serif text-3xl md:text-5xl text-text-primary leading-relaxed font-medium">
           {t("Art is not separate from life.", "Nghệ thuật không tách rời khỏi đời sống.")}
         </h2>
-        <p className="text-xs md:text-sm text-text-muted max-w-xl mx-auto leading-relaxed tracking-wide font-sans font-light">
+        <p className="font-serif text-lg md:text-xl text-text-primary max-w-3xl mx-auto leading-relaxed font-normal">
           {t(
             "This digital archive is a space where artworks, memories, travel, language, notebooks, materials, observations, and transformation coexist. As you explore, each piece you discover reveals its colors and remains preserved in memory.",
             "Lưu trữ kỹ thuật số này là một không gian nơi các tác phẩm nghệ thuật, ký ức, chuyến đi, ngôn ngữ, sổ tay, chất liệu, quan sát và sự chuyển đổi cùng tồn tại. Khi bạn khám phá, từng tác phẩm bạn xem sẽ dần hiện lại sắc màu và lưu giữ trong ký ức."
           )}
         </p>
-        <div className="w-16 h-[1px] bg-border-medium/60 mx-auto pt-4" />
+        <div className="w-20 h-[2px] bg-text-primary mx-auto pt-4" />
       </section>
 
       {/* Featured Artwork Row */}
       {featuredWorks.length > 0 && (
-        <section className="max-w-7xl mx-auto px-6 md:px-12">
-          <div className="flex justify-between items-end border-b border-border-light pb-4 mb-12">
-            <h3 className="font-serif text-xl tracking-wide text-text-primary font-light uppercase">
+        <section className="max-w-7xl mx-auto px-6 md:px-12 space-y-8">
+          <div className="flex justify-between items-end border-b-2 border-border-light pb-4">
+            <h3 className="font-serif text-2xl md:text-3xl tracking-wide text-text-primary font-medium uppercase">
               {t("FEATURED FRAGMENTS", "TÁC PHẨM TIÊU BIỂU")}
             </h3>
-            <Link href="/works" className="text-[10px] tracking-widest text-text-muted hover:text-text-primary transition-colors font-mono uppercase">
+            <Link href="/works" className="text-xs tracking-widest text-text-secondary hover:text-text-primary transition-colors font-mono font-bold uppercase">
               {t("VIEW ALL WORKS →", "XEM TOÀN BỘ →")}
             </Link>
           </div>
@@ -98,32 +98,41 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             {featuredWorks.map((work, idx) => {
               const lines = work.bodyText.split('\n').filter(l => l.trim() !== '');
+              const desc = lines.length > 0 ? lines[0] : '';
+
               return (
                 <motion.div 
-                  initial={{ opacity: 0, y: 30 }}
+                  key={work.slug}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 1, delay: idx * 0.2 }}
-                  key={`${work.slug}-${idx}`} 
-                  className="group block"
+                  transition={{ duration: 0.8, delay: idx * 0.15 }}
+                  className="space-y-4 group"
                 >
-                  <Link href={`/works/${work.slug}`}>
-                    <div className="border border-border-light overflow-hidden bg-background-secondary shadow-sm">
-                      <ArchiveImage
-                        src={work.images[0]}
-                        alt={lines[0] || "Artwork image"}
-                        id={work.slug}
-                        aspectRatio="aspect-[4/5]"
-                      />
-                    </div>
-                    <div className="mt-4 space-y-1.5">
-                      <span className="text-[9px] tracking-widest text-text-muted uppercase font-mono">{work.labels[0]}</span>
-                      <h4 className="font-serif text-lg text-text-primary group-hover:text-text-secondary transition-colors font-light">
-                        {lines[0] || "Untitled"}
-                      </h4>
-                      <p className="text-xs text-text-muted font-mono">{work.year}</p>
-                    </div>
+                  <Link href={`/works/${work.slug}`} className="block border-2 border-border-medium overflow-hidden bg-background-secondary shadow-sm">
+                    <ArchiveImage
+                      src={work.images[0]}
+                      alt={work.title}
+                      id={work.slug}
+                      aspectRatio="aspect-[4/3]"
+                    />
                   </Link>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center text-xs font-mono font-bold text-text-secondary">
+                      <span>{work.year}</span>
+                      <span>CHAPTER</span>
+                    </div>
+                    <Link href={`/works/${work.slug}`}>
+                      <h4 className="font-serif text-2xl text-text-primary group-hover:text-text-secondary transition-colors font-medium">
+                        {work.title}
+                      </h4>
+                    </Link>
+                    {desc && (
+                      <p className="font-serif text-base text-text-primary line-clamp-2 leading-relaxed font-normal">
+                        {desc}
+                      </p>
+                    )}
+                  </div>
                 </motion.div>
               );
             })}

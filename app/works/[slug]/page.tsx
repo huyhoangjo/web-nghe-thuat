@@ -42,7 +42,7 @@ export default async function WorkDetailPage({ params }: PageProps) {
       <div className="space-y-12">
         <Link 
           href="/works" 
-          className="text-xs tracking-widest text-text-muted hover:text-text-primary transition-colors flex items-center space-x-2"
+          className="text-xs tracking-widest text-text-secondary hover:text-text-primary transition-colors flex items-center space-x-2 font-mono font-bold uppercase"
         >
           <span>← BACK TO WORKS</span>
         </Link>
@@ -55,17 +55,17 @@ export default async function WorkDetailPage({ params }: PageProps) {
           
           {/* Right Column: Metadata & Details (Col span 5) */}
           <div className="md:col-span-5 space-y-8 md:sticky md:top-28">
-            <div className="space-y-2 border-b border-border-light pb-6">
-              <span className="text-[9px] tracking-widest text-text-muted uppercase font-mono block">
+            <div className="space-y-2 border-b-2 border-border-light pb-6">
+              <span className="text-xs tracking-widest text-text-secondary uppercase font-mono font-bold block">
                 {work.labels.join(' / ')}
               </span>
-              <h1 className="font-serif text-3xl font-light text-text-primary tracking-wide">
+              <h1 className="font-serif text-3xl md:text-4xl font-medium text-text-primary tracking-wide">
                 {title}
               </h1>
-              <p className="text-xs text-text-muted font-mono tracking-wider">{work.date}</p>
+              <p className="text-xs text-text-secondary font-mono font-bold tracking-wider">{work.date}</p>
             </div>
             
-            <div className="text-sm text-text-secondary leading-[1.8] font-serif italic border-b border-border-light pb-8">
+            <div className="text-base md:text-lg text-text-primary leading-[1.9] font-serif italic border-b-2 border-border-light pb-8 font-normal">
               {work.bodyHtml ? (
                 <div dangerouslySetInnerHTML={{ __html: work.bodyHtml }} className="prose-custom space-y-4" />
               ) : (
@@ -79,7 +79,7 @@ export default async function WorkDetailPage({ params }: PageProps) {
 
             {/* Related Connections (Bidirectional relationships) */}
             <div className="space-y-6 pt-2">
-              <h4 className="text-[10px] tracking-[0.25em] text-text-primary font-medium uppercase font-mono">
+              <h4 className="text-xs tracking-[0.25em] text-text-primary font-bold uppercase font-mono">
                 Invisible Layers & Memories
               </h4>
               {relatedPosts.length > 0 ? (
@@ -91,12 +91,12 @@ export default async function WorkDetailPage({ params }: PageProps) {
                     const postTitle = post.title || post.bodyText.substring(0, 45) + '...';
                     
                     return (
-                      <li key={post.slug} className="group border-l border-border-medium pl-4 py-1">
+                      <li key={post.slug} className="group border-l-2 border-border-medium pl-4 py-1">
                         <Link href={`/works/${post.slug}`} className="block space-y-1">
-                          <span className="text-[8px] tracking-widest text-text-muted font-mono uppercase block">
+                          <span className="text-xs tracking-widest text-text-secondary font-mono font-bold uppercase block">
                             {postType}
                           </span>
-                          <span className="text-xs text-text-secondary group-hover:text-text-primary transition-colors font-serif leading-relaxed block underline underline-offset-2">
+                          <span className="text-sm text-text-primary group-hover:underline transition-colors font-serif leading-relaxed block font-medium">
                             {postTitle}
                           </span>
                         </Link>
@@ -105,8 +105,8 @@ export default async function WorkDetailPage({ params }: PageProps) {
                   })}
                 </ul>
               ) : (
-                <p className="text-xs text-text-muted italic">
-                  This work stands alone. No related memories found.
+                <p className="text-xs text-text-secondary italic font-serif font-bold">
+                  Memory layers intertwined in quiet presence.
                 </p>
               )}
             </div>

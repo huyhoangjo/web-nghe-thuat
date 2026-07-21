@@ -78,14 +78,14 @@ export default function WorksPage() {
   return (
     <Container className="py-24 bg-background-primary min-h-screen">
       {/* Page Header */}
-      <div className="border-b border-border-light pb-8 mb-16 space-y-3">
-        <span className="text-[10px] tracking-[0.35em] text-text-muted font-mono uppercase block">
+      <div className="border-b-2 border-border-light pb-8 mb-16 space-y-3">
+        <span className="text-xs tracking-[0.35em] text-text-secondary font-mono font-bold uppercase block">
           {t('CHRONOLOGICAL ARCHIVE', 'LƯU TRỮ TIẾN TRÌNH THỜI GIAN')}
         </span>
-        <h1 className="font-serif text-4xl md:text-5xl font-light text-text-primary tracking-wide">
+        <h1 className="font-serif text-4xl md:text-6xl font-medium text-text-primary tracking-wide">
           {t('ARTWORKS', 'TÁC PHẨM')}
         </h1>
-        <p className="text-xs text-text-muted max-w-xl leading-relaxed tracking-wide font-sans">
+        <p className="font-serif text-base md:text-lg text-text-primary max-w-2xl leading-relaxed font-normal">
           {t(
             'The artistic journey of Ngô Thị Thùy Duyên, catalogued into six developmental phases from early installations to drawings on Dó paper.',
             'Hành trình thực hành nghệ thuật của Ngô Thị Thùy Duyên, được lưu trữ thành sáu giai đoạn tiến trình từ các sắp đặt ban đầu đến các tác phẩm vẽ trên giấy Dó.'
@@ -107,21 +107,21 @@ export default function WorksPage() {
           });
 
           return (
-            <div key={ch.number} className="grid grid-cols-1 lg:grid-cols-12 gap-12 border-t border-border-light pt-8">
+            <div key={ch.number} className="grid grid-cols-1 lg:grid-cols-12 gap-12 border-t-2 border-border-light pt-8">
               {/* Chapter Metadata (col span 3) */}
               <div className="lg:col-span-3 space-y-4 lg:sticky lg:top-28 h-fit">
                 <div className="space-y-1">
-                  <span className="text-[10px] tracking-widest text-text-muted font-mono uppercase block">
+                  <span className="text-xs tracking-widest text-text-secondary font-mono font-bold uppercase block">
                     {t('CHAPTER', 'CHƯƠNG')} 0{ch.number}
                   </span>
-                  <h2 className="font-serif text-2xl font-light text-text-primary tracking-wide">
+                  <h2 className="font-serif text-3xl font-medium text-text-primary tracking-wide">
                     {t(ch.titleEn, ch.titleVi)}
                   </h2>
-                  <span className="text-xs tracking-wider text-text-muted font-mono font-medium block">
+                  <span className="text-xs tracking-wider text-text-secondary font-mono font-bold block">
                     {ch.years}
                   </span>
                 </div>
-                <p className="text-xs text-text-secondary leading-relaxed font-serif italic pt-2 font-light">
+                <p className="text-sm text-text-primary leading-relaxed font-serif italic pt-2 font-normal">
                   {t(ch.descEn, ch.descVi)}
                 </p>
               </div>
@@ -133,7 +133,7 @@ export default function WorksPage() {
                   const title = lines[0] || "Untitled";
                   return (
                     <Link key={`${work.slug}-${idx}`} href={`/works/${work.slug}`} className="group block space-y-4">
-                      <div className="border border-border-light overflow-hidden bg-background-secondary shadow-sm">
+                      <div className="border-2 border-border-medium overflow-hidden bg-background-secondary shadow-sm">
                         {work.images.length > 0 ? (
                           <ArchiveImage
                             src={work.images[0]}
@@ -143,18 +143,18 @@ export default function WorksPage() {
                           />
                         ) : (
                           <div className="aspect-[4/3] flex items-center justify-center bg-background-secondary">
-                            <span className="text-xs text-text-muted font-mono tracking-widest">{t('NO IMAGE', 'KHÔNG CÓ ẢNH')}</span>
+                            <span className="text-xs text-text-secondary font-mono font-bold tracking-widest">{t('NO IMAGE', 'KHÔNG CÓ ẢNH')}</span>
                           </div>
                         )}
                       </div>
                       <div className="space-y-1">
-                        <span className="text-[9px] tracking-widest text-text-muted uppercase font-mono">
+                        <span className="text-xs tracking-widest text-text-secondary uppercase font-mono font-bold">
                           {work.labels.join(' / ')}
                         </span>
-                        <h3 className="font-serif text-lg text-text-primary group-hover:text-text-secondary transition-colors font-light">
+                        <h3 className="font-serif text-xl text-text-primary group-hover:text-text-secondary transition-colors font-medium">
                           {title}
                         </h3>
-                        <p className="text-xs text-text-muted font-mono">{work.year}</p>
+                        <p className="text-xs text-text-secondary font-mono font-bold">{work.year}</p>
                       </div>
                     </Link>
                   );
