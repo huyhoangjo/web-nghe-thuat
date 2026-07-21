@@ -260,15 +260,10 @@ export default function CVPage() {
 
   return (
     <Container className="py-24 w-full max-w-7xl mx-auto space-y-24">
-      {/* Page Title */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="space-y-4 text-center max-w-4xl mx-auto border-b-2 border-border-light pb-12"
-      >
+      {/* Page Title Header */}
+      <div className="space-y-4 text-center max-w-4xl mx-auto border-b-2 border-border-light pb-12">
         <span className="text-xs tracking-[0.35em] text-text-secondary font-mono font-bold uppercase block">
-          {t("ARTISTIC TIMELINE & ARTIST PROFILE", "HÀNH TRÌNH NGHỆ THUẬT & HỒ SƠ NGHỆ SĨ")}
+          {t("ARTISTIC TIMELINE & ARCHIVE", "HÀNH TRÌNH NGHỆ THUẬT & LƯU TRỮ")}
         </span>
         <h1 className="font-serif text-5xl md:text-7xl font-medium text-text-primary tracking-wide uppercase">
           BIOGRAPHY
@@ -276,83 +271,13 @@ export default function CVPage() {
         <p className="text-sm text-text-secondary font-mono font-bold tracking-widest uppercase">
           NGO THI THUY DUYEN — VISUAL ARTIST
         </p>
-      </motion.div>
-
-      {/* Artist Profile Hero Section (2-Column Layout with Portrait Image) */}
-      <motion.div 
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1 }}
-        className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center bg-background-secondary border-2 border-text-primary p-8 md:p-12 rounded-2xl shadow-xl"
-      >
-        {/* Left Column: Portrait Image */}
-        <div className="lg:col-span-5 space-y-4">
-          <div className="relative border-2 border-text-primary overflow-hidden rounded-xl shadow-md group bg-background-primary aspect-[3/4]">
-            <img 
-              src="/images/artist-portrait.png" 
-              alt="Ngo Thi Thuy Duyen - Visual Artist Portrait" 
-              className="w-full h-full object-cover filter grayscale contrast-110 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-text-primary/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
-              <span className="text-xs font-mono font-bold text-background-primary tracking-widest uppercase">
-                NGO THI THUY DUYEN
-              </span>
-            </div>
-          </div>
-          <div className="text-center md:text-left space-y-1">
-            <span className="text-xs font-mono font-bold text-text-secondary tracking-widest uppercase block">
-              LAYER 01 / ARTIST PORTRAIT
-            </span>
-            <p className="font-serif text-sm italic text-text-primary">
-              {t("Visual Artist — b. 1981, Hoi An, Vietnam", "Nghệ sĩ Thị giác — sinh năm 1981, Hội An, Việt Nam")}
-            </p>
-          </div>
-        </div>
-
-        {/* Right Column: Bio Summary & Philosophy */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="space-y-2 border-b-2 border-border-light pb-4">
-            <span className="text-xs font-mono font-bold text-text-secondary tracking-[0.25em] uppercase block">
-              LAYER 02 / PRACTICE PHILOSOPHY
-            </span>
-            <h2 className="font-serif text-3xl md:text-4xl font-medium text-text-primary">
-              {t("Artistic Journey & Research Focus", "Hành Trình Thực Hành & Hướng Nghiên Cứu")}
-            </h2>
-          </div>
-
-          <p className="font-serif text-lg md:text-xl text-text-primary leading-relaxed font-normal">
-            {t(
-              "Ngo Thi Thuy Duyen is a Vietnamese visual artist based in Ho Chi Minh City. For more than two decades, her practice has centered on the expressive and conceptual possibilities of handmade dó paper, exploring how material can embody memory, perception, and transformation.",
-              "Ngô Thị Thùy Duyên là nghệ sĩ thị giác sống và làm việc tại TP. Hồ Chí Minh. Trong hơn 20 năm thực hành, chị tập trung nghiên cứu khả năng biểu đạt và khái niệm của giấy Dó thủ công, khám phá cách chất liệu truyền tải ký ức, nhận thức và sự chuyển đổi."
-            )}
-          </p>
-
-          <p className="font-serif text-base md:text-lg text-text-primary leading-relaxed font-normal">
-            {t(
-              "Graduating with a Bachelor of Fine Arts from Hue University of Arts (2006) and completing coursework for the Master of Fine Arts program at Ho Chi Minh City University of Fine Arts (2009–2012), her early work explored installation and performance art. Over time, her research evolved into spatial structures combining dó paper, ink, thread, light, and transparent resin.",
-              "Tốt nghiệp Cử nhân Mỹ thuật từ Đại học Nghệ thuật Huế (2006) và hoàn thành phần lý thuyết chương trình Thạc sĩ Mỹ thuật tại Đại học Mỹ thuật TP.HCM (2009–2012), các thực hành ban đầu của chị khai thác nghệ thuật sắp đặt và trình diễn. Theo thời gian, hướng nghiên cứu phát triển thành các cấu trúc không gian kết hợp giấy Dó, mực, chỉ khâu, ánh sáng và keo trong suốt."
-            )}
-          </p>
-
-          <div className="grid grid-cols-2 gap-4 pt-4 border-t-2 border-border-light font-mono text-xs font-bold text-text-secondary uppercase tracking-wider">
-            <div>
-              <span className="block text-[10px] text-text-muted">LOCATION</span>
-              <span className="text-text-primary">HCMC, VIETNAM</span>
-            </div>
-            <div>
-              <span className="block text-[10px] text-text-muted">CORE MEDIUMS</span>
-              <span className="text-text-primary">DÓ PAPER, INK, RESIN</span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
+      </div>
       
-      {/* Timeline Sections List */}
+      {/* Sections List */}
       <div className="space-y-24 w-full">
         {cvData.map((section, secIdx) => (
           <motion.section 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: secIdx * 0.05 }}
