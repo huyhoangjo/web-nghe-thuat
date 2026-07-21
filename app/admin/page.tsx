@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Plus, Edit2, Trash2, Save, X, Eye, Upload, Loader2, Lock, 
-  Unlock, LogOut, Star, FileText, ArrowUp, ArrowDown, ShieldCheck, EyeOff
+  LogOut, Star, ArrowUp, ArrowDown, ShieldCheck, EyeOff
 } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Post } from '@/lib/types/post';
