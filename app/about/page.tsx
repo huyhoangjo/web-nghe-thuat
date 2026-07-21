@@ -110,7 +110,7 @@ export default function AboutPage() {
           {t("Art is not separate from life.", "Nghệ thuật không tách rời khỏi đời sống.")}
         </h2>
         <div className="w-16 h-[1px] bg-border-medium mx-auto my-6" />
-        <p className="font-serif italic text-base md:text-xl text-text-secondary leading-relaxed font-light max-w-2xl mx-auto">
+        <p className="font-serif italic text-base md:text-xl text-text-secondary leading-relaxed font-light max-w-3xl mx-auto">
           {t(
             "“Behind every artwork are memories, travels, notebooks, conversations, observations, unfinished thoughts, language, research, silence, and transformation. Not everything needs explanation. Leave room for mystery.”",
             "“Đằng sau mỗi tác phẩm là ký ức, những chuyến đi, sổ tay, trò chuyện, quan sát, những suy nghĩ dang dở, ngôn ngữ, nghiên cứu, sự im lặng và chuyển hóa. Không phải mọi thứ đều cần lời giải thích. Hãy để lại khoảng trống cho sự bí ẩn.”"
@@ -118,69 +118,77 @@ export default function AboutPage() {
         </p>
       </section>
 
-      {/* LAYER 4: MATERIAL PHILOSOPHY PREVIEW SECTION */}
+      {/* LAYER 4: MATERIAL PHILOSOPHY PREVIEW SECTION (WIDE & SPACIOUS LAYOUT) */}
       <section className="border-t border-border-light pt-24 space-y-16">
+        {/* Layer Header */}
         <div className="flex flex-col md:flex-row justify-between md:items-end gap-6 border-b border-border-light pb-8">
-          <div className="space-y-2">
+          <div className="space-y-2 max-w-2xl">
             <span className="text-[10px] tracking-[0.35em] text-text-muted font-mono uppercase block">
               LAYER 04 / ESSAY & ESSENCE
             </span>
             <h2 className="font-serif text-3xl md:text-4xl text-text-primary font-light">
               {t("Material Philosophy", "Triết lý Vật liệu")}
             </h2>
-            <p className="text-xs text-text-muted font-mono">
+            <p className="text-xs text-text-muted font-mono tracking-wide">
               {t("The Origin of Form: Matter, Suspension, and Perception", "Khởi nguyên của Hình hài: Vật chất, Huyền phù và Nhận thức")}
             </p>
           </div>
           <Link
             href="/field-notes/material-philosophy"
-            className="border border-text-primary px-6 py-3 text-[10px] tracking-[0.25em] text-text-primary hover:bg-text-primary hover:text-background-primary transition-all duration-500 font-mono inline-block text-center"
+            className="border border-text-primary px-8 py-3.5 text-[10px] tracking-[0.25em] text-text-primary hover:bg-text-primary hover:text-background-primary transition-all duration-500 font-mono inline-block text-center whitespace-nowrap shrink-0"
           >
             {t("READ FULL ESSAY →", "ĐỌC TOÀN VĂN BÀI LUẬN →")}
           </Link>
         </div>
 
-        {/* Featured Philosophical Quotes & Material Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-          <div className="md:col-span-6 space-y-6 font-serif leading-relaxed text-text-secondary text-sm md:text-base font-light">
-            <blockquote className="border-l-2 border-border-medium pl-6 italic space-y-4">
-              <p className="text-text-primary">
-                {t(
-                  "“Dó paper was once tree bark. Before taking the form of paper, that matter passes through a phase where it is no longer a tree, yet not yet paper. It is precisely this 'in-between' state of suspension that becomes the point of departure for my entire thinking.”",
-                  "“Giấy dó từng là vỏ cây... Trước khi có hình hài của một tờ giấy, vật chất ấy đã trải qua một giai đoạn không còn là cây nhưng cũng chưa phải là giấy. Chính trạng thái 'ở giữa' ấy trở thành điểm khởi đầu cho toàn bộ suy nghĩ của tôi.”"
-                )}
-              </p>
-            </blockquote>
-            <p className="text-xs font-sans text-text-muted leading-relaxed font-light">
+        {/* Full-width Generous Quote Paragraph (Wide Reading Layout) */}
+        <div className="max-w-4xl mx-auto space-y-8 text-center md:text-left">
+          <blockquote className="border-l-2 border-text-primary pl-6 md:pl-8 py-2 font-serif italic text-lg md:text-2xl text-text-primary leading-relaxed font-light">
+            <p>
               {t(
-                "Exploring matter not as a static medium, but as an open system of possibilities involving paper, water suspension, transparent resin, light, and the observer's movement.",
-                "Khám phá vật chất không phải như một phương tiện tĩnh, mà là một hệ thống mở chứa đựng nhiều khả năng tồn tại giữa giấy dó, huyền phù nước, resin trong suốt, ánh sáng và sự di chuyển của người xem."
+                "“Dó paper was once tree bark. Before taking the form of paper, that matter passes through a phase where it is no longer a tree, yet not yet paper. It is precisely this 'in-between' state of suspension that becomes the point of departure for my entire thinking.”",
+                "“Giấy dó từng là vỏ cây... Trước khi có hình hài của một tờ giấy, vật chất ấy đã trải qua một giai đoạn không còn là cây nhưng cũng chưa phải là giấy. Chính trạng thái 'ở giữa' ấy trở thành điểm khởi đầu cho toàn bộ suy nghĩ của tôi.”"
               )}
             </p>
+          </blockquote>
+          
+          <p className="text-sm md:text-base text-text-secondary leading-relaxed font-serif font-light max-w-3xl">
+            {t(
+              "Exploring matter not as a static medium, but as an open system of possibilities involving paper, water suspension, transparent resin, light, and the observer's movement.",
+              "Khám phá vật chất không phải như một phương tiện tĩnh, mà là một hệ thống mở chứa đựng nhiều khả năng tồn tại giữa giấy dó, huyền phù nước, resin trong suốt, ánh sáng và sự di chuyển nhận thức của người xem."
+            )}
+          </p>
+        </div>
+
+        {/* Full-width Material Study Cards Grid (Wide 2-Column) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 pt-4">
+          <div className="space-y-3">
+            <div className="border border-border-light bg-background-secondary shadow-sm">
+              <ArchiveImage
+                src="/images/materials/material-1.jpg"
+                alt="Dó paper and stitching material study"
+                id="about-mat-1"
+                aspectRatio="aspect-[16/10]"
+              />
+            </div>
+            <div className="space-y-1">
+              <span className="text-[10px] text-text-muted font-mono tracking-wider uppercase block">MATERIAL STUDY I</span>
+              <h4 className="font-serif text-base text-text-primary font-light">{t("Dó Paper & Stitching Traces", "Giấy Dó & Dấu Vết Đường Chỉ")}</h4>
+            </div>
           </div>
 
-          <div className="md:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <div className="border border-border-light bg-background-secondary shadow-sm">
-                <ArchiveImage
-                  src="/images/materials/material-1.jpg"
-                  alt="Dó paper and stitching material study"
-                  id="about-mat-1"
-                  aspectRatio="aspect-[4/5]"
-                />
-              </div>
-              <p className="text-[10px] text-text-muted font-mono uppercase">{t("Dó Paper & Stitching", "Giấy Dó & Đường Chỉ")}</p>
+          <div className="space-y-3">
+            <div className="border border-border-light bg-background-secondary shadow-sm">
+              <ArchiveImage
+                src="/images/materials/material-2.jpg"
+                alt="Resin suspension and light study"
+                id="about-mat-2"
+                aspectRatio="aspect-[16/10]"
+              />
             </div>
-            <div className="space-y-2">
-              <div className="border border-border-light bg-background-secondary shadow-sm">
-                <ArchiveImage
-                  src="/images/materials/material-2.jpg"
-                  alt="Resin suspension and light study"
-                  id="about-mat-2"
-                  aspectRatio="aspect-[4/5]"
-                />
-              </div>
-              <p className="text-[10px] text-text-muted font-mono uppercase">{t("Resin & Light Space", "Không Gian Resin & Ánh Sáng")}</p>
+            <div className="space-y-1">
+              <span className="text-[10px] text-text-muted font-mono tracking-wider uppercase block">MATERIAL STUDY II</span>
+              <h4 className="font-serif text-base text-text-primary font-light">{t("Resin Suspension & Spatial Light", "Resin Huyền Phù & Không Gian Ánh Sáng")}</h4>
             </div>
           </div>
         </div>

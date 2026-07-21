@@ -11,8 +11,8 @@ export default function Navbar() {
   const { language, setLanguage, t } = useLanguage();
   
   const navItems = [
-    { href: '/about', label: t('BIO & PHILOSOPHY', 'TIỂU SỬ & TRIẾT LÝ') },
-    { href: '/works', label: t('BODY OF WORKS', 'TIẾN TRÌNH TÁC PHẨM') },
+    { href: '/about', label: t('BIO & PHILOSOPHY', 'TRIẾT LÝ & TIỂU SỬ') },
+    { href: '/works', label: t('BODY OF WORKS', 'TÁC PHẨM') },
     { href: '/cv', label: t('TIMELINE / CV', 'HÀNH TRÌNH / CV') },
     { href: '/field-notes', label: t('FIELD NOTES', 'GHI CHÉP') },
     { href: '/journal', label: t('JOURNAL', 'NHẬT KÝ') },
@@ -21,22 +21,25 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="border-b border-border-light py-6 sticky top-0 bg-background-primary/95 backdrop-blur-sm z-50">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
-        <Link href="/" className="font-serif text-lg tracking-widest font-light text-text-primary hover:opacity-75 transition-opacity">
+    <header className="border-b border-border-light py-5 sticky top-0 bg-background-primary/95 backdrop-blur-sm z-50">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 flex justify-between items-center">
+        <Link 
+          href="/" 
+          className="font-serif text-base lg:text-lg tracking-widest font-light text-text-primary hover:opacity-75 transition-opacity whitespace-nowrap shrink-0"
+        >
           NGO THI THUY DUYEN
         </Link>
         
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center space-x-8">
-          <nav className="flex space-x-6 lg:space-x-8 text-xs tracking-widest items-center">
+        <div className="hidden md:flex items-center space-x-4 lg:space-x-8">
+          <nav className="flex items-center gap-3 lg:gap-6 text-[11px] lg:text-xs tracking-wider whitespace-nowrap font-mono">
             {navItems.map((item) => {
               const isActive = pathname.startsWith(item.href);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`text-text-secondary hover:text-text-primary transition-colors ${
+                  className={`text-text-secondary hover:text-text-primary transition-colors py-1 ${
                     isActive ? 'underline underline-offset-4 text-text-primary font-medium' : ''
                   }`}
                 >
@@ -47,17 +50,17 @@ export default function Navbar() {
           </nav>
           
           {/* Desktop Lang Switcher */}
-          <div className="flex items-center space-x-2 text-[10px] tracking-normal border-l border-border-light pl-4 ml-4 font-mono">
+          <div className="flex items-center space-x-2 text-[10px] tracking-normal border-l border-border-light pl-4 font-mono shrink-0">
             <button 
               onClick={() => setLanguage('vi')} 
-              className={`transition-colors ${language === 'vi' ? 'text-text-primary font-bold' : 'text-text-muted hover:text-text-primary'}`}
+              className={`transition-colors px-1 py-0.5 ${language === 'vi' ? 'text-text-primary font-bold' : 'text-text-muted hover:text-text-primary'}`}
             >
               VI
             </button>
             <span className="text-text-muted">/</span>
             <button 
               onClick={() => setLanguage('en')} 
-              className={`transition-colors ${language === 'en' ? 'text-text-primary font-bold' : 'text-text-muted hover:text-text-primary'}`}
+              className={`transition-colors px-1 py-0.5 ${language === 'en' ? 'text-text-primary font-bold' : 'text-text-muted hover:text-text-primary'}`}
             >
               EN
             </button>
@@ -101,10 +104,10 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-text-secondary hover:text-text-primary py-2 transition-colors ${
-                  isActive ? 'text-text-primary font-medium' : ''
-                }`}
                 onClick={() => setIsOpen(false)}
+                className={`text-text-secondary hover:text-text-primary transition-colors py-1 ${
+                  isActive ? 'text-text-primary font-medium underline underline-offset-4' : ''
+                }`}
               >
                 {item.label}
               </Link>
