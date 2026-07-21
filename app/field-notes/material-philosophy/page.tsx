@@ -12,26 +12,26 @@ export default function MaterialPhilosophyPage() {
       {/* Back Link */}
       <Link 
         href="/about" 
-        className="text-xs tracking-widest text-text-muted hover:text-text-primary transition-colors flex items-center space-x-2 font-mono uppercase"
+        className="text-xs tracking-widest text-text-secondary hover:text-text-primary transition-colors flex items-center space-x-2 font-mono uppercase font-bold"
       >
         <span>← BACK TO BIO & PHILOSOPHY</span>
       </Link>
 
       {/* Title & Metadata Header */}
-      <div className="border-b border-border-light pb-12 space-y-6 text-center">
-        <span className="text-[10px] tracking-[0.35em] text-text-muted font-mono uppercase block">
+      <div className="border-b-2 border-border-light pb-12 space-y-6 text-center">
+        <span className="text-xs tracking-[0.35em] text-text-secondary font-mono font-bold uppercase block">
           {t("MUSEUM PUBLICATION / ESSAY", "ẤN PHẨM BẢO TÀNG / BÀI LUẬN")}
         </span>
-        <h1 className="font-serif text-4xl md:text-6xl font-light text-text-primary tracking-wide leading-tight">
+        <h1 className="font-serif text-4xl md:text-6xl font-medium text-text-primary tracking-wide leading-tight">
           MATERIAL PHILOSOPHY
         </h1>
-        <p className="font-serif italic text-lg md:text-xl text-text-secondary tracking-wide font-light">
+        <p className="font-serif italic text-xl md:text-2xl text-text-primary tracking-wide font-normal">
           {t(
             "The Origin of Form: Matter, Suspension, and Perception",
             "Khởi nguyên của Hình hài: Vật chất, Huyền phù và Nhận thức"
           )}
         </p>
-        <div className="flex justify-center items-center space-x-4 text-xs text-text-muted font-mono pt-4">
+        <div className="flex justify-center items-center space-x-4 text-xs text-text-secondary font-mono font-bold pt-4">
           <span>NGO THI THUY DUYEN</span>
           <span>•</span>
           <span>ESSAY & RESEARCH</span>
@@ -39,10 +39,10 @@ export default function MaterialPhilosophyPage() {
       </div>
 
       {/* Main Essay Content */}
-      <article className="prose prose-stone max-w-none text-text-secondary text-base md:text-lg leading-[2] space-y-10 font-serif font-light">
+      <article className="prose prose-stone max-w-none text-text-primary text-lg md:text-xl leading-[2.1] space-y-10 font-serif font-normal">
         
         {/* Paragraph 1 */}
-        <p className="first-letter:text-5xl first-letter:font-serif first-letter:mr-3 first-letter:float-left first-letter:text-text-primary">
+        <p className="first-letter:text-6xl first-letter:font-serif first-letter:font-bold first-letter:mr-3 first-letter:float-left first-letter:text-text-primary">
           {t(
             "I do not view material as merely a medium for creating an artwork. To me, every material carries within itself a history, a process of transformation, and unrevealed possibilities of existence. My artistic practice begins with listening to those possibilities.",
             "Tôi không xem vật liệu là phương tiện để tạo nên một tác phẩm. Với tôi, mỗi vật liệu đều mang trong mình một lịch sử, một quá trình biến đổi và nhiều khả năng tồn tại chưa được khai mở. Thực hành nghệ thuật của tôi bắt đầu từ việc lắng nghe những khả năng ấy."
@@ -58,7 +58,7 @@ export default function MaterialPhilosophyPage() {
         </p>
 
         {/* Featured Pull Quote 1 */}
-        <blockquote className="my-12 border-l-2 border-text-primary pl-8 py-2 font-serif italic text-xl md:text-2xl text-text-primary space-y-2">
+        <blockquote className="my-12 border-l-4 border-text-primary pl-8 py-4 font-serif italic text-2xl md:text-3xl text-text-primary space-y-2 bg-background-secondary/80 rounded-r-lg">
           <p>
             {t(
               "“Dó paper was once tree bark. Before taking the form of paper, that matter passes through a phase where it is no longer a tree, yet not yet paper. It is precisely this 'in-between' state that becomes the point of departure for my entire thinking.”",
@@ -86,7 +86,7 @@ export default function MaterialPhilosophyPage() {
         {/* Image Display inside Essay */}
         <div className="my-16 grid grid-cols-1 md:grid-cols-2 gap-8 not-prose">
           <div className="space-y-3">
-            <div className="border border-border-light bg-background-secondary shadow-sm">
+            <div className="border-2 border-border-medium bg-background-secondary shadow-md">
               <ArchiveImage
                 src="/images/materials/material-1.jpg"
                 alt="Dó Paper Fiber and Thread"
@@ -94,13 +94,13 @@ export default function MaterialPhilosophyPage() {
                 aspectRatio="aspect-[4/3]"
               />
             </div>
-            <p className="text-xs text-text-muted font-mono">
+            <p className="text-xs text-text-secondary font-mono font-bold">
               {t("FIG 1. Dó paper fibers suspended in water & stitched thread traces.", "HÌNH 1. Sợi giấy dó lơ lửng trong nước & dấu vết đường chỉ khâu.")}
             </p>
           </div>
 
           <div className="space-y-3">
-            <div className="border border-border-light bg-background-secondary shadow-sm">
+            <div className="border-2 border-border-medium bg-background-secondary shadow-md">
               <ArchiveImage
                 src="/images/materials/material-2.jpg"
                 alt="Resin Layer and Spatial Light"
@@ -108,7 +108,7 @@ export default function MaterialPhilosophyPage() {
                 aspectRatio="aspect-[4/3]"
               />
             </div>
-            <p className="text-xs text-text-muted font-mono">
+            <p className="text-xs text-text-secondary font-mono font-bold">
               {t("FIG 2. Transparent resin block creating spatial depth & refraction.", "HÌNH 2. Khối resin trong suốt tạo chiều sâu không gian & sự phản xạ.")}
             </p>
           </div>
@@ -139,7 +139,7 @@ export default function MaterialPhilosophyPage() {
         </p>
 
         {/* Featured Pull Quote 2 */}
-        <blockquote className="my-12 border-l-2 border-text-primary pl-8 py-2 font-serif italic text-xl md:text-2xl text-text-primary space-y-2">
+        <blockquote className="my-12 border-l-4 border-text-primary pl-8 py-4 font-serif italic text-2xl md:text-3xl text-text-primary space-y-2 bg-background-secondary/80 rounded-r-lg">
           <p>
             {t(
               "“If water was the medium where bark fibers suspended before crystallizing into paper, resin is a new space where matter continues to exist in a state of suspension. I am no longer interested in protecting paper, but in creating an environment where matter continues to unlock alternative possibilities of existence.”",
@@ -174,20 +174,20 @@ export default function MaterialPhilosophyPage() {
       </article>
 
       {/* Footer Navigation & Related Series Link */}
-      <div className="border-t border-border-light pt-12 mt-16 space-y-8">
-        <div className="bg-background-secondary border border-border-light p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div className="border-t-2 border-border-light pt-12 mt-16 space-y-8">
+        <div className="bg-background-secondary border-2 border-border-medium p-8 flex flex-col sm:flex-row items-center justify-between gap-6 rounded-lg shadow-sm">
           <div className="space-y-1 text-center sm:text-left">
-            <span className="text-[9px] tracking-widest text-text-muted font-mono uppercase block">
+            <span className="text-xs tracking-widest text-text-secondary font-mono font-bold uppercase block">
               {t("RELATED ARTWORK SERIES", "SERIES TÁC PHẨM LIÊN QUAN")}
             </span>
-            <h4 className="font-serif text-xl text-text-primary">
+            <h4 className="font-serif text-2xl text-text-primary font-medium">
               {t("The Origin of No-Self & Suspension", "Khởi Nguyên Của Vô Ngã & Huyền Phù")}
             </h4>
-            <p className="text-xs text-text-muted">Chapter 06 (2013 - 2014)</p>
+            <p className="text-xs font-mono font-bold text-text-secondary">Chapter 06 (2013 - 2014)</p>
           </div>
           <Link
             href="/works"
-            className="border border-text-primary px-6 py-3 text-[10px] tracking-widest text-text-primary hover:bg-text-primary hover:text-background-primary transition-colors font-mono uppercase whitespace-nowrap"
+            className="border-2 border-text-primary px-6 py-3 text-xs font-bold tracking-widest text-text-primary hover:bg-text-primary hover:text-background-primary transition-colors font-mono uppercase whitespace-nowrap shadow-sm"
           >
             {t("VIEW BODY OF WORKS →", "XEM TIẾN TRÌNH TÁC PHẨM →")}
           </Link>

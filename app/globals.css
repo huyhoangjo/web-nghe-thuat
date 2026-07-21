@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
   --color-background-primary: #F8F7F4;
   --color-background-secondary: #F2F1ED;
-  --color-text-primary: #1C1C1C;
-  --color-text-secondary: #505050;
-  --color-text-muted: #7A7A7A;
-  --color-border-light: #E5E5E5;
-  --color-border-medium: #D5D5D5;
+  --color-text-primary: #111111;
+  --color-text-secondary: #2A2A2A;
+  --color-text-muted: #4A4A4A;
+  --color-border-light: #D8D8D8;
+  --color-border-medium: #B8B8B8;
 
   --font-serif: "Cormorant Garamond", serif;
   --font-sans: "Inter", sans-serif;
@@ -19,8 +19,15 @@ body {
   color: var(--color-text-primary);
   font-family: var(--font-sans);
   overflow-x: hidden;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .font-serif {
   font-family: var(--font-serif);
+}
+
+p, span, h1, h2, h3, h4, blockquote {
+  text-rendering: optimizeLegibility;
 }

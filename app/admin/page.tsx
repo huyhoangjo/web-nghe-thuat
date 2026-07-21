@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Plus, Edit2, Trash2, Save, X, Eye, Upload, Loader2, Lock, 
-  LogOut, Star, ArrowUp, ArrowDown, ShieldCheck, EyeOff
+  LogOut, Star, ArrowUp, ArrowDown, ShieldCheck, EyeOff, Key
 } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Post } from '@/lib/types/post';
@@ -19,6 +19,14 @@ export default function AdminPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState('');
   const [shake, setShake] = useState(0);
+
+  // Change Password Modal State
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [currentPassInput, setCurrentPassInput] = useState('');
+  const [newPassInput, setNewPassInput] = useState('');
+  const [confirmPassInput, setConfirmPassInput] = useState('');
+  const [passModalError, setPassModalError] = useState('');
+  const [passModalSuccess, setPassModalSuccess] = useState('');
 
   // Content Management State
   const [posts, setPosts] = useState<Post[]>([]);
@@ -47,8 +55,14 @@ export default function AdminPage() {
   const labelOptions = ['PAINTING', 'DRAWING', 'INSTALLATION', 'PERFORMANCE', 'WRITING', 'ARTICLES', 'BIOGRAPHY'];
   const tabs: TabType[] = ['ALL', 'WORKS', 'JOURNAL', 'FIELD NOTES', 'PUBLICATIONS', 'BIOGRAPHY', 'DRAFTS'];
 
+  const getStoredPassword = (): string => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('admin_custom_password') || 'admin123';
+    }
+    return 'admin123';
+  };
+
   useEffect(() => {
-    // Check local session storage on client mount
     if (typeof window !== 'undefined') {
       const auth = sessionStorage.getItem('admin_authenticated');
       if (auth === 'true') {
@@ -121,7 +135,8 @@ export default function AdminPage() {
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'admin123' || password === 'admin' || password === 'duyen2026') {
+    const storedPass = getStoredPassword();
+    if (password === storedPass || password === 'admin' || password === 'duyen2026') {
       sessionStorage.setItem('admin_authenticated', 'true');
       setIsAuthenticated(true);
       setAuthError('');
@@ -135,6 +150,39 @@ export default function AdminPage() {
     sessionStorage.removeItem('admin_authenticated');
     setIsAuthenticated(false);
     setPassword('');
+  };
+
+  const handleChangePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setPassModalError('');
+    setPassModalSuccess('');
+
+    const storedPass = getStoredPassword();
+    if (currentPassInput !== storedPass && currentPassInput !== 'admin' && currentPassInput !== 'duyen2026') {
+      setPassModalError('Mật khẩu hiện tại không chính xác.');
+      return;
+    }
+
+    if (newPassInput.length < 4) {
+      setPassModalError('Mật khẩu mới phải có ít nhất 4 ký tự.');
+      return;
+    }
+
+    if (newPassInput !== confirmPassInput) {
+      setPassModalError('Mật khẩu mới và xác nhận mật khẩu không trùng khớp.');
+      return;
+    }
+
+    localStorage.setItem('admin_custom_password', newPassInput);
+    setPassModalSuccess('Đổi mật khẩu thành công! Mật khẩu mới đã được lưu.');
+    
+    setTimeout(() => {
+      setIsChangingPassword(false);
+      setCurrentPassInput('');
+      setNewPassInput('');
+      setConfirmPassInput('');
+      setPassModalSuccess('');
+    }, 1500);
   };
 
   const handleTitleChange = (val: string) => {
@@ -306,23 +354,23 @@ export default function AdminPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1, x: shake ? [-10, 10, -8, 8, -4, 4, 0] : 0 }}
           transition={{ duration: 0.4 }}
-          className="w-full max-w-md bg-background-secondary/90 backdrop-blur-xl border border-border-medium p-8 md:p-10 rounded-2xl shadow-2xl space-y-8"
+          className="w-full max-w-md bg-background-secondary/95 backdrop-blur-xl border-2 border-border-medium p-8 md:p-10 rounded-2xl shadow-2xl space-y-8"
         >
           <div className="text-center space-y-3">
-            <div className="inline-flex p-3 rounded-full bg-background-primary border border-border-medium text-text-primary shadow-sm">
-              <Lock size={28} />
+            <div className="inline-flex p-3.5 rounded-full bg-background-primary border-2 border-border-medium text-text-primary shadow-sm">
+              <Lock size={32} />
             </div>
-            <h1 className="font-serif text-2xl md:text-3xl tracking-widest text-text-primary font-normal">
+            <h1 className="font-serif text-2xl md:text-3xl tracking-widest text-text-primary font-bold">
               CURATORIAL ADMIN
             </h1>
-            <p className="font-mono text-xs text-text-muted tracking-widest uppercase">
+            <p className="font-mono text-xs text-text-secondary font-bold tracking-widest uppercase">
               Không Gian Quản Trị & Lưu Trữ Sáng Tác
             </p>
           </div>
 
           <form onSubmit={handleLoginSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label className="block text-xs font-mono tracking-widest text-text-secondary uppercase">
+              <label className="block text-xs font-mono font-bold tracking-widest text-text-primary uppercase">
                 Mật Khẩu Quản Trị (Admin Key)
               </label>
               <div className="relative">
@@ -331,13 +379,13 @@ export default function AdminPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Nhập mật khẩu..."
-                  className="w-full bg-background-primary border border-border-medium px-4 py-3 text-sm text-text-primary focus:outline-none focus:border-text-primary transition-colors pr-10 font-mono"
+                  className="w-full bg-background-primary border-2 border-border-medium px-4 py-3.5 text-sm text-text-primary font-bold focus:outline-none focus:border-text-primary transition-colors pr-10 font-mono"
                   autoFocus
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-primary"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -345,21 +393,21 @@ export default function AdminPage() {
             </div>
 
             {authError && (
-              <p className="text-xs font-mono text-red-600 bg-red-50 p-3 rounded border border-red-200">
+              <p className="text-xs font-mono font-bold text-red-700 bg-red-100 p-3 rounded border border-red-300">
                 {authError}
               </p>
             )}
 
             <button
               type="submit"
-              className="w-full bg-text-primary text-background-primary py-3.5 px-6 font-mono text-xs tracking-[0.2em] uppercase font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 rounded shadow-md cursor-pointer"
+              className="w-full bg-text-primary text-background-primary py-4 px-6 font-mono text-xs tracking-[0.2em] uppercase font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 rounded shadow-md cursor-pointer"
             >
-              <ShieldCheck size={16} /> XÁC NHẬN / ENTER ARCHIVE
+              <ShieldCheck size={18} /> XÁC NHẬN / ENTER ARCHIVE
             </button>
           </form>
 
           <div className="pt-4 border-t border-border-light text-center">
-            <span className="text-[10px] font-mono text-text-muted uppercase">
+            <span className="text-[10px] font-mono font-bold text-text-secondary uppercase">
               NGO THI THUY DUYEN — LIVING ARTISTIC ARCHIVE
             </span>
           </div>
@@ -379,29 +427,36 @@ export default function AdminPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between border-b-2 border-border-light pb-8 gap-6">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <span className="px-3 py-1 bg-amber-100 border border-amber-300 text-amber-900 font-mono text-[10px] tracking-widest font-bold uppercase rounded flex items-center gap-1.5">
-                <ShieldCheck size={12} /> CURATOR ACTIVE
+              <span className="px-3 py-1 bg-amber-100 border border-amber-300 text-amber-900 font-mono text-[10px] tracking-widest font-bold uppercase rounded flex items-center gap-1.5 shadow-xs">
+                <ShieldCheck size={14} /> CURATOR ACTIVE
               </span>
-              <h1 className="font-serif text-3xl md:text-4xl text-text-primary font-normal tracking-wide">
+              <h1 className="font-serif text-3xl md:text-4xl text-text-primary font-bold tracking-wide">
                 Bảng Quản Trị Lưu Trữ
               </h1>
             </div>
-            <p className="font-mono text-xs text-text-muted uppercase tracking-widest">
+            <p className="font-mono text-xs text-text-secondary font-bold uppercase tracking-widest">
               Quản lý tác phẩm, ghi chép triết lý, bản nháp và hình ảnh lưu trữ
             </p>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={handleAddClick}
-              className="bg-text-primary text-background-primary px-6 py-3 text-xs md:text-sm font-mono tracking-widest font-bold uppercase flex items-center gap-2 rounded hover:opacity-90 transition-opacity cursor-pointer shadow-sm"
+              className="bg-text-primary text-background-primary px-5 py-3 text-xs md:text-sm font-mono tracking-widest font-bold uppercase flex items-center gap-2 rounded hover:opacity-90 transition-opacity cursor-pointer shadow-sm"
             >
               <Plus size={16} /> THÊM BÀI MỚI
             </button>
 
             <button
+              onClick={() => setIsChangingPassword(true)}
+              className="border-2 border-text-primary text-text-primary px-4 py-3 text-xs font-mono tracking-widest font-bold uppercase flex items-center gap-2 rounded hover:bg-text-primary hover:text-background-primary transition-all bg-background-primary shadow-xs cursor-pointer"
+            >
+              <Key size={16} /> ĐỔI MẬT KHẨU
+            </button>
+
+            <button
               onClick={handleLogout}
-              className="border-2 border-border-medium hover:border-red-600 hover:text-red-600 px-4 py-3 text-xs font-mono tracking-widest font-bold uppercase flex items-center gap-2 rounded transition-colors text-text-secondary bg-background-secondary"
+              className="border-2 border-border-medium hover:border-red-600 hover:text-red-600 px-4 py-3 text-xs font-mono tracking-widest font-bold uppercase flex items-center gap-2 rounded transition-colors text-text-secondary bg-background-secondary cursor-pointer"
             >
               <LogOut size={16} /> ĐĂNG XUẤT
             </button>
@@ -409,15 +464,15 @@ export default function AdminPage() {
         </div>
 
         {/* TAB FILTERING BAR */}
-        <div className="flex flex-wrap items-center gap-2 border-b border-border-light pb-4 font-mono text-xs">
+        <div className="flex flex-wrap items-center gap-2 border-b-2 border-border-light pb-4 font-mono text-xs">
           {tabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 rounded font-semibold tracking-wider transition-all cursor-pointer ${
+              className={`px-4 py-2.5 rounded font-bold tracking-wider transition-all cursor-pointer ${
                 activeTab === tab
-                  ? 'bg-text-primary text-background-primary shadow-xs'
-                  : 'bg-background-secondary text-text-muted hover:text-text-primary border border-border-light'
+                  ? 'bg-text-primary text-background-primary shadow-sm'
+                  : 'bg-background-secondary text-text-secondary hover:text-text-primary border border-border-medium'
               }`}
             >
               {tab === 'DRAFTS' ? 'BẢN NHÁP 📄' : tab}
@@ -428,37 +483,37 @@ export default function AdminPage() {
         {/* POSTS GRID LISTING */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="animate-spin text-text-muted" size={32} />
+            <Loader2 className="animate-spin text-text-primary" size={32} />
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredPosts.map((post) => (
               <div
                 key={post.slug}
-                className="bg-background-secondary/60 border border-border-medium p-6 rounded-lg space-y-4 hover:border-text-primary transition-colors flex flex-col justify-between"
+                className="bg-background-secondary border-2 border-border-medium p-6 rounded-lg space-y-4 hover:border-text-primary transition-colors flex flex-col justify-between shadow-xs"
               >
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between font-mono text-[10px] text-text-muted border-b border-border-light pb-2">
+                  <div className="flex items-center justify-between font-mono text-[10px] text-text-secondary font-bold border-b border-border-light pb-2">
                     <span>{post.year} — {post.date}</span>
                     <div className="flex items-center gap-2">
                       {post.isDraft && (
-                        <span className="px-2 py-0.5 bg-yellow-100 text-yellow-800 border border-yellow-300 font-bold rounded">
+                        <span className="px-2 py-0.5 bg-yellow-100 text-yellow-900 border border-yellow-400 font-bold rounded">
                           NHÁP
                         </span>
                       )}
                       {post.isFeatured && (
-                        <span className="px-2 py-0.5 bg-amber-100 text-amber-800 border border-amber-300 font-bold rounded flex items-center gap-1">
+                        <span className="px-2 py-0.5 bg-amber-100 text-amber-900 border border-amber-400 font-bold rounded flex items-center gap-1">
                           <Star size={10} /> NỔI BẬT
                         </span>
                       )}
                     </div>
                   </div>
 
-                  <h2 className="font-serif text-xl text-text-primary font-medium line-clamp-2">
+                  <h2 className="font-serif text-xl md:text-2xl text-text-primary font-bold line-clamp-2">
                     {post.title}
                   </h2>
 
-                  <p className="font-mono text-xs text-text-muted italic line-clamp-1">
+                  <p className="font-mono text-xs text-text-secondary font-bold italic line-clamp-1">
                     /{post.slug}
                   </p>
 
@@ -466,7 +521,7 @@ export default function AdminPage() {
                     {post.labels?.map((label) => (
                       <span
                         key={label}
-                        className="text-[9px] font-mono px-2 py-0.5 bg-background-primary border border-border-light text-text-secondary rounded"
+                        className="text-[10px] font-mono font-bold px-2 py-0.5 bg-background-primary border border-border-medium text-text-primary rounded"
                       >
                         {label}
                       </span>
@@ -476,7 +531,7 @@ export default function AdminPage() {
                   {post.images?.length > 0 && (
                     <div className="grid grid-cols-4 gap-2 pt-2">
                       {post.images.slice(0, 4).map((img, i) => (
-                        <div key={i} className="aspect-square bg-background-primary border border-border-light overflow-hidden rounded">
+                        <div key={i} className="aspect-square bg-background-primary border border-border-medium overflow-hidden rounded">
                           <img src={img} alt="" className="w-full h-full object-cover filter grayscale" />
                         </div>
                       ))}
@@ -494,7 +549,7 @@ export default function AdminPage() {
 
                   <button
                     onClick={() => handleDelete(post.slug)}
-                    className="flex items-center gap-1.5 text-red-600 hover:underline font-bold"
+                    className="flex items-center gap-1.5 text-red-700 hover:underline font-bold"
                   >
                     <Trash2 size={14} /> XÓA
                   </button>
@@ -503,6 +558,100 @@ export default function AdminPage() {
             ))}
           </div>
         )}
+
+        {/* CHANGE PASSWORD MODAL */}
+        <AnimatePresence>
+          {isChangingPassword && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-text-primary/70 backdrop-blur-sm">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="w-full max-w-md bg-background-primary border-2 border-text-primary p-8 rounded-xl shadow-2xl space-y-6"
+              >
+                <div className="flex items-center justify-between border-b-2 border-border-light pb-4">
+                  <div className="flex items-center gap-2">
+                    <Key size={20} className="text-text-primary" />
+                    <h2 className="font-serif text-2xl text-text-primary font-bold">Thao Tác Đổi Mật Khẩu</h2>
+                  </div>
+                  <button
+                    onClick={() => setIsChangingPassword(false)}
+                    className="p-1 text-text-secondary hover:text-text-primary rounded"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                {passModalError && (
+                  <p className="text-xs font-mono font-bold text-red-700 bg-red-100 p-3 rounded border border-red-300">
+                    {passModalError}
+                  </p>
+                )}
+
+                {passModalSuccess && (
+                  <p className="text-xs font-mono font-bold text-emerald-800 bg-emerald-100 p-3 rounded border border-emerald-300">
+                    {passModalSuccess}
+                  </p>
+                )}
+
+                <form onSubmit={handleChangePasswordSubmit} className="space-y-4 font-mono text-xs">
+                  <div className="space-y-1.5">
+                    <label className="block font-bold uppercase text-text-primary">MẬT KHẨU HIỆN TẠI</label>
+                    <input
+                      type="password"
+                      value={currentPassInput}
+                      onChange={(e) => setCurrentPassInput(e.target.value)}
+                      required
+                      placeholder="Nhập mật khẩu cũ..."
+                      className="w-full bg-background-secondary border-2 border-border-medium px-4 py-3 text-sm font-bold text-text-primary focus:outline-none focus:border-text-primary"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="block font-bold uppercase text-text-primary">MẬT KHẨU MỚI</label>
+                    <input
+                      type="password"
+                      value={newPassInput}
+                      onChange={(e) => setNewPassInput(e.target.value)}
+                      required
+                      placeholder="Nhập mật khẩu mới..."
+                      className="w-full bg-background-secondary border-2 border-border-medium px-4 py-3 text-sm font-bold text-text-primary focus:outline-none focus:border-text-primary"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="block font-bold uppercase text-text-primary">XÁC NHẬN MẬT KHẨU MỚI</label>
+                    <input
+                      type="password"
+                      value={confirmPassInput}
+                      onChange={(e) => setConfirmPassInput(e.target.value)}
+                      required
+                      placeholder="Nhập lại mật khẩu mới..."
+                      className="w-full bg-background-secondary border-2 border-border-medium px-4 py-3 text-sm font-bold text-text-primary focus:outline-none focus:border-text-primary"
+                    />
+                  </div>
+
+                  <div className="flex gap-3 pt-4">
+                    <button
+                      type="submit"
+                      className="flex-1 bg-text-primary text-background-primary py-3 font-bold uppercase tracking-wider rounded hover:opacity-90 transition-opacity cursor-pointer"
+                    >
+                      LƯU MẬT KHẨU MỚI
+                    </button>
+                    
+                    <button
+                      type="button"
+                      onClick={() => setIsChangingPassword(false)}
+                      className="px-4 border-2 border-border-medium text-text-secondary hover:text-text-primary font-bold uppercase rounded cursor-pointer"
+                    >
+                      HỦY
+                    </button>
+                  </div>
+                </form>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
 
         {/* EDITOR FORM MODAL / PANEL */}
         <AnimatePresence>
@@ -513,21 +662,21 @@ export default function AdminPage() {
               exit={{ opacity: 0, y: 20 }}
               className="bg-background-secondary border-2 border-text-primary p-6 md:p-10 rounded-xl shadow-2xl space-y-8"
             >
-              <div className="flex items-center justify-between border-b border-border-medium pb-4">
-                <h2 className="font-serif text-2xl md:text-3xl text-text-primary font-normal">
+              <div className="flex items-center justify-between border-b-2 border-border-medium pb-4">
+                <h2 className="font-serif text-2xl md:text-3xl text-text-primary font-bold">
                   {editingPost ? 'Chỉnh Sửa Bài Viết' : 'Tạo Bài Viết Mới'}
                 </h2>
 
                 <button
                   onClick={() => { setIsAdding(false); setEditingPost(null); }}
-                  className="p-2 text-text-muted hover:text-text-primary rounded-full hover:bg-background-primary transition-colors"
+                  className="p-2 text-text-secondary hover:text-text-primary rounded-full hover:bg-background-primary transition-colors"
                 >
                   <X size={24} />
                 </button>
               </div>
 
               {message && (
-                <div className="p-4 bg-background-primary border border-border-medium font-mono text-xs text-text-primary font-bold">
+                <div className="p-4 bg-background-primary border-2 border-border-medium font-mono text-xs text-text-primary font-bold">
                   {message}
                 </div>
               )}
@@ -535,7 +684,7 @@ export default function AdminPage() {
               <form onSubmit={handleSave} className="space-y-6 font-mono text-xs">
                 
                 {/* STATUS & FEATURED CONTROLS */}
-                <div className="flex flex-wrap items-center gap-6 p-4 bg-background-primary border border-border-light rounded-lg">
+                <div className="flex flex-wrap items-center gap-6 p-4 bg-background-primary border-2 border-border-light rounded-lg">
                   <label className="flex items-center gap-2 cursor-pointer font-bold text-text-primary">
                     <input
                       type="checkbox"
@@ -546,7 +695,7 @@ export default function AdminPage() {
                     <span>LƯU BẢN NHÁP (DRAFT MODE)</span>
                   </label>
 
-                  <label className="flex items-center gap-2 cursor-pointer font-bold text-amber-800">
+                  <label className="flex items-center gap-2 cursor-pointer font-bold text-amber-900">
                     <input
                       type="checkbox"
                       checked={isFeatured}
@@ -560,25 +709,25 @@ export default function AdminPage() {
                 {/* TITLE & AUTO-SLUG */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="block tracking-widest text-text-secondary uppercase">TIÊU ĐỀ BÀI VIẾT (TITLE)</label>
+                    <label className="block tracking-widest text-text-primary font-bold uppercase">TIÊU ĐỀ BÀI VIẾT (TITLE)</label>
                     <input
                       type="text"
                       value={title}
                       onChange={(e) => handleTitleChange(e.target.value)}
                       required
-                      className="w-full bg-background-primary border border-border-medium px-4 py-3 text-sm text-text-primary font-serif"
+                      className="w-full bg-background-primary border-2 border-border-medium px-4 py-3 text-sm text-text-primary font-serif font-bold"
                       placeholder="Nhập tiêu đề tác phẩm..."
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block tracking-widest text-text-secondary uppercase">SLUG URL (TỰ ĐỘNG CẤU HÌNH)</label>
+                    <label className="block tracking-widest text-text-primary font-bold uppercase">SLUG URL (TỰ ĐỘNG CẤU HÌNH)</label>
                     <input
                       type="text"
                       value={slug}
                       onChange={(e) => setSlug(e.target.value)}
                       required
-                      className="w-full bg-background-primary border border-border-medium px-4 py-3 text-sm text-text-primary font-mono"
+                      className="w-full bg-background-primary border-2 border-border-medium px-4 py-3 text-sm text-text-primary font-mono font-bold"
                       placeholder="slug-url-bai-viet"
                     />
                   </div>
@@ -587,29 +736,29 @@ export default function AdminPage() {
                 {/* YEAR & DATE */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="block tracking-widest text-text-secondary uppercase">NĂM SÁNG TÁC (YEAR)</label>
+                    <label className="block tracking-widest text-text-primary font-bold uppercase">NĂM SÁNG TÁC (YEAR)</label>
                     <input
                       type="text"
                       value={year}
                       onChange={(e) => setYear(e.target.value)}
-                      className="w-full bg-background-primary border border-border-medium px-4 py-3 text-sm text-text-primary"
+                      className="w-full bg-background-primary border-2 border-border-medium px-4 py-3 text-sm text-text-primary font-bold"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block tracking-widest text-text-secondary uppercase">NGÀY ĐẰNG / DISPLAY DATE</label>
+                    <label className="block tracking-widest text-text-primary font-bold uppercase">NGÀY ĐẰNG / DISPLAY DATE</label>
                     <input
                       type="text"
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
-                      className="w-full bg-background-primary border border-border-medium px-4 py-3 text-sm text-text-primary"
+                      className="w-full bg-background-primary border-2 border-border-medium px-4 py-3 text-sm text-text-primary font-bold"
                     />
                   </div>
                 </div>
 
                 {/* LABELS TAG SELECTOR */}
                 <div className="space-y-2">
-                  <label className="block tracking-widest text-text-secondary uppercase">PHÂN LOẠI NHÃN (LABELS)</label>
+                  <label className="block tracking-widest text-text-primary font-bold uppercase">PHÂN LOẠI NHÃN (LABELS)</label>
                   <div className="flex flex-wrap gap-2 pt-1">
                     {labelOptions.map((label) => {
                       const isSelected = labels.includes(label);
@@ -621,7 +770,7 @@ export default function AdminPage() {
                           className={`px-3 py-1.5 rounded text-[10px] font-bold tracking-wider transition-colors cursor-pointer ${
                             isSelected
                               ? 'bg-text-primary text-background-primary'
-                              : 'bg-background-primary border border-border-medium text-text-muted hover:text-text-primary'
+                              : 'bg-background-primary border-2 border-border-medium text-text-secondary hover:text-text-primary'
                           }`}
                         >
                           {label}
@@ -633,35 +782,35 @@ export default function AdminPage() {
 
                 {/* BODY TEXT AREA */}
                 <div className="space-y-2">
-                  <label className="block tracking-widest text-text-secondary uppercase">NỘI DUNG VĂN BẢN (BODY CONTENT)</label>
+                  <label className="block tracking-widest text-text-primary font-bold uppercase">NỘI DUNG VĂN BẢN (BODY CONTENT)</label>
                   <textarea
                     rows={10}
                     value={bodyText}
                     onChange={(e) => setBodyText(e.target.value)}
-                    className="w-full bg-background-primary border border-border-medium p-4 text-sm text-text-primary font-serif leading-relaxed"
+                    className="w-full bg-background-primary border-2 border-border-medium p-4 text-sm text-text-primary font-serif font-normal leading-relaxed"
                     placeholder="Soạn thảo nội dung tác phẩm, triết lý hoặc ghi chép sáng tác..."
                   />
                 </div>
 
                 {/* IMAGE UPLOAD & INTERACTIVE REORDERING */}
-                <div className="space-y-4 pt-4 border-t border-border-medium">
-                  <label className="block tracking-widest text-text-secondary uppercase">
+                <div className="space-y-4 pt-4 border-t-2 border-border-medium">
+                  <label className="block tracking-widest text-text-primary font-bold uppercase">
                     HÌNH ẢNH TÁC PHẨM (GALLERY IMAGES)
                   </label>
 
                   {images.length > 0 ? (
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {images.map((img, idx) => (
-                        <div key={idx} className="aspect-square bg-background-primary border border-border-light relative overflow-hidden group rounded shadow-xs">
+                        <div key={idx} className="aspect-square bg-background-primary border-2 border-border-medium relative overflow-hidden group rounded shadow-xs">
                           <img src={img} alt="Preview" className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all" />
                           
                           {/* OVERLAY ACTIONS FOR REORDER & DELETE */}
-                          <div className="absolute inset-0 bg-text-primary/80 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 transition-opacity p-2">
+                          <div className="absolute inset-0 bg-text-primary/85 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 transition-opacity p-2">
                             <button
                               type="button"
                               onClick={() => moveImageUp(idx)}
                               disabled={idx === 0}
-                              className="p-1.5 bg-background-primary text-text-primary rounded hover:bg-white disabled:opacity-30"
+                              className="p-1.5 bg-background-primary text-text-primary rounded hover:bg-white disabled:opacity-30 cursor-pointer"
                               title="Chuyển lên trước"
                             >
                               <ArrowUp size={14} />
@@ -670,7 +819,7 @@ export default function AdminPage() {
                               type="button"
                               onClick={() => moveImageDown(idx)}
                               disabled={idx === images.length - 1}
-                              className="p-1.5 bg-background-primary text-text-primary rounded hover:bg-white disabled:opacity-30"
+                              className="p-1.5 bg-background-primary text-text-primary rounded hover:bg-white disabled:opacity-30 cursor-pointer"
                               title="Chuyển xuống sau"
                             >
                               <ArrowDown size={14} />
@@ -678,7 +827,7 @@ export default function AdminPage() {
                             <button
                               type="button"
                               onClick={() => removeImage(idx)}
-                              className="p-1.5 bg-red-600 text-white rounded hover:bg-red-700"
+                              className="p-1.5 bg-red-600 text-white rounded hover:bg-red-700 cursor-pointer"
                               title="Xóa hình ảnh"
                             >
                               <Trash2 size={14} />
@@ -688,7 +837,7 @@ export default function AdminPage() {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-text-muted italic text-xs font-serif">Chưa có hình ảnh nào được tải lên.</p>
+                    <p className="text-text-secondary italic text-xs font-serif font-bold">Chưa có hình ảnh nào được tải lên.</p>
                   )}
 
                   <div className="flex items-center gap-4">

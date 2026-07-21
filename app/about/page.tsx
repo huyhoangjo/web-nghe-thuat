@@ -12,14 +12,14 @@ export default function AboutPage() {
     <Container className="py-24 max-w-6xl bg-background-primary space-y-32">
       
       {/* HEADER TITLE */}
-      <div className="space-y-4 text-center max-w-3xl mx-auto border-b border-border-light pb-12">
-        <span className="text-[10px] tracking-[0.35em] text-text-muted font-mono uppercase block">
+      <div className="space-y-4 text-center max-w-3xl mx-auto border-b-2 border-border-light pb-12">
+        <span className="text-xs tracking-[0.35em] text-text-secondary font-mono font-bold uppercase block">
           {t("CURATORIAL ARCHITECTURE", "CẤU TRÚC GIÁM ĐỊNH LƯU TRỮ")}
         </span>
-        <h1 className="font-serif text-4xl md:text-6xl font-light text-text-primary tracking-wide">
+        <h1 className="font-serif text-4xl md:text-6xl font-normal text-text-primary tracking-wide">
           BIO & MATERIAL PHILOSOPHY
         </h1>
-        <p className="text-xs text-text-muted font-mono tracking-widest uppercase">
+        <p className="text-xs text-text-secondary font-mono tracking-widest font-bold uppercase">
           NGO THI THUY DUYEN — VISUAL ARTIST
         </p>
       </div>
@@ -34,7 +34,7 @@ export default function AboutPage() {
           transition={{ duration: 1.2, ease: 'easeOut' }}
           className="md:col-span-5 space-y-6 md:sticky md:top-28"
         >
-          <div className="border border-border-light overflow-hidden bg-background-secondary shadow-md">
+          <div className="border-2 border-border-medium overflow-hidden bg-background-secondary shadow-md">
             <ArchiveImage
               src="/images/artist-portrait.png"
               alt="Ngo Thi Thuy Duyen Portrait"
@@ -43,16 +43,16 @@ export default function AboutPage() {
             />
           </div>
           <div className="space-y-3 pt-2">
-            <span className="text-[9px] tracking-[0.3em] text-text-muted font-mono uppercase block">
+            <span className="text-xs tracking-[0.3em] text-text-secondary font-mono font-bold uppercase block">
               LAYER 01 / ARTIST BIO
             </span>
-            <h2 className="font-serif text-3xl font-light text-text-primary tracking-wide">
+            <h2 className="font-serif text-3xl font-medium text-text-primary tracking-wide">
               Ngô Thị Thùy Duyên
             </h2>
-            <p className="text-xs text-text-muted tracking-[0.2em] font-mono uppercase">
+            <p className="text-xs text-text-secondary tracking-[0.2em] font-mono font-bold uppercase">
               VISUAL ARTIST / B. 1981, HOI AN, VIETNAM
             </p>
-            <p className="text-xs text-text-secondary leading-relaxed pt-2 font-sans font-light border-t border-border-light/60">
+            <p className="text-sm text-text-primary leading-relaxed pt-2 font-sans font-normal border-t border-border-medium">
               {t(
                 "Based in Ho Chi Minh City, Vietnam. Practicing across painting, installation, performance art, handmade dó paper, ink, thread, light, and transparent resin.",
                 "Sống và làm việc tại TP. Hồ Chí Minh, Việt Nam. Thực hành nghệ thuật thị giác qua hội họa, sắp đặt, trình diễn, giấy dó thủ công, mực, chỉ, ánh sáng và nhựa resin."
@@ -70,15 +70,15 @@ export default function AboutPage() {
           className="md:col-span-7 space-y-12"
         >
           <div className="space-y-6">
-            <span className="text-[10px] tracking-[0.3em] text-text-muted font-mono uppercase block">
+            <span className="text-xs tracking-[0.3em] text-text-secondary font-mono font-bold uppercase block">
               LAYER 02 / ARTIST BIOGRAPHY
             </span>
-            <h3 className="font-serif text-3xl text-text-primary font-light tracking-wide border-b border-border-light pb-4">
+            <h3 className="font-serif text-3xl text-text-primary font-medium tracking-wide border-b-2 border-border-light pb-4">
               {t("Artistic Journey & Background", "Hành Trình Thực Hành & Tiểu Sử")}
             </h3>
             
-            <div className="prose prose-stone max-w-none text-text-secondary text-sm md:text-base leading-[1.9] space-y-6 font-serif font-light">
-              <p className="first-letter:text-4xl first-letter:font-serif first-letter:mr-2 first-letter:float-left first-letter:text-text-primary">
+            <div className="prose prose-stone max-w-none text-text-primary text-base md:text-lg leading-[1.9] space-y-6 font-serif font-normal">
+              <p className="first-letter:text-5xl first-letter:font-serif first-letter:font-bold first-letter:mr-3 first-letter:float-left first-letter:text-text-primary">
                 {t(
                   "Ngo Thi Thuy Duyen (b. 1981, Hoi An, Vietnam) is a Vietnamese visual artist based in Ho Chi Minh City. For more than two decades, her practice has centered on the expressive and conceptual possibilities of handmade dó paper, exploring how material can embody memory, perception, and transformation.",
                   "Ngô Thị Thùy Duyên (sinh năm 1981 tại Hội An, Việt Nam) là một nghệ sĩ thị giác hiện đang sống và làm việc tại TP. Hồ Chí Minh. Trong hơn hai thập kỷ qua, thực hành nghệ thuật của cô tập trung vào khả năng biểu đạt và tư tưởng của giấy dó thủ công, khám phá cách chất liệu chứa đựng ký ức, nhận thức và sự chuyển đổi."
@@ -102,15 +102,15 @@ export default function AboutPage() {
       </section>
 
       {/* LAYER 3: ARTIST STATEMENT */}
-      <section className="border-t border-border-light pt-24 max-w-4xl mx-auto space-y-8 text-center">
-        <span className="text-[10px] tracking-[0.35em] text-text-muted font-mono uppercase block">
+      <section className="border-t-2 border-border-light pt-24 max-w-4xl mx-auto space-y-8 text-center">
+        <span className="text-xs tracking-[0.35em] text-text-secondary font-mono font-bold uppercase block">
           LAYER 03 / ARTIST STATEMENT
         </span>
-        <h2 className="font-serif text-3xl md:text-5xl text-text-primary font-light leading-relaxed">
+        <h2 className="font-serif text-3xl md:text-5xl text-text-primary font-medium leading-relaxed">
           {t("Art is not separate from life.", "Nghệ thuật không tách rời khỏi đời sống.")}
         </h2>
-        <div className="w-16 h-[1px] bg-border-medium mx-auto my-6" />
-        <p className="font-serif italic text-base md:text-xl text-text-secondary leading-relaxed font-light max-w-3xl mx-auto">
+        <div className="w-20 h-[2px] bg-text-primary mx-auto my-6" />
+        <p className="font-serif italic text-lg md:text-2xl text-text-primary leading-relaxed font-normal max-w-3xl mx-auto">
           {t(
             "“Behind every artwork are memories, travels, notebooks, conversations, observations, unfinished thoughts, language, research, silence, and transformation. Not everything needs explanation. Leave room for mystery.”",
             "“Đằng sau mỗi tác phẩm là ký ức, những chuyến đi, sổ tay, trò chuyện, quan sát, những suy nghĩ dang dở, ngôn ngữ, nghiên cứu, sự im lặng và chuyển hóa. Không phải mọi thứ đều cần lời giải thích. Hãy để lại khoảng trống cho sự bí ẩn.”"
@@ -118,32 +118,32 @@ export default function AboutPage() {
         </p>
       </section>
 
-      {/* LAYER 4: MATERIAL PHILOSOPHY PREVIEW SECTION (WIDE & SPACIOUS LAYOUT) */}
-      <section className="border-t border-border-light pt-24 space-y-16">
+      {/* LAYER 4: MATERIAL PHILOSOPHY PREVIEW SECTION (HIGH CONTRAST) */}
+      <section className="border-t-2 border-border-light pt-24 space-y-16">
         {/* Layer Header */}
-        <div className="flex flex-col md:flex-row justify-between md:items-end gap-6 border-b border-border-light pb-8">
+        <div className="flex flex-col md:flex-row justify-between md:items-end gap-6 border-b-2 border-border-light pb-8">
           <div className="space-y-2 max-w-2xl">
-            <span className="text-[10px] tracking-[0.35em] text-text-muted font-mono uppercase block">
+            <span className="text-xs tracking-[0.35em] text-text-secondary font-mono font-bold uppercase block">
               LAYER 04 / ESSAY & ESSENCE
             </span>
-            <h2 className="font-serif text-3xl md:text-4xl text-text-primary font-light">
+            <h2 className="font-serif text-3xl md:text-4xl text-text-primary font-medium">
               {t("Material Philosophy", "Triết lý Vật liệu")}
             </h2>
-            <p className="text-xs text-text-muted font-mono tracking-wide">
+            <p className="text-xs text-text-secondary font-mono font-bold tracking-wide">
               {t("The Origin of Form: Matter, Suspension, and Perception", "Khởi nguyên của Hình hài: Vật chất, Huyền phù và Nhận thức")}
             </p>
           </div>
           <Link
             href="/field-notes/material-philosophy"
-            className="border border-text-primary px-8 py-3.5 text-[10px] tracking-[0.25em] text-text-primary hover:bg-text-primary hover:text-background-primary transition-all duration-500 font-mono inline-block text-center whitespace-nowrap shrink-0"
+            className="border-2 border-text-primary px-8 py-3.5 text-xs font-bold tracking-[0.25em] text-text-primary hover:bg-text-primary hover:text-background-primary transition-all duration-300 font-mono inline-block text-center whitespace-nowrap shrink-0 shadow-sm"
           >
             {t("READ FULL ESSAY →", "ĐỌC TOÀN VĂN BÀI LUẬN →")}
           </Link>
         </div>
 
-        {/* Full-width Generous Quote Paragraph (Wide Reading Layout) */}
+        {/* Full-width Generous Quote Paragraph */}
         <div className="max-w-4xl mx-auto space-y-8 text-center md:text-left">
-          <blockquote className="border-l-2 border-text-primary pl-6 md:pl-8 py-2 font-serif italic text-lg md:text-2xl text-text-primary leading-relaxed font-light">
+          <blockquote className="border-l-4 border-text-primary pl-6 md:pl-8 py-3 font-serif italic text-xl md:text-2xl text-text-primary leading-relaxed font-normal bg-background-secondary/60 rounded-r-lg">
             <p>
               {t(
                 "“Dó paper was once tree bark. Before taking the form of paper, that matter passes through a phase where it is no longer a tree, yet not yet paper. It is precisely this 'in-between' state of suspension that becomes the point of departure for my entire thinking.”",
@@ -152,7 +152,7 @@ export default function AboutPage() {
             </p>
           </blockquote>
           
-          <p className="text-sm md:text-base text-text-secondary leading-relaxed font-serif font-light max-w-3xl">
+          <p className="text-base md:text-lg text-text-primary leading-relaxed font-serif font-normal max-w-3xl">
             {t(
               "Exploring matter not as a static medium, but as an open system of possibilities involving paper, water suspension, transparent resin, light, and the observer's movement.",
               "Khám phá vật chất không phải như một phương tiện tĩnh, mà là một hệ thống mở chứa đựng nhiều khả năng tồn tại giữa giấy dó, huyền phù nước, resin trong suốt, ánh sáng và sự di chuyển nhận thức của người xem."
@@ -160,10 +160,10 @@ export default function AboutPage() {
           </p>
         </div>
 
-        {/* Full-width Material Study Cards Grid (Wide 2-Column) */}
+        {/* Full-width Material Study Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 pt-4">
           <div className="space-y-3">
-            <div className="border border-border-light bg-background-secondary shadow-sm">
+            <div className="border-2 border-border-medium bg-background-secondary shadow-md">
               <ArchiveImage
                 src="/images/materials/material-1.jpg"
                 alt="Dó paper and stitching material study"
@@ -172,13 +172,13 @@ export default function AboutPage() {
               />
             </div>
             <div className="space-y-1">
-              <span className="text-[10px] text-text-muted font-mono tracking-wider uppercase block">MATERIAL STUDY I</span>
-              <h4 className="font-serif text-base text-text-primary font-light">{t("Dó Paper & Stitching Traces", "Giấy Dó & Dấu Vết Đường Chỉ")}</h4>
+              <span className="text-xs text-text-secondary font-mono font-bold tracking-wider uppercase block">MATERIAL STUDY I</span>
+              <h4 className="font-serif text-lg text-text-primary font-medium">{t("Dó Paper & Stitching Traces", "Giấy Dó & Dấu Vết Đường Chỉ")}</h4>
             </div>
           </div>
 
           <div className="space-y-3">
-            <div className="border border-border-light bg-background-secondary shadow-sm">
+            <div className="border-2 border-border-medium bg-background-secondary shadow-md">
               <ArchiveImage
                 src="/images/materials/material-2.jpg"
                 alt="Resin suspension and light study"
@@ -187,22 +187,22 @@ export default function AboutPage() {
               />
             </div>
             <div className="space-y-1">
-              <span className="text-[10px] text-text-muted font-mono tracking-wider uppercase block">MATERIAL STUDY II</span>
-              <h4 className="font-serif text-base text-text-primary font-light">{t("Resin Suspension & Spatial Light", "Resin Huyền Phù & Không Gian Ánh Sáng")}</h4>
+              <span className="text-xs text-text-secondary font-mono font-bold tracking-wider uppercase block">MATERIAL STUDY II</span>
+              <h4 className="font-serif text-lg text-text-primary font-medium">{t("Resin Suspension & Spatial Light", "Resin Huyền Phù & Không Gian Ánh Sáng")}</h4>
             </div>
           </div>
         </div>
       </section>
 
       {/* LAYER 5 TRANSITION BANNER: BODY OF WORKS */}
-      <section className="border border-border-light bg-background-secondary p-12 md:p-16 text-center space-y-6 shadow-sm">
-        <span className="text-[10px] tracking-[0.35em] text-text-muted font-mono uppercase block">
+      <section className="border-2 border-text-primary bg-background-secondary p-12 md:p-16 text-center space-y-6 shadow-md rounded-lg">
+        <span className="text-xs tracking-[0.35em] text-text-secondary font-mono font-bold uppercase block">
           LAYER 05 / CURATORIAL CONCLUSION
         </span>
-        <h2 className="font-serif text-3xl md:text-5xl font-light text-text-primary tracking-wide">
+        <h2 className="font-serif text-3xl md:text-5xl font-medium text-text-primary tracking-wide">
           {t("Body of Works", "Tiến Trình Tác Phẩm")}
         </h2>
-        <p className="text-xs md:text-sm text-text-muted max-w-xl mx-auto leading-relaxed font-sans font-light">
+        <p className="text-sm md:text-base text-text-primary max-w-xl mx-auto leading-relaxed font-sans font-normal">
           {t(
             "Explore the six chronological development chapters from early installations (2003) to spatial drawings on Dó paper and resin (2014+). Each artwork revealed remains preserved in memory.",
             "Khám phá sáu chương tiến trình phát triển theo mốc thời gian từ các sắp đặt thử nghiệm ban đầu (2003) đến các cấu trúc không gian trên giấy Dó và resin (2014+). Từng tác phẩm bạn khám phá sẽ luôn lưu giữ trong ký ức."
@@ -211,7 +211,7 @@ export default function AboutPage() {
         <div className="pt-4">
           <Link
             href="/works"
-            className="border border-text-primary/70 hover:border-text-primary px-10 py-4 text-[10px] tracking-[0.3em] text-text-primary hover:bg-text-primary hover:text-background-primary transition-all duration-500 font-mono inline-block"
+            className="border-2 border-text-primary px-10 py-4 text-xs font-bold tracking-[0.3em] text-text-primary hover:bg-text-primary hover:text-background-primary transition-all duration-300 font-mono inline-block shadow-sm"
           >
             {t("ENTER BODY OF WORKS →", "KHÁM PHÁ TIẾN TRÌNH TÁC PHẨM →")}
           </Link>
