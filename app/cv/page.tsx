@@ -293,11 +293,11 @@ export default function CVPage() {
 
             <div className="space-y-6">
               {section.items.map((item, idx) => (
-                <div key={idx} className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start border-b border-border-light/60 pb-6 last:border-0 group">
-                  <div className="md:col-span-2 font-mono text-sm md:text-base font-bold text-text-primary tracking-wider pt-1">
+                <div key={idx} className="flex flex-col md:flex-row gap-4 md:gap-10 items-start border-b border-border-light/80 pb-6 last:border-0 group">
+                  <div className="w-full md:w-52 shrink-0 font-mono text-sm md:text-base font-bold text-text-primary tracking-wider pt-1">
                     {item.year}
                   </div>
-                  <div className="md:col-span-10 text-text-primary font-serif text-lg md:text-xl font-normal leading-relaxed group-hover:text-text-primary transition-colors">
+                  <div className="flex-1 min-w-0 text-text-primary font-serif text-xl md:text-2xl font-normal leading-relaxed">
                     {t(item.textEn, item.textVi)}
                   </div>
                 </div>
