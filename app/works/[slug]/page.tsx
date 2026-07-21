@@ -50,7 +50,7 @@ export default async function WorkDetailPage({ params }: PageProps) {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-16">
           {/* Left Column: Lightbox Gallery (Col span 7) */}
           <div className="md:col-span-7">
-            <Lightbox images={work.images} />
+            <Lightbox images={work.images} workSlug={slug} />
           </div>
           
           {/* Right Column: Metadata & Details (Col span 5) */}

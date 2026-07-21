@@ -1,10 +1,27 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useViewedImages } from '@/lib/context/ViewedImagesContext';
 
-export default function Lightbox({ images }: { images: string[] }) {
+interface LightboxProps {
+  images: string[];
+  workSlug?: string;
+}
+
+export default function Lightbox({ images, workSlug }: LightboxProps) {
   const [index, setIndex] = useState<number | null>(null);
+  const { markAsViewed, isViewed } = useViewedImages();
+
+  // Automatically mark images and slug as viewed when this page/component is loaded
+  useEffect(() => {
+    if (workSlug) {
+      markAsViewed(workSlug);
+    }
+    if (images.length > 0) {
+      markAsViewed(images);
+    }
+  }, [workSlug, images, markAsViewed]);
 
   if (images.length === 0) {
     return (
@@ -28,25 +45,46 @@ export default function Lightbox({ images }: { images: string[] }) {
     }
   };
 
+  const handleOpenLightbox = (idx: number) => {
+    markAsViewed(images[idx]);
+    setIndex(idx);
+  };
+
   return (
     <div className="space-y-6">
       {/* Main image grid */}
       <div className="space-y-6">
-        {images.map((img, idx) => (
-          <motion.div 
-            whileHover={{ scale: 1.01 }}
-            transition={{ duration: 0.3 }}
-            key={idx} 
-            className="border border-border-light overflow-hidden bg-background-secondary cursor-zoom-in shadow-sm"
-            onClick={() => setIndex(idx)}
-          >
-            <img 
-              src={img} 
-              alt={`Artwork image ${idx + 1}`} 
-              className="w-full h-auto filter grayscale contrast-105 hover:grayscale-0 transition-all duration-700" 
-            />
-          </motion.div>
-        ))}
+        {images.map((img, idx) => {
+          const viewed = isViewed(img) || (workSlug && isViewed(workSlug));
+
+          return (
+            <motion.div 
+              whileHover={{ scale: 1.01 }}
+              transition={{ duration: 0.3 }}
+              key={idx} 
+              className="border border-border-light overflow-hidden bg-background-secondary cursor-zoom-in shadow-sm relative group"
+              onClick={() => handleOpenLightbox(idx)}
+            >
+              <img 
+                src={img} 
+                alt={`Artwork image ${idx + 1}`} 
+                className={`w-full h-auto transition-all duration-700 ${
+                  viewed
+                    ? 'filter grayscale-0 contrast-100'
+                    : 'filter grayscale contrast-110 group-hover:grayscale-0'
+                }`}
+              />
+              
+              {/* Revealed Badge */}
+              {viewed && (
+                <div className="absolute top-3 right-3 flex items-center space-x-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full text-[9px] text-white/90 font-mono tracking-wider">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  <span>REVEALED</span>
+                </div>
+              )}
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* Lightbox Modal */}
@@ -99,8 +137,8 @@ export default function Lightbox({ images }: { images: string[] }) {
             >
               <img 
                 src={images[index]} 
-                alt="Enlarged artwork view" 
-                className="max-w-full max-h-[75vh] object-contain border border-border-light filter grayscale hover:grayscale-0 transition-all duration-1000"
+                alt={`Artwork lightbox preview ${index + 1}`} 
+                className="max-h-[75vh] w-auto object-contain border border-border-light shadow-2xl filter grayscale-0"
               />
               <span className="text-[10px] tracking-widest text-text-muted font-mono">
                 {index + 1} / {images.length}

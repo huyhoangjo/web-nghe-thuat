@@ -1,11 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { getWorks } from '@/lib/repositories/postRepository';
 import { Container } from '@/components/ui/Container';
 import { Post } from '@/lib/types/post';
 import { useLanguage } from '@/lib/context/LanguageContext';
+import { ArchiveImage } from '@/components/ui/ArchiveImage';
 
 interface Chapter {
   number: number;
@@ -85,7 +85,7 @@ export default function WorksPage() {
         <h1 className="font-serif text-4xl md:text-5xl font-light text-text-primary tracking-wide">
           {t('ARTWORKS', 'TÁC PHẨM')}
         </h1>
-        <p className="text-xs text-text-muted max-w-xl leading-relaxed tracking-wide">
+        <p className="text-xs text-text-muted max-w-xl leading-relaxed tracking-wide font-sans">
           {t(
             'The artistic journey of Ngô Thị Thùy Duyên, catalogued into six developmental phases from early installations to drawings on Dó paper.',
             'Hành trình thực hành nghệ thuật của Ngô Thị Thùy Duyên, được lưu trữ thành sáu giai đoạn tiến trình từ các sắp đặt ban đầu đến các tác phẩm vẽ trên giấy Dó.'
@@ -96,7 +96,6 @@ export default function WorksPage() {
       {/* Chapters loop */}
       <div className="space-y-32">
         {chapters.map((ch) => {
-          // Filter works belonging to this chapter's years
           const startYear = parseInt(ch.years.split('-')[0].trim());
           const endYear = ch.years.includes('-') 
             ? parseInt(ch.years.split('-')[1].trim()) 
@@ -104,7 +103,6 @@ export default function WorksPage() {
 
           const chWorks = works.filter((w) => {
             const wYear = parseInt(w.year);
-            // If it belongs to years range
             return wYear >= startYear && wYear <= endYear;
           });
 
@@ -123,7 +121,7 @@ export default function WorksPage() {
                     {ch.years}
                   </span>
                 </div>
-                <p className="text-xs text-text-secondary leading-relaxed font-serif italic pt-2">
+                <p className="text-xs text-text-secondary leading-relaxed font-serif italic pt-2 font-light">
                   {t(ch.descEn, ch.descVi)}
                 </p>
               </div>
@@ -135,14 +133,18 @@ export default function WorksPage() {
                   const title = lines[0] || "Untitled";
                   return (
                     <Link key={`${work.slug}-${idx}`} href={`/works/${work.slug}`} className="group block space-y-4">
-                      <div className="aspect-[4/3] bg-background-secondary border border-border-light flex items-center justify-center overflow-hidden relative shadow-sm">
+                      <div className="border border-border-light overflow-hidden bg-background-secondary shadow-sm">
                         {work.images.length > 0 ? (
-                          <div 
-                            className="w-full h-full bg-cover bg-center transition-all duration-700 filter grayscale contrast-110 group-hover:scale-105 group-hover:grayscale-0" 
-                            style={{ backgroundImage: `url('${work.images[0]}')` }} 
+                          <ArchiveImage
+                            src={work.images[0]}
+                            alt={title}
+                            id={work.slug}
+                            aspectRatio="aspect-[4/3]"
                           />
                         ) : (
-                          <span className="text-xs text-text-muted font-mono tracking-widest">{t('IMAGE', 'HÌNH ẢNH')}</span>
+                          <div className="aspect-[4/3] flex items-center justify-center bg-background-secondary">
+                            <span className="text-xs text-text-muted font-mono tracking-widest">{t('NO IMAGE', 'KHÔNG CÓ ẢNH')}</span>
+                          </div>
                         )}
                       </div>
                       <div className="space-y-1">

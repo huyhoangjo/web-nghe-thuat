@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# library & raw documentation archives
+/Thu vien/
+/*.zip
+/Tai lieu/
+/data training/

@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 };
 
 import { LanguageProvider } from "@/lib/context/LanguageContext";
+import { ViewedImagesProvider } from "@/lib/context/ViewedImagesContext";
 
 export default function RootLayout({
   children,
@@ -19,11 +20,13 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased min-h-screen flex flex-col justify-between">
         <LanguageProvider>
-          <div>
-            <Navbar />
-            <main>{children}</main>
-          </div>
-          <Footer />
+          <ViewedImagesProvider>
+            <div>
+              <Navbar />
+              <main>{children}</main>
+            </div>
+            <Footer />
+          </ViewedImagesProvider>
         </LanguageProvider>
       </body>
     </html>
