@@ -1,12 +1,16 @@
 export interface Post {
-  filePath: string;
+  filePath?: string;
   year: string;
-  month: string;
+  month?: string;
   slug: string;
   date: string;
   title: string;
   labels: string[];
   images: string[];
   bodyText: string;
-  bodyHtml: string;
+  bodyHtml?: string;
+  isDraft?: boolean;
+  isFeatured?: boolean;
+  order?: number;
 }
+

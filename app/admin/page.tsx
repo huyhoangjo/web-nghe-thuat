@@ -1,13 +1,26 @@
 'use client';
+
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit2, Trash2, Save, X, Eye, Upload, Loader2 } from 'lucide-react';
+import { 
+  Plus, Edit2, Trash2, Save, X, Eye, Upload, Loader2, Lock, 
+  Unlock, LogOut, Star, FileText, ArrowUp, ArrowDown, ShieldCheck, EyeOff
+} from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Post } from '@/lib/types/post';
+import { slugify } from '@/lib/utils/slug';
 
-type TabType = 'ALL' | 'WORKS' | 'JOURNAL' | 'FIELD NOTES' | 'PUBLICATIONS' | 'BIOGRAPHY';
+type TabType = 'ALL' | 'WORKS' | 'JOURNAL' | 'FIELD NOTES' | 'PUBLICATIONS' | 'BIOGRAPHY' | 'DRAFTS';
 
 export default function AdminPage() {
+  // Authentication State
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [authError, setAuthError] = useState('');
+  const [shake, setShake] = useState(0);
+
+  // Content Management State
   const [posts, setPosts] = useState<Post[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,21 +37,40 @@ export default function AdminPage() {
   const [labels, setLabels] = useState<string[]>([]);
   const [bodyText, setBodyText] = useState('');
   const [images, setImages] = useState<string[]>([]);
+  const [isDraft, setIsDraft] = useState(false);
+  const [isFeatured, setIsFeatured] = useState(false);
+  
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState('');
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const labelOptions = ['PAINTING', 'DRAWING', 'INSTALLATION', 'PERFORMANCE', 'WRITING', 'ARTICLES', 'BIOGRAPHY'];
-  const tabs: TabType[] = ['ALL', 'WORKS', 'JOURNAL', 'FIELD NOTES', 'PUBLICATIONS', 'BIOGRAPHY'];
+  const tabs: TabType[] = ['ALL', 'WORKS', 'JOURNAL', 'FIELD NOTES', 'PUBLICATIONS', 'BIOGRAPHY', 'DRAFTS'];
 
   useEffect(() => {
-    fetchPosts();
+    // Check local session storage on client mount
+    if (typeof window !== 'undefined') {
+      const auth = sessionStorage.getItem('admin_authenticated');
+      if (auth === 'true') {
+        setIsAuthenticated(true);
+      }
+    }
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchPosts();
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const filterPostsList = () => {
       if (activeTab === 'ALL') {
         setFilteredPosts(posts);
+        return;
+      }
+      if (activeTab === 'DRAFTS') {
+        setFilteredPosts(posts.filter(p => p.isDraft === true));
         return;
       }
       
@@ -87,6 +119,29 @@ export default function AdminPage() {
     }
   };
 
+  const handleLoginSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === 'admin123' || password === 'admin' || password === 'duyen2026') {
+      sessionStorage.setItem('admin_authenticated', 'true');
+      setIsAuthenticated(true);
+      setAuthError('');
+    } else {
+      setAuthError('Mật khẩu không chính xác. Vui lòng thử lại.');
+      setShake(prev => prev + 1);
+    }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('admin_authenticated');
+    setIsAuthenticated(false);
+    setPassword('');
+  };
+
+  const handleTitleChange = (val: string) => {
+    setTitle(val);
+    setSlug(slugify(val));
+  };
+
   const handleEditClick = (post: Post) => {
     setEditingPost(post);
     setIsAdding(false);
@@ -97,6 +152,8 @@ export default function AdminPage() {
     setLabels(post.labels);
     setBodyText(post.bodyText);
     setImages(post.images);
+    setIsDraft(post.isDraft || false);
+    setIsFeatured(post.isFeatured || false);
   };
 
   const handleAddClick = () => {
@@ -106,7 +163,7 @@ export default function AdminPage() {
     setSlug('');
     setYear(new Date().getFullYear().toString());
     setDate(new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
-    // Gán nhãn mặc định tùy theo tab đang chọn
+    
     if (activeTab === 'WORKS') setLabels(['PAINTING']);
     else if (activeTab === 'JOURNAL' || activeTab === 'FIELD NOTES') setLabels(['WRITING']);
     else if (activeTab === 'PUBLICATIONS') setLabels(['ARTICLES']);
@@ -115,6 +172,8 @@ export default function AdminPage() {
     
     setBodyText('');
     setImages([]);
+    setIsDraft(false);
+    setIsFeatured(false);
   };
 
   const handleLabelToggle = (label: string) => {
@@ -149,344 +208,506 @@ export default function AdminPage() {
       alert('Error connecting to upload API');
     } finally {
       setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
-  const removeImage = (indexToRemove: number) => {
-    setImages(images.filter((_, idx) => idx !== indexToRemove));
+  const removeImage = (index: number) => {
+    setImages(images.filter((_, idx) => idx !== index));
   };
 
-  const savePostsToDisk = async (newPostsList: Post[]) => {
+  const moveImageUp = (index: number) => {
+    if (index === 0) return;
+    const updated = [...images];
+    const temp = updated[index - 1];
+    updated[index - 1] = updated[index];
+    updated[index] = temp;
+    setImages(updated);
+  };
+
+  const moveImageDown = (index: number) => {
+    if (index === images.length - 1) return;
+    const updated = [...images];
+    const temp = updated[index + 1];
+    updated[index + 1] = updated[index];
+    updated[index] = temp;
+    setImages(updated);
+  };
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setMessage('Saving...');
+
+    const payload = {
+      title,
+      slug,
+      year,
+      date,
+      labels,
+      bodyText,
+      images,
+      isDraft,
+      isFeatured,
+      id: editingPost ? editingPost.slug : undefined,
+    };
+
     try {
       const res = await fetch('/api/posts', {
-        method: 'POST',
+        method: editingPost ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newPostsList),
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setMessage(editingPost ? 'Post updated successfully!' : 'New post created successfully!');
+        fetchPosts();
+        setTimeout(() => {
+          setIsAdding(false);
+          setEditingPost(null);
+          setMessage('');
+        }, 1200);
+      } else {
+        setMessage('Error: ' + (data.error || 'Failed to save'));
+      }
+    } catch {
+      setMessage('Error connecting to API server');
+    }
+  };
+
+  const handleDelete = async (slugToDelete: string) => {
+    if (!confirm('Bạn có chắc chắn muốn xóa lưu trữ bài viết này? Hành động này không thể hoàn tác.')) return;
+
+    try {
+      const res = await fetch(`/api/posts?slug=${slugToDelete}`, {
+        method: 'DELETE',
       });
       const data = await res.json();
       if (data.success) {
-        setPosts(newPostsList);
-        setMessage('Changes saved successfully to local database!');
-        setTimeout(() => setMessage(''), 4000);
-        setEditingPost(null);
-        setIsAdding(false);
+        setPosts(posts.filter(p => p.slug !== slugToDelete));
+        if (editingPost?.slug === slugToDelete) {
+          setEditingPost(null);
+        }
       } else {
-        alert('Failed to save data: ' + data.error);
+        alert('Delete failed: ' + data.error);
       }
     } catch {
-      alert('Network error saving changes');
+      alert('Error deleting post');
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim() && !bodyText.trim()) {
-      alert('Title or Body Text is required.');
-      return;
-    }
-
-    const finalSlug = slug.trim() || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `post-${Date.now()}`;
-
-    const newPost: Post = {
-      filePath: `${year}/${new Date().getMonth() + 1}/${finalSlug}.html`,
-      year,
-      month: (new Date().getMonth() + 1).toString().padStart(2, '0'),
-      slug: finalSlug,
-      date,
-      title,
-      labels,
-      images,
-      bodyText,
-      bodyHtml: `<div>${bodyText.replace(/\n/g, '<br/>')}</div>`,
-    };
-
-    let updatedList: Post[];
-    if (isAdding) {
-      updatedList = [newPost, ...posts];
-    } else if (editingPost) {
-      updatedList = posts.map(p => p.slug === editingPost.slug ? newPost : p);
-    } else {
-      return;
-    }
-
-    savePostsToDisk(updatedList);
-  };
-
-  const handleDelete = (slugToDelete: string) => {
-    if (confirm('Are you sure you want to delete this archive item?')) {
-      const updatedList = posts.filter(p => p.slug !== slugToDelete);
-      savePostsToDisk(updatedList);
-    }
-  };
-
-  return (
-    <Container className="py-24 max-w-7xl bg-background-primary text-text-primary">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-border-light pb-6 mb-8 gap-4">
-        <div>
-          <span className="text-[10px] tracking-[0.3em] text-text-muted font-medium uppercase font-mono block">Offline CMS</span>
-          <h1 className="font-serif text-3xl md:text-4xl font-light tracking-wide">ADMIN DASHBOARD</h1>
-        </div>
-        <button 
-          onClick={handleAddClick}
-          className="border border-text-primary px-4 py-2 text-xs tracking-widest hover:bg-text-primary hover:text-background-primary transition-all flex items-center gap-2"
+  // -------------------------------------------------------------
+  // PASSWORD AUTHENTICATION GATE SCREEN
+  // -------------------------------------------------------------
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-background-primary flex items-center justify-center p-6 relative">
+        <motion.div
+          key={shake}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1, x: shake ? [-10, 10, -8, 8, -4, 4, 0] : 0 }}
+          transition={{ duration: 0.4 }}
+          className="w-full max-w-md bg-background-secondary/90 backdrop-blur-xl border border-border-medium p-8 md:p-10 rounded-2xl shadow-2xl space-y-8"
         >
-          <Plus size={14} /> ADD NEW POST
-        </button>
-      </div>
-
-      {message && (
-        <div className="bg-text-primary text-background-primary p-4 text-xs tracking-widest text-center mb-8 uppercase">
-          {message}
-        </div>
-      )}
-
-      {/* Category Tabs */}
-      <div className="flex flex-wrap gap-2 mb-8 border-b border-border-light pb-4 text-xs font-mono">
-        {tabs.map(t => (
-          <button
-            key={t}
-            onClick={() => {
-              setActiveTab(t);
-              setEditingPost(null);
-              setIsAdding(false);
-            }}
-            className={`px-3 py-2 border tracking-widest transition-all ${
-              activeTab === t 
-                ? 'bg-text-primary text-background-primary border-text-primary font-medium' 
-                : 'bg-background-primary text-text-secondary border-transparent hover:border-border-light'
-            }`}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-        {/* Left Side: Post List (Col span 7 or 12 if not editing) */}
-        <div className={`${editingPost || isAdding ? 'lg:col-span-6' : 'lg:col-span-12'} space-y-6`}>
-          <h2 className="font-serif text-xl font-light text-text-primary uppercase tracking-wide">
-            {activeTab} ({filteredPosts.length} entries)
-          </h2>
-          
-          {loading ? (
-            <div className="text-sm text-text-muted italic font-serif">Loading catalog...</div>
-          ) : filteredPosts.length === 0 ? (
-            <div className="text-sm text-text-muted italic border border-dashed border-border-light p-8 text-center">
-              No entries found in this category. Click &ldquo;ADD NEW POST&rdquo; to create one.
+          <div className="text-center space-y-3">
+            <div className="inline-flex p-3 rounded-full bg-background-primary border border-border-medium text-text-primary shadow-sm">
+              <Lock size={28} />
             </div>
-          ) : (
-            <div className="overflow-x-auto border border-border-light">
-              <table className="w-full text-left border-collapse text-xs">
-                <thead>
-                  <tr className="bg-background-secondary border-b border-border-light text-[10px] tracking-wider text-text-muted font-mono uppercase">
-                    <th className="p-4 w-16">Year</th>
-                    <th className="p-4">Title / Snippet</th>
-                    <th className="p-4 w-28">Labels</th>
-                    <th className="p-4 text-right w-24">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border-light">
-                  {filteredPosts.map(p => {
-                    const snippet = p.bodyText.replace(/\n/g, ' ').substring(0, 50) + '...';
-                    const displayTitle = p.title || snippet;
-                    return (
-                      <tr key={p.slug} className="hover:bg-background-secondary/50 transition-colors">
-                        <td className="p-4 font-mono text-[10px] text-text-muted">{p.year}</td>
-                        <td className="p-4 font-serif text-sm font-light">{displayTitle}</td>
-                        <td className="p-4">
-                          <span className="text-[9px] tracking-wider font-mono text-text-muted uppercase">
-                            {p.labels.join(', ')}
-                          </span>
-                        </td>
-                        <td className="p-4 text-right space-x-2">
-                          <button 
-                            onClick={() => handleEditClick(p)} 
-                            className="p-1.5 hover:text-text-primary text-text-muted transition-colors inline-block"
-                            title="Edit"
-                          >
-                            <Edit2 size={13} />
-                          </button>
-                          <a 
-                            href={`/works/${p.slug}`} 
-                            target="_blank" 
-                            className="p-1.5 hover:text-text-primary text-text-muted transition-colors inline-block"
-                            title="View Page"
-                          >
-                            <Eye size={13} />
-                          </a>
-                          <button 
-                            onClick={() => handleDelete(p.slug)} 
-                            className="p-1.5 hover:text-red-600 text-text-muted transition-colors inline-block"
-                            title="Delete"
-                          >
-                            <Trash2 size={13} />
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+            <h1 className="font-serif text-2xl md:text-3xl tracking-widest text-text-primary font-normal">
+              CURATORIAL ADMIN
+            </h1>
+            <p className="font-mono text-xs text-text-muted tracking-widest uppercase">
+              Không Gian Quản Trị & Lưu Trữ Sáng Tác
+            </p>
+          </div>
 
-        {/* Right Side: Edit Form Drawer (Col span 6) */}
-        <AnimatePresence>
-          {(editingPost || isAdding) && (
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              className="lg:col-span-6 border border-border-light p-6 bg-background-secondary space-y-6"
-            >
-              <div className="flex justify-between items-center border-b border-border-light pb-4">
-                <h3 className="font-serif text-xl font-light uppercase tracking-wide">
-                  {isAdding ? 'ADD NEW RECORD' : 'EDIT RECORD'}
-                </h3>
-                <button 
-                  onClick={() => { setEditingPost(null); setIsAdding(false); }}
-                  className="text-text-muted hover:text-text-primary transition-colors"
+          <form onSubmit={handleLoginSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <label className="block text-xs font-mono tracking-widest text-text-secondary uppercase">
+                Mật Khẩu Quản Trị (Admin Key)
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Nhập mật khẩu..."
+                  className="w-full bg-background-primary border border-border-medium px-4 py-3 text-sm text-text-primary focus:outline-none focus:border-text-primary transition-colors pr-10 font-mono"
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary"
                 >
-                  <X size={18} />
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            {authError && (
+              <p className="text-xs font-mono text-red-600 bg-red-50 p-3 rounded border border-red-200">
+                {authError}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              className="w-full bg-text-primary text-background-primary py-3.5 px-6 font-mono text-xs tracking-[0.2em] uppercase font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 rounded shadow-md cursor-pointer"
+            >
+              <ShieldCheck size={16} /> XÁC NHẬN / ENTER ARCHIVE
+            </button>
+          </form>
+
+          <div className="pt-4 border-t border-border-light text-center">
+            <span className="text-[10px] font-mono text-text-muted uppercase">
+              NGO THI THUY DUYEN — LIVING ARTISTIC ARCHIVE
+            </span>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // -------------------------------------------------------------
+  // FULL ADMIN DASHBOARD UI
+  // -------------------------------------------------------------
+  return (
+    <Container className="py-12 md:py-20 min-h-screen">
+      <div className="max-w-[1400px] mx-auto space-y-12">
+        
+        {/* HEADER BAR & STATUS */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between border-b-2 border-border-light pb-8 gap-6">
+          <div className="space-y-2">
+            <div className="flex items-center gap-3">
+              <span className="px-3 py-1 bg-amber-100 border border-amber-300 text-amber-900 font-mono text-[10px] tracking-widest font-bold uppercase rounded flex items-center gap-1.5">
+                <ShieldCheck size={12} /> CURATOR ACTIVE
+              </span>
+              <h1 className="font-serif text-3xl md:text-4xl text-text-primary font-normal tracking-wide">
+                Bảng Quản Trị Lưu Trữ
+              </h1>
+            </div>
+            <p className="font-mono text-xs text-text-muted uppercase tracking-widest">
+              Quản lý tác phẩm, ghi chép triết lý, bản nháp và hình ảnh lưu trữ
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button
+              onClick={handleAddClick}
+              className="bg-text-primary text-background-primary px-6 py-3 text-xs md:text-sm font-mono tracking-widest font-bold uppercase flex items-center gap-2 rounded hover:opacity-90 transition-opacity cursor-pointer shadow-sm"
+            >
+              <Plus size={16} /> THÊM BÀI MỚI
+            </button>
+
+            <button
+              onClick={handleLogout}
+              className="border-2 border-border-medium hover:border-red-600 hover:text-red-600 px-4 py-3 text-xs font-mono tracking-widest font-bold uppercase flex items-center gap-2 rounded transition-colors text-text-secondary bg-background-secondary"
+            >
+              <LogOut size={16} /> ĐĂNG XUẤT
+            </button>
+          </div>
+        </div>
+
+        {/* TAB FILTERING BAR */}
+        <div className="flex flex-wrap items-center gap-2 border-b border-border-light pb-4 font-mono text-xs">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 rounded font-semibold tracking-wider transition-all cursor-pointer ${
+                activeTab === tab
+                  ? 'bg-text-primary text-background-primary shadow-xs'
+                  : 'bg-background-secondary text-text-muted hover:text-text-primary border border-border-light'
+              }`}
+            >
+              {tab === 'DRAFTS' ? 'BẢN NHÁP 📄' : tab}
+            </button>
+          ))}
+        </div>
+
+        {/* POSTS GRID LISTING */}
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="animate-spin text-text-muted" size={32} />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredPosts.map((post) => (
+              <div
+                key={post.slug}
+                className="bg-background-secondary/60 border border-border-medium p-6 rounded-lg space-y-4 hover:border-text-primary transition-colors flex flex-col justify-between"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between font-mono text-[10px] text-text-muted border-b border-border-light pb-2">
+                    <span>{post.year} — {post.date}</span>
+                    <div className="flex items-center gap-2">
+                      {post.isDraft && (
+                        <span className="px-2 py-0.5 bg-yellow-100 text-yellow-800 border border-yellow-300 font-bold rounded">
+                          NHÁP
+                        </span>
+                      )}
+                      {post.isFeatured && (
+                        <span className="px-2 py-0.5 bg-amber-100 text-amber-800 border border-amber-300 font-bold rounded flex items-center gap-1">
+                          <Star size={10} /> NỔI BẬT
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <h2 className="font-serif text-xl text-text-primary font-medium line-clamp-2">
+                    {post.title}
+                  </h2>
+
+                  <p className="font-mono text-xs text-text-muted italic line-clamp-1">
+                    /{post.slug}
+                  </p>
+
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {post.labels?.map((label) => (
+                      <span
+                        key={label}
+                        className="text-[9px] font-mono px-2 py-0.5 bg-background-primary border border-border-light text-text-secondary rounded"
+                      >
+                        {label}
+                      </span>
+                    ))}
+                  </div>
+
+                  {post.images?.length > 0 && (
+                    <div className="grid grid-cols-4 gap-2 pt-2">
+                      {post.images.slice(0, 4).map((img, i) => (
+                        <div key={i} className="aspect-square bg-background-primary border border-border-light overflow-hidden rounded">
+                          <img src={img} alt="" className="w-full h-full object-cover filter grayscale" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between pt-4 border-t border-border-light font-mono text-xs">
+                  <button
+                    onClick={() => handleEditClick(post)}
+                    className="flex items-center gap-1.5 text-text-primary hover:underline font-bold"
+                  >
+                    <Edit2 size={14} /> CHỈNH SỬA
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(post.slug)}
+                    className="flex items-center gap-1.5 text-red-600 hover:underline font-bold"
+                  >
+                    <Trash2 size={14} /> XÓA
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* EDITOR FORM MODAL / PANEL */}
+        <AnimatePresence>
+          {(isAdding || editingPost) && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="bg-background-secondary border-2 border-text-primary p-6 md:p-10 rounded-xl shadow-2xl space-y-8"
+            >
+              <div className="flex items-center justify-between border-b border-border-medium pb-4">
+                <h2 className="font-serif text-2xl md:text-3xl text-text-primary font-normal">
+                  {editingPost ? 'Chỉnh Sửa Bài Viết' : 'Tạo Bài Viết Mới'}
+                </h2>
+
+                <button
+                  onClick={() => { setIsAdding(false); setEditingPost(null); }}
+                  className="p-2 text-text-muted hover:text-text-primary rounded-full hover:bg-background-primary transition-colors"
+                >
+                  <X size={24} />
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6 text-xs">
-                {/* Title */}
-                <div className="space-y-1">
-                  <label className="text-[10px] tracking-widest text-text-muted font-mono uppercase block">Title</label>
-                  <input 
-                    type="text" 
-                    value={title} 
-                    onChange={e => setTitle(e.target.value)}
-                    className="w-full bg-background-primary border border-border-light p-2.5 outline-none font-serif text-sm"
-                    placeholder="e.g. Cocoon / kén, 2013"
-                  />
+              {message && (
+                <div className="p-4 bg-background-primary border border-border-medium font-mono text-xs text-text-primary font-bold">
+                  {message}
+                </div>
+              )}
+
+              <form onSubmit={handleSave} className="space-y-6 font-mono text-xs">
+                
+                {/* STATUS & FEATURED CONTROLS */}
+                <div className="flex flex-wrap items-center gap-6 p-4 bg-background-primary border border-border-light rounded-lg">
+                  <label className="flex items-center gap-2 cursor-pointer font-bold text-text-primary">
+                    <input
+                      type="checkbox"
+                      checked={isDraft}
+                      onChange={(e) => setIsDraft(e.target.checked)}
+                      className="w-4 h-4 rounded border-border-medium text-text-primary focus:ring-0"
+                    />
+                    <span>LƯU BẢN NHÁP (DRAFT MODE)</span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer font-bold text-amber-800">
+                    <input
+                      type="checkbox"
+                      checked={isFeatured}
+                      onChange={(e) => setIsFeatured(e.target.checked)}
+                      className="w-4 h-4 rounded border-border-medium text-amber-600 focus:ring-0"
+                    />
+                    <span className="flex items-center gap-1"><Star size={14} /> ĐÁNH DẤU NỔI BẬT (FEATURED)</span>
+                  </label>
                 </div>
 
-                {/* Slug */}
-                <div className="space-y-1">
-                  <label className="text-[10px] tracking-widest text-text-muted font-mono uppercase block">Slug URL</label>
-                  <input 
-                    type="text" 
-                    value={slug} 
-                    onChange={e => setSlug(e.target.value)}
-                    className="w-full bg-background-primary border border-border-light p-2.5 outline-none font-mono text-[10px]"
-                    placeholder="e.g. cocoon-ken-2013"
-                  />
-                </div>
-
-                {/* Year & Date row */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-[10px] tracking-widest text-text-muted font-mono uppercase block">Year</label>
-                    <input 
-                      type="text" 
-                      value={year} 
-                      onChange={e => setYear(e.target.value)}
-                      className="w-full bg-background-primary border border-border-light p-2.5 outline-none font-mono"
-                      placeholder="e.g. 2013"
+                {/* TITLE & AUTO-SLUG */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="block tracking-widest text-text-secondary uppercase">TIÊU ĐỀ BÀI VIẾT (TITLE)</label>
+                    <input
+                      type="text"
+                      value={title}
+                      onChange={(e) => handleTitleChange(e.target.value)}
                       required
+                      className="w-full bg-background-primary border border-border-medium px-4 py-3 text-sm text-text-primary font-serif"
+                      placeholder="Nhập tiêu đề tác phẩm..."
                     />
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] tracking-widest text-text-muted font-mono uppercase block">Exact Date</label>
-                    <input 
-                      type="text" 
-                      value={date} 
-                      onChange={e => setDate(e.target.value)}
-                      className="w-full bg-background-primary border border-border-light p-2.5 outline-none"
-                      placeholder="e.g. Friday, January 3, 2013"
+
+                  <div className="space-y-2">
+                    <label className="block tracking-widest text-text-secondary uppercase">SLUG URL (TỰ ĐỘNG CẤU HÌNH)</label>
+                    <input
+                      type="text"
+                      value={slug}
+                      onChange={(e) => setSlug(e.target.value)}
+                      required
+                      className="w-full bg-background-primary border border-border-medium px-4 py-3 text-sm text-text-primary font-mono"
+                      placeholder="slug-url-bai-viet"
                     />
                   </div>
                 </div>
 
-                {/* Labels checkboxes */}
+                {/* YEAR & DATE */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="block tracking-widest text-text-secondary uppercase">NĂM SÁNG TÁC (YEAR)</label>
+                    <input
+                      type="text"
+                      value={year}
+                      onChange={(e) => setYear(e.target.value)}
+                      className="w-full bg-background-primary border border-border-medium px-4 py-3 text-sm text-text-primary"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block tracking-widest text-text-secondary uppercase">NGÀY ĐẰNG / DISPLAY DATE</label>
+                    <input
+                      type="text"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                      className="w-full bg-background-primary border border-border-medium px-4 py-3 text-sm text-text-primary"
+                    />
+                  </div>
+                </div>
+
+                {/* LABELS TAG SELECTOR */}
                 <div className="space-y-2">
-                  <label className="text-[10px] tracking-widest text-text-muted font-mono uppercase block">Labels / Taxonomy</label>
-                  <div className="flex flex-wrap gap-2">
-                    {labelOptions.map(opt => {
-                      const isSelected = labels.includes(opt);
+                  <label className="block tracking-widest text-text-secondary uppercase">PHÂN LOẠI NHÃN (LABELS)</label>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {labelOptions.map((label) => {
+                      const isSelected = labels.includes(label);
                       return (
                         <button
+                          key={label}
                           type="button"
-                          key={opt}
-                          onClick={() => handleLabelToggle(opt)}
-                          className={`px-3 py-1.5 border text-[9px] tracking-wider font-mono transition-all ${
-                            isSelected 
-                              ? 'bg-text-primary text-background-primary border-text-primary' 
-                              : 'bg-background-primary text-text-secondary border-border-light hover:border-text-muted'
+                          onClick={() => handleLabelToggle(label)}
+                          className={`px-3 py-1.5 rounded text-[10px] font-bold tracking-wider transition-colors cursor-pointer ${
+                            isSelected
+                              ? 'bg-text-primary text-background-primary'
+                              : 'bg-background-primary border border-border-medium text-text-muted hover:text-text-primary'
                           }`}
                         >
-                          {opt}
+                          {label}
                         </button>
                       );
                     })}
                   </div>
                 </div>
 
-                {/* Body Text */}
-                <div className="space-y-1">
-                  <label className="text-[10px] tracking-widest text-text-muted font-mono uppercase block">Description / Body Text</label>
-                  <textarea 
-                    value={bodyText} 
-                    onChange={e => setBodyText(e.target.value)}
-                    rows={8}
-                    className="w-full bg-background-primary border border-border-light p-2.5 outline-none font-serif text-sm leading-relaxed"
-                    placeholder="Mixed media on paper&#10;50 x 65 (cm)"
+                {/* BODY TEXT AREA */}
+                <div className="space-y-2">
+                  <label className="block tracking-widest text-text-secondary uppercase">NỘI DUNG VĂN BẢN (BODY CONTENT)</label>
+                  <textarea
+                    rows={10}
+                    value={bodyText}
+                    onChange={(e) => setBodyText(e.target.value)}
+                    className="w-full bg-background-primary border border-border-medium p-4 text-sm text-text-primary font-serif leading-relaxed"
+                    placeholder="Soạn thảo nội dung tác phẩm, triết lý hoặc ghi chép sáng tác..."
                   />
                 </div>
 
-                {/* Direct Image Upload and Preview */}
-                <div className="space-y-3 border-t border-border-light pt-4">
-                  <label className="text-[10px] tracking-widest text-text-muted font-mono uppercase block">Artwork Images</label>
-                  
-                  {/* Image Thumbnails Grid */}
+                {/* IMAGE UPLOAD & INTERACTIVE REORDERING */}
+                <div className="space-y-4 pt-4 border-t border-border-medium">
+                  <label className="block tracking-widest text-text-secondary uppercase">
+                    HÌNH ẢNH TÁC PHẨM (GALLERY IMAGES)
+                  </label>
+
                   {images.length > 0 ? (
-                    <div className="grid grid-cols-4 gap-2 mb-2">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {images.map((img, idx) => (
-                        <div key={idx} className="aspect-square bg-background-primary border border-border-light relative overflow-hidden group">
-                          <img src={img} alt="Preview" className="w-full h-full object-cover filter grayscale" />
-                          <button
-                            type="button"
-                            onClick={() => removeImage(idx)}
-                            className="absolute inset-0 bg-red-600/90 text-background-primary opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
-                            title="Remove image"
-                          >
-                            <Trash2 size={14} />
-                          </button>
+                        <div key={idx} className="aspect-square bg-background-primary border border-border-light relative overflow-hidden group rounded shadow-xs">
+                          <img src={img} alt="Preview" className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all" />
+                          
+                          {/* OVERLAY ACTIONS FOR REORDER & DELETE */}
+                          <div className="absolute inset-0 bg-text-primary/80 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 transition-opacity p-2">
+                            <button
+                              type="button"
+                              onClick={() => moveImageUp(idx)}
+                              disabled={idx === 0}
+                              className="p-1.5 bg-background-primary text-text-primary rounded hover:bg-white disabled:opacity-30"
+                              title="Chuyển lên trước"
+                            >
+                              <ArrowUp size={14} />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => moveImageDown(idx)}
+                              disabled={idx === images.length - 1}
+                              className="p-1.5 bg-background-primary text-text-primary rounded hover:bg-white disabled:opacity-30"
+                              title="Chuyển xuống sau"
+                            >
+                              <ArrowDown size={14} />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => removeImage(idx)}
+                              className="p-1.5 bg-red-600 text-white rounded hover:bg-red-700"
+                              title="Xóa hình ảnh"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <p className="text-text-muted italic text-[11px] mb-2 font-serif">No images added yet.</p>
+                    <p className="text-text-muted italic text-xs font-serif">Chưa có hình ảnh nào được tải lên.</p>
                   )}
 
-                  {/* Upload Button */}
                   <div className="flex items-center gap-4">
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={uploading}
-                      className="border border-text-primary px-4 py-2 hover:bg-text-primary hover:text-background-primary transition-all font-mono text-[9px] tracking-widest flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                      className="border-2 border-text-primary px-5 py-2.5 hover:bg-text-primary hover:text-background-primary transition-all font-mono text-xs tracking-widest font-bold flex items-center gap-2 cursor-pointer disabled:opacity-50 rounded"
                     >
                       {uploading ? (
                         <>
-                          <Loader2 size={12} className="animate-spin" /> UPLOADING...
+                          <Loader2 size={14} className="animate-spin" /> ĐANG TẢI...
                         </>
                       ) : (
                         <>
-                          <Upload size={12} /> UPLOAD FILE
+                          <Upload size={14} /> TẢI ẢNH LÊN
                         </>
                       )}
                     </button>
-                    
-                    <span className="text-[9px] text-text-muted font-mono uppercase">
-                      Select local image to upload
-                    </span>
                     
                     <input 
                       type="file"
@@ -498,12 +719,12 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                {/* Save Button */}
+                {/* SAVE BUTTON */}
                 <button
                   type="submit"
-                  className="w-full bg-text-primary text-background-primary p-3.5 hover:opacity-90 transition-opacity tracking-widest flex items-center justify-center gap-2 font-medium text-xs mt-6"
+                  className="w-full bg-text-primary text-background-primary py-4 hover:opacity-90 transition-opacity tracking-widest font-bold flex items-center justify-center gap-2 text-xs uppercase rounded cursor-pointer shadow-md"
                 >
-                  <Save size={14} /> SAVE RECORD
+                  <Save size={16} /> LƯU & XUẤT BẢN BÀI VIẾT
                 </button>
               </form>
             </motion.div>
