@@ -259,46 +259,58 @@ export default function CVPage() {
   const { t } = useLanguage();
 
   return (
-    <Container className="py-24 max-w-6xl bg-background-primary space-y-20">
-      <div className="space-y-4 text-center max-w-3xl mx-auto border-b-2 border-border-light pb-10">
+    <Container className="py-24 w-full max-w-7xl mx-auto space-y-24">
+      {/* Page Title */}
+      <div className="space-y-4 text-center max-w-4xl mx-auto border-b-2 border-border-light pb-12">
         <span className="text-xs tracking-[0.35em] text-text-secondary font-mono font-bold uppercase block">
           {t("ARTISTIC TIMELINE & ARCHIVE", "HÀNH TRÌNH NGHỆ THUẬT & LƯU TRỮ")}
         </span>
-        <h1 className="font-serif text-4xl md:text-6xl font-medium text-text-primary tracking-wide">
+        <h1 className="font-serif text-5xl md:text-7xl font-medium text-text-primary tracking-wide">
           BIOGRAPHY / CV
         </h1>
-        <p className="text-xs text-text-secondary font-mono font-bold tracking-widest uppercase">
+        <p className="text-sm text-text-secondary font-mono font-bold tracking-widest uppercase">
           NGO THI THUY DUYEN — VISUAL ARTIST
         </p>
       </div>
       
-      <div className="space-y-20">
+      {/* Sections List */}
+      <div className="space-y-24 w-full">
         {cvData.map((section, secIdx) => (
           <motion.section 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 1, delay: secIdx * 0.1 }}
+            transition={{ duration: 0.8, delay: secIdx * 0.05 }}
             key={section.titleEn} 
-            className="space-y-8"
+            className="space-y-10 w-full"
           >
-            <div className="flex items-center justify-between border-b-2 border-border-light pb-4">
-              <h2 className="font-serif text-2xl md:text-4xl font-medium text-text-primary tracking-wide">
+            {/* Section Header */}
+            <div className="flex items-center justify-between border-b-2 border-text-primary pb-4">
+              <h2 className="font-serif text-3xl md:text-5xl font-medium text-text-primary tracking-wide">
                 {t(section.titleEn, section.titleVi)}
               </h2>
-              <span className="font-mono text-xs font-bold text-text-secondary">
+              <span className="font-mono text-sm font-bold text-text-secondary">
                 0{secIdx + 1}
               </span>
             </div>
 
-            <div className="space-y-6">
+            {/* Timeline Items List */}
+            <div className="space-y-8 w-full">
               {section.items.map((item, idx) => (
-                <div key={idx} className="flex flex-col md:flex-row gap-4 md:gap-10 items-start border-b border-border-light/80 pb-6 last:border-0 group">
-                  <div className="w-full md:w-52 shrink-0 font-mono text-sm md:text-base font-bold text-text-primary tracking-wider pt-1">
-                    {item.year}
-                  </div>
-                  <div className="flex-1 min-w-0 text-text-primary font-serif text-xl md:text-2xl font-normal leading-relaxed">
-                    {t(item.textEn, item.textVi)}
+                <div 
+                  key={idx} 
+                  className="w-full pb-8 border-b border-border-light/80 last:border-0"
+                >
+                  <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-12 w-full">
+                    {/* Year Column */}
+                    <div className="w-full md:w-60 shrink-0 font-mono text-base md:text-lg font-bold text-text-primary tracking-wider pt-1">
+                      {item.year}
+                    </div>
+
+                    {/* Description Text Column */}
+                    <div className="w-full font-serif text-xl md:text-2xl font-normal text-text-primary leading-relaxed">
+                      {t(item.textEn, item.textVi)}
+                    </div>
                   </div>
                 </div>
               ))}
