@@ -67,7 +67,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.5, delay: 0.2, ease: 'easeOut' }}
-            className="font-serif text-3xl md:text-5xl lg:text-6xl font-medium tracking-wider text-text-primary uppercase"
+            className="font-serif text-3xl md:text-5xl lg:text-6xl font-medium tracking-wider text-text-primary hover-gold transition-colors uppercase cursor-default"
           >
             NGO THI THUY DUYEN
           </motion.h1>
@@ -91,7 +91,7 @@ export default function Home() {
           >
             <Link 
               href="/works" 
-              className="border-2 border-text-primary px-10 py-3 text-xs tracking-[0.35em] font-mono font-bold text-text-primary hover:bg-text-primary hover:text-background-primary transition-all duration-300 inline-block uppercase shadow-sm cursor-pointer"
+              className="border-2 border-text-primary px-8 py-3.5 text-xs tracking-[0.35em] font-mono font-bold text-text-primary hover:bg-text-primary hover:text-background-primary transition-all duration-300 inline-block uppercase shadow-sm cursor-pointer"
             >
               ENTER
             </Link>
@@ -110,7 +110,7 @@ export default function Home() {
             "Lưu trữ kỹ thuật số này là một không gian nơi các tác phẩm nghệ thuật, ký ức, chuyến đi, ngôn ngữ, sổ tay, chất liệu, quan sát và sự chuyển đổi cùng tồn tại. Khi bạn khám phá, từng tác phẩm bạn xem sẽ dần hiện lại sắc màu và lưu giữ trong ký ức."
           )}
         </p>
-        <div className="w-20 h-[2px] bg-text-primary mx-auto pt-4" />
+        <div className="w-20 h-[1px] bg-border-medium/60 mx-auto mt-4" />
       </section>
 
       {/* Featured Artwork Row - Renamed BODY OF WORK (Page 4 of PDF) */}

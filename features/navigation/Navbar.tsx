@@ -25,8 +25,6 @@ export default function Navbar() {
     { href: '/works', label: t('Body of Work (5 Chapters)', 'Body of Work (5 Chương)') },
     { href: '/about', label: t('Practice & Material Philosophy', 'Tiểu sử & Triết lý Vật liệu') },
     { href: '/field-notes', label: t('Fragments & Field Notes', 'Ghi chép & Lưu trữ') },
-    { href: '/journal', label: t('Artistic Journal & Reflections', 'Nhật ký Sáng tác') },
-    { href: '/publications', label: t('Publications & Reviews', 'Ấn phẩm & Bài viết') },
     { href: '/cv', label: t('Biography & Professional Timeline', 'Hành trình & CV Chi tiết') },
     { href: '/contact', label: t('Contact & Inquiries', 'Liên hệ & Trao đổi') },
   ];
@@ -157,8 +155,8 @@ export default function Navbar() {
                   </span>
                   <p className="font-serif italic text-xl md:text-2xl text-text-primary leading-relaxed font-normal">
                     {t(
-                      "“Art as a process of becoming.” A museum-grade digital space for artworks, memories, materials, and transformation.",
-                      "“Art as a process of becoming.” Không gian lưu trữ kỹ thuật số cấp bảo tàng lưu giữ tác phẩm, ký ức và chất liệu."
+                      "“Art is what remains after time has passed.” A museum-grade digital space for artworks, memories, materials, and transformation.",
+                      "“Nghệ thuật là những gì còn lại khi thời gian trôi qua.” Không gian lưu trữ kỹ thuật số cấp bảo tàng lưu giữ tác phẩm, ký ức và chất liệu."
                     )}
                   </p>
                 </div>

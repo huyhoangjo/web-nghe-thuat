@@ -9,7 +9,7 @@
   --color-text-muted: #2B2A2A;
   --color-border-light: #D8D8D8;
   --color-border-medium: #B8B8B8;
-  --color-accent-gold: #bc9c22;
+  --color-accent-gold: #C5A059;
 
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-mono: "JetBrains Mono", monospace;
@@ -40,7 +40,7 @@ p, article, section, blockquote, h1, h2, h3, h4, h5, h6 {
   text-rendering: optimizeLegibility;
 }
 
-/* Hover Accent Color #bc9c22 */
+/* Hover Accent Color #C5A059 */
 .hover-gold:hover {
-  color: #bc9c22 !important;
+  color: #C5A059 !important;
 }

@@ -51,6 +51,9 @@ export const ArchiveImage: React.FC<ArchiveImageProps> = ({
       {/* Subtle overlay vignette on hover */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
+      {/* Archival corner-notch accent */}
+      <div className="absolute bottom-0 right-0 w-3 h-3 bg-background-primary z-20 pointer-events-none border-l border-t border-border-medium/40" />
+
       {/* Subtle "Revealed / Đã khám phá" dot badge when viewed */}
       {viewed && showBadge && (
         <div className="absolute top-3 right-3 flex items-center space-x-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full text-[9px] text-white/90 font-mono tracking-wider opacity-80 group-hover:opacity-100 transition-opacity">
