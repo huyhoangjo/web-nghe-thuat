@@ -90,7 +90,7 @@ export default function WorksPage() {
     <Container className="py-24 bg-background-primary min-h-screen">
       {/* Page Header (Page 6 PDF: Title BODY OF WORK, remove archive tagline) */}
       <div className="border-b-2 border-border-light pb-8 mb-12 space-y-4">
-        <h1 className="font-serif text-5xl md:text-7xl font-medium text-text-primary tracking-wide uppercase">
+        <h1 className="font-serif text-2xl md:text-4xl font-medium text-text-primary hover-gold transition-colors tracking-wide uppercase cursor-default">
           BODY OF WORK
         </h1>
         <p className="font-serif text-lg md:text-xl text-text-primary max-w-3xl leading-relaxed font-normal">
@@ -103,21 +103,10 @@ export default function WorksPage() {
 
       {/* 5-Chapter Interactive Tabs Filter (Page 6 of PDF) */}
       <div className="flex flex-wrap items-center gap-3 mb-16 pb-6 border-b-2 border-border-light font-mono text-xs font-bold">
-        <button
-          onClick={() => setSelectedChapter(null)}
-          className={`px-5 py-2.5 rounded-md border-2 transition-all cursor-pointer ${
-            selectedChapter === null 
-              ? 'bg-text-primary text-background-primary border-text-primary shadow-sm' 
-              : 'bg-background-secondary text-text-secondary border-border-medium hover-gold'
-          }`}
-        >
-          {t('ALL CHAPTERS (5)', 'TẤT CẢ 5 CHƯƠNG')}
-        </button>
-
         {chapters.map((ch) => (
           <button
             key={ch.number}
-            onClick={() => setSelectedChapter(ch.number)}
+            onClick={() => setSelectedChapter(selectedChapter === ch.number ? null : ch.number)}
             className={`px-4 py-2.5 rounded-md border-2 transition-all cursor-pointer ${
               selectedChapter === ch.number 
                 ? 'bg-text-primary text-background-primary border-text-primary shadow-sm' 
