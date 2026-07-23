@@ -59,7 +59,7 @@ export default function Navbar() {
                     style={{ marginLeft: '0.75rem', marginRight: '0.75rem' }}
                     className="relative inline-flex items-center justify-center px-4 py-2 text-base md:text-lg lg:text-xl tracking-[0.15em] font-medium text-text-secondary hover-gold transition-all whitespace-nowrap group"
                   >
-                    <span className={`relative z-10 ${isActive ? 'text-text-primary font-bold' : ''}`}>
+                    <span className={`relative z-10 group-hover-gold transition-colors ${isActive ? 'text-text-primary font-bold' : ''}`}>
                       {item.label}
                     </span>
 
@@ -140,7 +140,7 @@ export default function Navbar() {
                       onClick={() => setIsOpen(false)}
                       className="block group space-y-1 py-2 border-b border-border-light/40 last:border-0"
                     >
-                      <span className="font-serif text-2xl md:text-3xl text-text-primary group-hover:text-text-secondary transition-colors font-medium block">
+                      <span className="font-serif text-2xl md:text-3xl text-text-primary group-hover-gold transition-colors font-medium block">
                         {item.label}
                       </span>
                     </Link>

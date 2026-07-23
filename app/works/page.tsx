@@ -110,7 +110,7 @@ export default function WorksPage() {
             className={`px-4 py-2.5 rounded-md border-2 transition-all cursor-pointer ${
               selectedChapter === ch.number 
                 ? 'bg-text-primary text-background-primary border-text-primary shadow-sm' 
-                : 'bg-background-secondary text-text-secondary border-border-medium hover-gold'
+                : 'bg-background-secondary text-text-secondary border-border-medium hover-gold hover:border-[#C5A059]'
             }`}
           >
             CHAPTER 0{ch.number}

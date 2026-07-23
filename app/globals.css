@@ -41,6 +41,14 @@ p, article, section, blockquote, h1, h2, h3, h4, h5, h6 {
 }
 
 /* Hover Accent Color #C5A059 */
-.hover-gold:hover {
+.hover-gold:hover,
+.hover-gold:hover *,
+.hover-gold:hover span,
+.hover-gold:hover a,
+.hover-gold:hover h1,
+.hover-gold:hover h2,
+.hover-gold:hover h3,
+.hover-gold:hover h4,
+.group:hover .group-hover-gold {
   color: #C5A059 !important;
 }
