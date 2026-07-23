@@ -10,7 +10,7 @@ import { Container } from '@/components/ui/Container';
 import { Post } from '@/lib/types/post';
 import { slugify } from '@/lib/utils/slug';
 
-type TabType = 'ALL' | 'WORKS' | 'JOURNAL' | 'FIELD NOTES' | 'PUBLICATIONS' | 'BIOGRAPHY' | 'DRAFTS';
+type TabType = 'ALL' | 'TRANG CHỦ' | 'WORKS' | 'JOURNAL' | 'FIELD NOTES' | 'PUBLICATIONS' | 'BIOGRAPHY' | 'DRAFTS';
 
 export default function AdminPage() {
   // Authentication State
@@ -52,8 +52,15 @@ export default function AdminPage() {
   const [message, setMessage] = useState('');
   
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const homeHeroFileInputRef = useRef<HTMLInputElement>(null);
   const labelOptions = ['PAINTING', 'DRAWING', 'INSTALLATION', 'PERFORMANCE', 'WRITING', 'ARTICLES', 'BIOGRAPHY'];
-  const tabs: TabType[] = ['ALL', 'WORKS', 'JOURNAL', 'FIELD NOTES', 'PUBLICATIONS', 'BIOGRAPHY', 'DRAFTS'];
+  const tabs: TabType[] = ['ALL', 'TRANG CHỦ', 'WORKS', 'JOURNAL', 'FIELD NOTES', 'PUBLICATIONS', 'BIOGRAPHY', 'DRAFTS'];
+
+  // Home Settings State
+  const [homeHeroImage, setHomeHeroImage] = useState('/images/home-hero.jpg');
+  const [homeHeroOpacity, setHomeHeroOpacity] = useState(35);
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [settingsMessage, setSettingsMessage] = useState('');
 
   const getStoredPassword = (): string => {
     if (typeof window !== 'undefined') {
@@ -74,6 +81,7 @@ export default function AdminPage() {
   useEffect(() => {
     if (isAuthenticated) {
       fetchPosts();
+      fetchSettings();
     }
   }, [isAuthenticated]);
 
@@ -130,6 +138,74 @@ export default function AdminPage() {
       console.error('Failed to fetch posts');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch('/api/settings');
+      const data = await res.json();
+      if (data.homeHeroImage) setHomeHeroImage(data.homeHeroImage);
+      if (typeof data.homeHeroOpacity === 'number') setHomeHeroOpacity(data.homeHeroOpacity);
+    } catch {
+      console.error('Failed to fetch settings');
+    }
+  };
+
+  const handleSaveHomeSettings = async () => {
+    setIsSavingSettings(true);
+    setSettingsMessage('');
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          homeHeroImage,
+          homeHeroOpacity,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSettingsMessage('Đã lưu cấu hình trang chủ thành công!');
+      } else {
+        setSettingsMessage('Lỗi khi lưu cấu hình.');
+      }
+    } catch {
+      setSettingsMessage('Lỗi kết nối khi lưu cấu hình.');
+    } finally {
+      setIsSavingSettings(false);
+    }
+  };
+
+  const handleResetHomeSettings = () => {
+    setHomeHeroImage('/images/home-hero.jpg');
+    setHomeHeroOpacity(35);
+    setSettingsMessage('Đã khôi phục về mặc định (chưa lưu). Nhấn "Lưu thay đổi" để áp dụng.');
+  };
+
+  const handleUploadHomeHeroImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setSettingsMessage('');
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.url) {
+        setHomeHeroImage(data.url);
+        setSettingsMessage('Đã tải ảnh mới lên thành công! Nhấn "Lưu thay đổi" để áp dụng.');
+      }
+    } catch {
+      setSettingsMessage('Lỗi tải ảnh lên.');
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -484,6 +560,145 @@ export default function AdminPage() {
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <Loader2 className="animate-spin text-text-primary" size={32} />
+          </div>
+        ) : activeTab === 'TRANG CHỦ' ? (
+          <div className="bg-background-secondary border-2 border-border-medium p-6 md:p-8 rounded-lg space-y-8 shadow-sm">
+            <div className="border-b-2 border-border-light pb-4">
+              <h2 className="font-serif text-2xl font-bold text-text-primary uppercase tracking-wide">
+                Cấu Hình Ảnh Nền & Giao Diện Trang Chủ
+              </h2>
+              <p className="font-mono text-xs text-text-secondary mt-1 font-bold">
+                Tải ảnh nền mới, điều chỉnh độ mờ opacity và xem trước giao diện Hero ngay tại đây.
+              </p>
+            </div>
+
+            {settingsMessage && (
+              <div className={`p-4 rounded border font-mono text-xs font-bold ${
+                settingsMessage.includes('thành công') 
+                  ? 'bg-emerald-50 text-emerald-900 border-emerald-300' 
+                  : 'bg-amber-50 text-amber-900 border-amber-300'
+              }`}>
+                {settingsMessage}
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Left Column: Live Preview Card */}
+              <div className="space-y-4">
+                <h3 className="font-mono text-xs font-bold uppercase tracking-widest text-text-primary">
+                  Live Preview (Xem Trước)
+                </h3>
+                <div className="relative h-80 rounded-lg overflow-hidden border-2 border-border-medium bg-background-primary flex items-center justify-center text-center p-6 shadow-inner">
+                  {/* Background Image with Opacity */}
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-300 scale-105"
+                    style={{ 
+                      backgroundImage: `url('${homeHeroImage}')`,
+                      opacity: homeHeroOpacity / 100 
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background-primary via-background-primary/30 to-transparent" />
+                  
+                  {/* Overlay Content Preview */}
+                  <div className="relative z-10 space-y-3 max-w-sm mx-auto">
+                    <span className="text-[10px] tracking-[0.3em] text-text-secondary font-mono font-bold block uppercase">
+                      KHÔNG GIAN LƯU TRỮ NGHỆ THUẬT SỐNG
+                    </span>
+                    <h1 className="font-serif text-xl md:text-2xl font-medium tracking-wider text-text-primary uppercase">
+                      NGO THI THUY DUYEN
+                    </h1>
+                    <p className="font-serif italic text-xs md:text-sm text-text-primary tracking-wide">
+                      “Art as a process of becoming.”
+                    </p>
+                    <div className="pt-2">
+                      <span className="border-2 border-text-primary px-6 py-1.5 text-[10px] tracking-[0.25em] font-mono font-bold text-text-primary inline-block uppercase">
+                        ENTER
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Controls */}
+              <div className="space-y-6 flex flex-col justify-between">
+                <div className="space-y-6">
+                  {/* Image Upload Control */}
+                  <div className="space-y-2">
+                    <label className="block font-mono text-xs font-bold uppercase tracking-wider text-text-primary">
+                      Ảnh Nền Hiện Tại (URL)
+                    </label>
+                    <div className="flex gap-3">
+                      <input 
+                        type="text"
+                        value={homeHeroImage}
+                        onChange={(e) => setHomeHeroImage(e.target.value)}
+                        className="flex-1 bg-background-primary border-2 border-border-medium p-3 rounded text-xs font-mono text-text-primary focus:outline-none focus:border-text-primary"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => homeHeroFileInputRef.current?.click()}
+                        disabled={uploading}
+                        className="bg-text-primary text-background-primary px-4 py-3 rounded text-xs font-mono font-bold tracking-widest uppercase flex items-center gap-2 hover:opacity-90 transition-opacity cursor-pointer"
+                      >
+                        {uploading ? <Loader2 className="animate-spin" size={14} /> : <Upload size={14} />}
+                        TẢI ẢNH MỚI
+                      </button>
+                      <input 
+                        ref={homeHeroFileInputRef}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleUploadHomeHeroImage}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Opacity Control */}
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center font-mono text-xs font-bold text-text-primary">
+                      <label className="uppercase tracking-wider">Độ Mờ Ảnh Nền (Opacity)</label>
+                      <span className="px-2 py-1 bg-background-primary border border-border-medium rounded text-xs">
+                        {homeHeroOpacity}%
+                      </span>
+                    </div>
+                    <input 
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={homeHeroOpacity}
+                      onChange={(e) => setHomeHeroOpacity(Number(e.target.value))}
+                      className="w-full h-2 bg-border-medium rounded-lg appearance-none cursor-pointer accent-text-primary"
+                    />
+                    <div className="flex justify-between font-mono text-[10px] text-text-secondary font-bold">
+                      <span>0% (Hoàn toàn trong suốt)</span>
+                      <span>35% (Mặc định)</span>
+                      <span>100% (Hiển thị rõ 100%)</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="pt-6 border-t border-border-light flex flex-wrap gap-4">
+                  <button
+                    type="button"
+                    onClick={handleSaveHomeSettings}
+                    disabled={isSavingSettings}
+                    className="bg-emerald-700 hover:bg-emerald-800 text-white px-6 py-3 rounded text-xs font-mono font-bold tracking-widest uppercase flex items-center gap-2 transition-colors cursor-pointer shadow-sm"
+                  >
+                    {isSavingSettings ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
+                    LƯU THAY ĐỔI
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleResetHomeSettings}
+                    className="border-2 border-border-medium hover:border-amber-600 hover:text-amber-700 text-text-secondary px-5 py-3 rounded text-xs font-mono font-bold tracking-widest uppercase transition-colors cursor-pointer"
+                  >
+                    KHÔI PHỤC MẶC ĐỊNH
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
