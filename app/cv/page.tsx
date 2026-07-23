@@ -265,7 +265,7 @@ export default function CVPage() {
         <span className="text-xs tracking-[0.35em] text-text-secondary font-mono font-bold uppercase block">
           {t("ARTISTIC TIMELINE & ARCHIVE", "HÀNH TRÌNH NGHỆ THUẬT & LƯU TRỮ")}
         </span>
-        <h1 className="font-serif text-5xl md:text-7xl font-medium text-text-primary tracking-wide uppercase">
+        <h1 className="font-serif text-5xl md:text-7xl font-medium text-text-primary hover-gold transition-colors tracking-wide uppercase cursor-default">
           BIOGRAPHY
         </h1>
         <p className="text-sm text-text-secondary font-mono font-bold tracking-widest uppercase">

@@ -21,7 +21,7 @@ export default function FieldNotesPage() {
         <span className="text-xs tracking-[0.35em] text-text-secondary font-mono font-bold uppercase block">
           Observations & Travel Journals
         </span>
-        <h1 className="font-serif text-4xl md:text-6xl font-medium text-text-primary tracking-wide">
+        <h1 className="font-serif text-4xl md:text-6xl font-medium text-text-primary hover-gold transition-colors tracking-wide cursor-default">
           FIELD NOTES
         </h1>
         <div className="w-16 h-[2px] bg-text-primary mx-auto mt-4" />
