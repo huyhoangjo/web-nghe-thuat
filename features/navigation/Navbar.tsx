@@ -59,7 +59,7 @@ export default function Navbar() {
                     style={{ marginLeft: '0.75rem', marginRight: '0.75rem' }}
                     className="relative inline-flex items-center justify-center px-4 py-2 text-base md:text-lg lg:text-xl tracking-[0.15em] font-medium text-text-secondary hover-gold transition-all whitespace-nowrap group"
                   >
-                    <span className={`relative z-10 group-hover-gold transition-colors ${isActive ? 'text-text-primary font-bold' : ''}`}>
+                    <span className={`relative z-10 hover-gold group-hover-gold transition-colors ${isActive ? 'text-text-primary font-bold' : ''}`}>
                       {item.label}
                     </span>
 
