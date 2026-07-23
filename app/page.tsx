@@ -7,8 +7,14 @@ import { Post } from '@/lib/types/post';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { ArchiveImage } from '@/components/ui/ArchiveImage';
 
+import { SiteSettings } from '@/lib/types/settings';
+
 export default function Home() {
   const [featuredWorks, setFeaturedWorks] = useState<Post[]>([]);
+  const [settings, setSettings] = useState<SiteSettings>({
+    homeHeroImage: '/images/home-hero.jpg',
+    homeHeroOpacity: 35,
+  });
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -16,6 +22,20 @@ export default function Home() {
     const allWorks = getWorks();
     const selected = allWorks.filter(w => w.images.length > 0).slice(0, 3);
     setFeaturedWorks(selected);
+
+    // Fetch site settings
+    const fetchSiteSettings = async () => {
+      try {
+        const res = await fetch('/api/settings');
+        if (res.ok) {
+          const data = await res.json();
+          setSettings(data);
+        }
+      } catch {
+        // Fallback to default
+      }
+    };
+    fetchSiteSettings();
   }, []);
 
   return (
@@ -24,8 +44,11 @@ export default function Home() {
       <section className="relative h-[85vh] flex items-center justify-center bg-background-secondary overflow-hidden border-b-2 border-border-light">
         {/* Full Color Background Image (Page 3 of PDF: "GIỮ HÌNH MÀU, CÒN ĐỘ OPACITY THÌ CỨ THEO EM ĐANG LÀM") */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-35 transition-all duration-1000 scale-105"
-          style={{ backgroundImage: `url('/images/home-hero.jpg')` }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 scale-105"
+          style={{ 
+            backgroundImage: `url('${settings.homeHeroImage}')`,
+            opacity: settings.homeHeroOpacity / 100 
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background-primary via-background-primary/30 to-transparent" />
         
